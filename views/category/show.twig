@@ -1,0 +1,14 @@
+{% extends "layout/default.twig" %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+<section class="row">
+    {% for post in posts %}
+    {% include "post/card.twig" %}
+    {% endfor %}
+</section>
+{{ paginate | raw}}
+{% endblock content %}

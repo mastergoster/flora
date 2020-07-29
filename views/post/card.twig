@@ -1,0 +1,19 @@
+<article class="col-3 mb-4 d-flex align-items-stretch">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.name }}</h5>
+            <p class="card-text">{{ post.getExcerpt(200) | raw }}</p>
+            <a class="card-link" href="{{ post.url }}">lire plus</a>
+
+        </div>
+        <ul class="list-group list-group-flush ">
+            {% for category in post.categories %}
+            <li class="list-group-item bg-light"><a href="{{ category.url}}">{{  category.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="card-footer text-muted">
+            {{ post.getCreatedAt() | date('d/m/Y h:i') }}
+        </div>
+    </div>
+</article>

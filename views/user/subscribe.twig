@@ -1,0 +1,31 @@
+{% extends 'layout/default_beer.twig' %}
+
+{% block body %}
+  <section class="container mb-5 mt-5">
+        <h1>Inscription</h1>
+    
+        <form method="POST" action="">
+            <div class="row">
+                <div class="form-group col-12 col-sm">
+                    <label for="">Adresse mail</label>
+                    <input class="form-control" required type="email" name="mail" placeholder="Votre courriel">
+                </div>
+                <div class="form-group col-12 col-sm">
+                    <label for="">Verification adresse mail</label>
+                    <input class="form-control" required type="email" name="mailVerify" placeholder="vérification de votre courriel">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-12 col-sm">
+                    <label for="">Mot de passe</label>
+                    <input class="form-control" required type="password" name="password" placeholder="Votre mot de passe">
+                </div>
+                <div class="form-group col-12 col-sm">
+                    <label for="">Répétez le mot de passe</label>
+                    <input class="form-control" required type="password" name="passwordVerify" placeholder="confirmez votre mot de passe">
+                </div>
+            </div>
+            <button class="btn btn-primary" required type="submit">S'inscrire</button>
+        </form>
+    </section>
+{% endblock %}

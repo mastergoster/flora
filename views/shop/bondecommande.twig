@@ -1,0 +1,66 @@
+{% extends 'layout/default_beer.twig' %}
+
+{% block body %}
+<form method="POST" action="" id="formPurchase" class="container mt-5 mb-5">
+	<h1 class="text-center">Bon de commande</h1>
+	<div class="row">
+		<div class="form-group col-12 col-sm">
+			<label>NOM</label>
+			<input class="form-control" type="text" name="lastname" value="{{ session.user.lastname }}" required/>
+		</div>
+		<div class="form-group col-12 col-sm">
+			<label>PRENOM</label>
+			<input class="form-control" type="text" name="firstname" value="{{ session.user.firstname }}" required/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label>ADRESSE</label>
+		<input class="form-control" type="text" name="address" value="{{ session.user.address }}" required/>
+	</div>
+	<div class="row">
+		<div class="form-group col-12 col-sm">
+			<label>CODE POSTAL</label>
+			<input class="form-control" type="text" name="zipCode" value="{{ session.user.zipCode }}" required/>
+		</div>
+		<div class="form-group col-12 col-sm">
+			<label>VILLE</label>
+			<input class="form-control" type="text" name="city" value="{{ session.user.city }}" required/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label>PAYS</label>
+		<input class="form-control" type="text" name="country" value="{{ session.user.country }}" required/>
+	</div>
+	<div class="row">
+		<div class="form-group col-12 col-sm">
+			<label>TEL</label>
+			<input class="form-control" type="tel" name="phone" value="{{ session.user.phone }}" required/>
+		</div>
+		<div class="form-group col-12 col-sm">
+			<label>MAIL</label>
+			<input class="form-control" type="text" name="mail" value="{{ session.user.mail }}" disabled/>
+		</div>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Nomination</th>
+				<th>Prix HT</th>
+				<th>Prix TTC</th>
+				<th>Quantité</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for key, beer in beers %}
+				<tr>
+					<td>{{ beer.title }}</td>
+					<td id="PHT_{{ key }}">{{ beer.price| number_format(2, '.', ',') }}€</td>
+					<td id="PTTC_{{ key }}">{{ (beer.price * constant.TVA) | number_format(2, '.', ',') }}€</td>
+					<td><input class="form-control" type="number" min="0" name="qty[{{ beer.id }}]" value="0" oninput="calcPrice(this, {{ key }}, {{ beer.price }});" /></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" type="submit">COMMANDER</button>
+</form>
+{% endblock %}

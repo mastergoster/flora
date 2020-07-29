@@ -1,0 +1,17 @@
+<phpunit colors="true" cacheResult="false">
+    <testsuites>
+        <testsuite name="Framework">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>
+                src
+            </directory>
+            <directory>
+                core
+            </directory>
+        </whitelist>
+    </filter>
+</phpunit>

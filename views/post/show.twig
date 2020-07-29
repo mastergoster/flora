@@ -1,0 +1,16 @@
+{% extends "layout/default.twig" %}
+
+{% block title %}{{ title }}{% endblock  %}
+
+{% block content %}
+<div class="text-muted text-center pb-5 mb-5">
+    {{  post.CreatedAt | date('d/m/Y h:i') }}<br />
+    {% for key, category in categories %}
+    {% if key > 0 %}
+    ,
+    {% endif %}
+    <a href="{{ category.url }}">{{ category.name }}</a>
+    {% endfor %}
+</div>
+<p class="mx-4 text-justify">{{ post.content | raw }}</p>
+{% endblock content %}

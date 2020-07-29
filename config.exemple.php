@@ -1,4 +1,7 @@
 <?php
-
-$usernameadmin = "";
-$passwordadmin = "";
+return [
+    "usernameadmin" => "",
+    "passwordadmin" => "",
+    "tokenSms" => "",
+    "UrlSms" => ""
+];
