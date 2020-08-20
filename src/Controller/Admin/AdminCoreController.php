@@ -37,15 +37,18 @@ class AdminCoreController extends Controller
             echo `php composer-setup.php`;
             echo `php -r "unlink('composer-setup.php');"`;
         }
-        $composer = "";
-        $codecomposer = "";
+
         exec("sudo git pull", $git);
-        var_dump(`php composer.phar update -v --no-dev -o 2>&1`);
+        $composer = `php composer.phar update -v --no-dev -o 2>&1`;
+        $composer2=[]:
+        for ($i = 2; $i < strlen($composer); $i++) {
+            $composer2 =$composer[$i];
+        }
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
             "git" => $git,
-            "codecomposer" => $codecomposer,
+            "composer" => $composer2,
             "phinx" => $phinx,
             "codechmod" => $codechmod
         ]]);
