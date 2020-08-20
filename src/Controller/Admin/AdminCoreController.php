@@ -42,9 +42,10 @@ class AdminCoreController extends Controller
         $composer = `php composer.phar update -v --no-dev -o 2>&1`;
         $composer2 = [];
         for ($i = 2; $i < strlen($composer); $i++) {
-            $composer2[] = $composer[$i];
+            $composer2[] = ctype_upper($composer[$i]) ? "°" . $composer[$i] : $composer[$i];
         }
-        \var_dump($composer2);
+        $composer = join($composer2);
+        $composer = explode("°", $composer);
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
