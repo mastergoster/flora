@@ -14,8 +14,8 @@
 						<th>slug</th>
 						<th>description</th>
 						<th>cover</th>
-						<th>date_at</th>
 						<th>publish</th>
+						<th>date_at</th>
 						<th>created_at</th>
 						<th>updated_at</th>
 					</tr>
@@ -25,13 +25,19 @@
 						<tr>
 							<td>{{ item.id }}</td>
 							<td>{{ item.title }}</td>
-							<td>{{ item.slug }}</td>
+							<td>
+								<a href="{{ path("eventsBooking", {id: item.id, slug: item.slug})}}">{{ item.slug }}</a>
+							</td>
 							<td>{{ item.description }}</td>
 							<td>{{ item.cover }}</td>
 							<td>{{ item.publish }}</td>
-							<td>{{ item.date_at | date("d/m/Y") }}</td>
+							<td>{{ item.dateAt | date("d/m/Y") }}</td>
 							<td>{{ item.createdAt | date("d/m/Y") }}</td>
-							<td>{{ item.updated_at | date("d/m/Y") }}</td>
+							<td>
+								{% if item.updatedAt %}
+									{{ item.updatedAt | date("d/m/Y") }}
+								{% endif %}
+							</td>
 						</tr>
 					{% endfor %}
 				</tbody>

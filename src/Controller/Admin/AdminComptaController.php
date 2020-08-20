@@ -11,7 +11,9 @@ class AdminComptaController extends Controller
 
     public function __construct()
     {
-        $this->security()->onlyAdmin();
+        if (!$this->security()->isAdmin()) {
+            $this->redirect('userProfile');
+        }
         $this->loadModel("comptaLigne");
         $this->loadModel("comptaNdf");
         $this->loadModel("user");

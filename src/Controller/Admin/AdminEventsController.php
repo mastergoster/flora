@@ -11,7 +11,9 @@ class AdminEventsController extends Controller
 
     public function __construct()
     {
-        $this->security()->onlyAdmin();
+        if (!$this->security()->isAdmin()) {
+            $this->redirect('userProfile');
+        }
         $this->loadModel("events");
     }
 
@@ -20,7 +22,19 @@ class AdminEventsController extends Controller
 
         $items = $this->events->all(true, "date_at");
         return $this->render(
-            "admin/compta/panel",
+            "admin/events",
+            [
+                "items" => $items
+            ]
+        );
+    }
+
+    public function event($id)
+    {
+
+        $items = $this->events->find($id);
+        return $this->render(
+            "admin/event",
             [
                 "items" => $items
             ]
