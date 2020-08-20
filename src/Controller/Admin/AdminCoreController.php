@@ -19,11 +19,27 @@ class AdminCoreController extends Controller
         // if (\getenv("ENV_DEV")) {
         //     return dd("mode dev impossible de faire ceci");
         // }
-        exec("cd /var/www && sudo git pull", $returns, $code);
-        exec("cd .. && composer update", $returns2, $code2);
-        \dump($code);
-        dump($returns);
-        \dump($code2);
-        dd($returns2);
+        chdir("/var/www");
+        putenv("COMPOSER_HOME=/var/www/.config/composer");
+
+        if (!file_exists("composer.phar")) {
+
+
+            $source = "https://getcomposer.org/installer";
+            $destination = "/var/www/composer-setup.php";
+
+            $data = file_get_contents($source);
+            $file = fopen($destination, "w+");
+            fputs($file, $data);
+            fclose($file);
+
+            echo `php composer-setup.php`;
+            echo `php -r "unlink('composer-setup.php');"`;
+        }
+        echo `/usr/bin/git pull` . "<br>";
+
+        echo `php composer.phar update`;
+
+        dd();
     }
 }

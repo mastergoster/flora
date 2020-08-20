@@ -4,3 +4,5 @@ config.php
 /old
 /vendor
 .saas-cache
+.config
+composer.phar
