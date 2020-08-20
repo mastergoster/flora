@@ -40,9 +40,9 @@ class AdminCoreController extends Controller
 
         exec("sudo git pull", $git);
         $composer = `php composer.phar update -v --no-dev -o 2>&1`;
-        $composer2=[]:
+        $composer2 = [];
         for ($i = 2; $i < strlen($composer); $i++) {
-            $composer2 =$composer[$i];
+            $composer2 = $composer[$i];
         }
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
