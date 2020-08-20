@@ -40,7 +40,7 @@ class AdminCoreController extends Controller
         $composer = "";
         $codecomposer = "";
         exec("sudo git pull", $git);
-        var_dump(`php composer.phar update -v --no-dev -o"`);
+        var_dump(`php composer.phar update -v --no-dev -o 2>&1`);
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
