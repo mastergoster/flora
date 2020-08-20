@@ -40,10 +40,10 @@ class AdminCoreController extends Controller
         echo "<br><br>";
         echo shell_exec("sudo composer update 2>&1");
         echo "<br><br>";
-        echo shell_exec("vendor/bin/phinx migrate 2>&1");
+        echo exec("vendor/bin/phinx migrate", $phinx);
 
 
 
-        dd();
+        dd($phinx);
     }
 }
