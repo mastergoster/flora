@@ -39,11 +39,12 @@ class AdminCoreController extends Controller
         exec("sudo git pull", $git);
         exec("sudo composer update", $composer, $codecomposer);
         exec("vendor/bin/phinx migrate", $phinx);
-
+        exec("sudo chown -R www-data:www-data *", $chmod);
 
         dump($git);
         dump($composer);
         dump($codecomposer);
-        dd($phinx);
+        dump($phinx);
+        dd($chmod);
     }
 }
