@@ -20,7 +20,7 @@ class AdminCoreController extends Controller
         //     return dd("mode dev impossible de faire ceci");
         // }
         chdir("/var/www");
-        putenv("COMPOSER_HOME=/var/www/.config/composer");
+        //putenv("COMPOSER_HOME=/var/www/.config/composer");
 
         if (!file_exists("composer.phar")) {
 
