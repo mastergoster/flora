@@ -36,9 +36,11 @@ class AdminCoreController extends Controller
             echo `php composer-setup.php`;
             echo `php -r "unlink('composer-setup.php');"`;
         }
-        echo `vendor/bin/phinx migrate`;
-
+        echo shell_exec("vendor/bin/phinx migrate 2>&1");
+        echo "<br>";
         echo shell_exec("sudo composer update 2>&1");
+        echo "<br>";
+
         echo shell_exec("sudo git pull 2>&1");
 
         dd();
