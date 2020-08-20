@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use \Core\Controller\Controller;
+use Symfony\Component\Config\Resource\ComposerResource;
 
 class AdminCoreController extends Controller
 {
@@ -39,8 +40,9 @@ class AdminCoreController extends Controller
         }
         $composer = "";
         $codecomposer = "";
+        var_dump((new ComposerResource())->getVendors());
         exec("sudo git pull", $git);
-        var_dump(`php composer.phar update -vvv --no-dev -o"`);
+        var_dump(`php composer.phar update -v --no-dev -o"`);
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
