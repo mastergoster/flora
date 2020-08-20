@@ -1,0 +1,16 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">Update</h1>
+{% endblock %}
+{% block content %}
+	<ul>
+		{% for items in itemss|keys %}
+			<li>{{keys}}</li>
+			{% for item in items %}
+				<li>{{item}}</li>
+			{% endfor %}
+		{% endfor %}
+	</ul>
+
+{% endblock %}

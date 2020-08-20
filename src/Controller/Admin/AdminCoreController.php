@@ -16,9 +16,10 @@ class AdminCoreController extends Controller
 
     public function update()
     {
-        // if (\getenv("ENV_DEV")) {
-        //     return dd("mode dev impossible de faire ceci");
-        // }
+
+        if (\getenv("ENV_DEV")) {
+            return dd("mode dev impossible de faire ceci");
+        }
         chdir("/var/www");
         putenv("COMPOSER_HOME=/var/www/.config/composer");
 
@@ -37,14 +38,14 @@ class AdminCoreController extends Controller
             echo `php -r "unlink('composer-setup.php');"`;
         }
         exec("sudo git pull", $git);
-        exec("sudo composer update", $composer, $codecomposer);
+        exec("sudo composer update --no-dev -o", $composer, $codecomposer);
         exec("vendor/bin/phinx migrate", $phinx);
-        exec("sudo chown -R www-data:www-data *", $chmod);
-
-        dump($git);
-        dump($composer);
-        dump($codecomposer);
-        dump($phinx);
-        dd($chmod);
+        exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
+        return $this->render("admin/update", ["item" => [
+            'git' => $git,
+            "codecomposer" => $codecomposer,
+            "phinx" => $phinx,
+            "codechmod" => $codechmod
+        ]]);
     }
 }

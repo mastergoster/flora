@@ -121,7 +121,7 @@ class UsersController extends Controller
                 //evoyer mail de confirmation avec le token
                 $mail = new EmailController();
                 $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $datas["token"];
-                $mail->object('valiez votre inscription sur le site labiere.fr')
+                $mail->object('valiez votre inscription sur le site ' . getenv('stieName'))
                     ->to($datas['email'])
                     ->message('confirmation', compact('datas'))
                     ->send();
