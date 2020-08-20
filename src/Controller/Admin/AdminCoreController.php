@@ -40,7 +40,7 @@ class AdminCoreController extends Controller
         }
         $composer = "";
         $codecomposer = "";
-        var_dump((new ComposerResource())->getVendors());
+        var_dump((new ComposerResource())->isFresh());
         exec("sudo git pull", $git);
         var_dump(`php composer.phar update -v --no-dev -o"`);
         exec("vendor/bin/phinx migrate", $phinx);
