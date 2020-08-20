@@ -42,7 +42,7 @@ class AdminCoreController extends Controller
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
-            'git' => $git,
+            "git" => $git,
             "codecomposer" => $codecomposer,
             "phinx" => $phinx,
             "codechmod" => $codechmod
