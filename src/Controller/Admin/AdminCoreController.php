@@ -44,6 +44,7 @@ class AdminCoreController extends Controller
         for ($i = 2; $i < strlen($composer); $i++) {
             $composer2[] = $composer[$i];
         }
+        \var_dump($composer2);
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
