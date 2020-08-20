@@ -6,3 +6,4 @@ config.php
 .saas-cache
 .config
 composer.phar
+composer.lock
