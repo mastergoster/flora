@@ -1,57 +1,266 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title></title>
-</head>
+	<head>
+		<title>
+			{% block title %}Co Work In Moulins
+			{% endblock %}
+		</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" href="/assets/css/main.css"/>
+		<noscript>
+			<link rel="stylesheet" href="/assets/css/noscript.css"/></noscript>
+		<link rel="stylesheet" href="/assets/css/perso.css"/> {% block style %}{% endblock %}
+		</head>
 
-<body class="container-fluid p-0">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="/">Retour site</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+		<body
+			class="is-preload">
 
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/categories">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
-    <section class="bg-light mb-2 mt-3 p-5" style="min-height:100vh">
-        <header class="jumbotron  mb-5">
-            <h1 class="text-center display-4">{% block title %}Mon site{% endblock %}</h1>
-        </header>
-        {% block content %}
-        {% endblock %}
-    </section>
-    <footer class="footer bg-dark fixed-bottom py-1">
-        <div class="text-center">
 
-            <span class="text-white">By julien in {{debugTime}} ms</span>
-        </div>
-    </footer>
-</body>
+			<!-- Wrapper -->
+			<div id="wrapper" class="fade-in"> {% block intro %}{% endblock %}
 
-</html>
+				<!-- Header -->
+				<header id="header">
+					<a href="/" class="logo">CoWorkInMoulins</a>
+				</header>
+
+				<!-- Nav -->
+				<nav id="nav">
+					<ul class="links">
+						<li {{ linkactive("home") }}>
+							<a href="/">Le coworking</a>
+						</li>
+						<li {{ linkactive("events") }} {% if event %} {{ linkactive("events") }} {% endif %}>
+							<a href="/events">Evenements</a>
+						</li>
+						<li {{ linkactive("usersLogin") }} {{ linkactive("usersSubscribe") }} {{ linkactive("activatePage") }}>
+							<a href="/login">Espace Membre</a>
+						</li>
+					</ul>
+					<ul class="icons">
+						<li>
+							<a href="https://www.facebook.com/espaceCWM" class="icon brands fa-facebook-f">
+								<span class="label">Facebook</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+
+				<!-- Main -->
+				<div id="main">
+					{% block content %}
+						<!-- Featured Post -->
+						<article class="post featured">
+							<header class="major">
+								<h2>Espace de Cowoking<br>
+									à Moulins
+								</h2>
+								<p>l'espace de coworking se situe au 1 place Marechale de lattre de tassigny<br>
+									à coté de la salle des fete en plein centre de moulins.</p>
+							</header>
+							<ul class="actions special">
+								<li>
+									<a href="/inscription" class="button">Venez-vous inscrire</a>
+								</li>
+							</ul>
+							<img height="500px" src="/images/pic01.jpg" alt=""/>
+						</article>
+						<article class="post featured">
+							<header>
+
+								<h2>
+									Les Tarifs
+								</h2>
+							</header>
+							<div class="tarif">
+								<ul>
+									<li class="title">Quand on est de passage</li>
+									<li>
+										<ul>
+											<li class="title">non adhérant</li>
+											<li class="des">l'heure</li>
+											<li class="prix">5 €</li>
+										</ul>
+										<ul>
+											<li class="title">non adhérant</li>
+											<li class="des">la demis journée</li>
+											<li class="prix">12 €</li>
+										</ul>
+										<ul>
+											<li class="title">non adhérant</li>
+											<li class="des">la journée</li>
+											<li class="prix">20 €</li>
+										</ul>
+									</li>
+									<li class="title">Quand on veux rester un peut plus</li>
+									<li>
+										<ul>
+											<li class="title">adhérant</li>
+											<li class="des">l'heure</li>
+											<li class="prix">2,5 €</li>
+										</ul>
+										<ul>
+											<li class="title">adhérant</li>
+											<li class="des">la demis journée</li>
+											<li class="prix">6 €</li>
+										</ul>
+										<ul>
+											<li class="title">adhérant</li>
+											<li class="des">la journée</li>
+											<li class="prix">10 €</li>
+										</ul>
+									</li>
+									<li class="title">Quand on nous adopté</li>
+									<li>
+										<ul>
+											<li class="title">FORFAIT</li>
+											<li class="des">25 heures</li>
+											<li class="prix">25 €</li>
+										</ul>
+										<ul>
+											<li class="title">FORFAIT</li>
+											<li class="des">55 heures</li>
+											<li class="prix">50 €</li>
+										</ul>
+										<ul>
+											<li class="title">FORFAIT</li>
+											<li class="des">125 heures</li>
+											<li class="prix">100 €</li>
+										</ul>
+									</li>
+									<li class="title">Là c'est pour que ca devienne votre maison</li>
+									<li>
+										<ul>
+											<li class="title">Adhesion individuel</li>
+											<li class="des"></li>
+											<li class="prix">20 € / an</li>
+										</ul>
+										<ul>
+											<li class="title">Adhesion professionel</li>
+											<li class="des"></li>
+											<li class="prix">200 € / an</li>
+										</ul>
+										<ul>
+											<li class="title">Forfait Mois</li>
+											<li class="des">option domitiliation 50€</li>
+											<li class="prix">100 € / mois</li>
+
+										</ul>
+									</li>
+								</ul>
+							</div>
+
+						</article>
+						<!-- Posts -->
+
+					{% endblock %}
+				</div>
+
+				<!-- Footer -->
+				<footer id="footer">
+					<section>
+						<form method="post" action="#">
+							<div class="fields">
+								<div class="field">
+									<label for="name">Nom</label>
+									<input type="text" name="name" id="name"/>
+								</div>
+								<div class="field">
+									<label for="email">Email</label>
+									<input type="text" name="email" id="email"/>
+								</div>
+								<div class="field">
+									<label for="message">Message</label>
+									<textarea name="message" id="message" rows="3"></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Envoyer"/></li>
+							</ul>
+						</form>
+					</section>
+					<section class="split contact">
+						<section class="alt">
+							<h3>adresse</h3>
+							<p>1 place Maréchale de lattre de tassigny<br/>
+								03000 Moulins</p>
+						</section>
+						<section>
+							<h3>telephone</h3>
+							<p>
+								<a href="#">07.83.34.69.12</a>
+							</p>
+						</section>
+						<section>
+							<h3>Email</h3>
+							<p>
+								<a href="#">Contact@coworkinmoulins.fr</a>
+							</p>
+						</section>
+						<section>
+							<h3>Social</h3>
+							<ul class="icons alt">
+								<li>
+									<a href="#" class="icon brands alt fa-twitter">
+										<span class="label">Twitter</span>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="icon brands alt fa-facebook-f">
+										<span class="label">Facebook</span>
+									</a>
+								</li>
+							</ul>
+						</section>
+					</section>
+				</footer>
+
+				<!-- Copyright -->
+				<div id="copyright">
+					<ul>
+						<li>By julien in
+							{{debugTime}}
+							ms</li>
+						<li>Design:
+							<a href="https://html5up.net">HTML5 UP</a>
+						</li>
+					</ul>
+				</div>
+			</div><!-- Scripts --><script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/jquery.scrollex.min.js"></script>
+			<script src="/assets/js/jquery.scrolly.min.js"></script>
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+			<script>
+				toastr.options = {
+"closeButton": false,
+"debug": false,
+"newestOnTop": false,
+"progressBar": true,
+"positionClass": "toast-bottom-right",
+"preventDuplicates": true,
+"onclick": null,
+"showDuration": "300",
+"hideDuration": "1000",
+"timeOut": "5000",
+"extendedTimeOut": "1000",
+"showEasing": "swing",
+"hideEasing": "linear",
+"showMethod": "fadeIn",
+"hideMethod": "fadeOut"
+};{% if flash('success') %}{% for successMesassage in flash('success') %}toastr["success"]("{{ successMesassage }}");{% endfor %}{% endif %}{% if flash('error') %}{% for error in flash('error') %}toastr["error"]("{{ error }}");{% endfor %}{% endif %}
+			</script>
+			{% block script %}{% endblock %}
+		</body>
+	</html>

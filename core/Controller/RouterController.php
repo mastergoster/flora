@@ -42,7 +42,10 @@ class RouterController
 
     public function run(): void
     {
+
         $match = $this->router->match();
+
+        $admin = "";
 
         if (!is_array($match) && !strpos($match['target'], "#")) {
             $controller = "App\\Controller\\ErrorsController";
@@ -50,7 +53,10 @@ class RouterController
             $match['params'] = [];
         } else {
             [$controller, $method] = explode("#", $match['target']);
-            $controller = "App\\Controller\\" . ucfirst($controller) . "Controller";
+            if (substr($controller, 0, 5) == "Admin") {
+                $admin = "Admin\\";
+            }
+            $controller = "App\\Controller\\" . $admin . ucfirst($controller) . "Controller";
         }
 
         echo (new $controller())->$method(...array_values($match['params']));

@@ -3,7 +3,7 @@
 
 
 declare(strict_types=1);
-require_once("config.php");
+$config = require_once("config.php");
 if (php_sapi_name() != "cli") {
   fwrite(
     STDERR,
@@ -44,6 +44,10 @@ $pdo->exec('DROP TABLE user');
 $pdo->exec('DROP TABLE forfait_log');
 $pdo->exec('DROP TABLE forfait');
 $pdo->exec('DROP TABLE heures');
+$pdo->exec('DROP TABLE role_liaison');
+$pdo->exec('DROP TABLE role');
+$pdo->exec('DROP TABLE compta_ligne');
+$pdo->exec('DROP TABLE compta_ndf');
 
 
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
@@ -87,8 +91,44 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS heures (
   id_user VARCHAR( 250 ),
   created_at VARCHAR( 250 )
 );");
+echo "||";
 
+$pdo->exec("CREATE TABLE IF NOT EXISTS role ( 
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom VARCHAR( 250 ),
+  activate VARCHAR( 250 )
+);");
 
+echo "||";
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS role_liaison ( 
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_role VARCHAR( 250 ),
+  id_user VARCHAR( 250 ),
+  created_at VARCHAR( 250 )
+);");
+
+echo "||";
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS compta_ligne ( 
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  `description` VARCHAR( 250 ),
+  `debit` VARCHAR( 250 ),
+  `credit` VARCHAR( 250 ),
+  `date` VARCHAR( 250 ),
+  created_at VARCHAR( 250 )
+);");
+
+echo "||";
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS compta_ndf ( 
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  `description` VARCHAR( 250 ),
+  `id_user` VARCHAR( 250 ),
+  `id_ligne` VARCHAR( 250 ),
+  `paye_at` VARCHAR( 250 ),
+  created_at VARCHAR( 250 )
+);");
 
 echo "||||||||||||]
 ";
@@ -97,7 +137,53 @@ echo "||||||||||||]
  * remplissage des tables
  */
 
+echo "[||||";
+$pdo->exec(
+  "INSERT INTO role 
+        (nom, activate)
+        VALUES 
+        ('aucun','1')"
+);
+echo "||||";
+$pdo->exec(
+  "INSERT INTO role 
+        (nom, activate)
+        VALUES 
+        ('administrateur','1')"
+);
+echo "||||";
+$pdo->exec(
+  "INSERT INTO role 
+        (nom, activate)
+        VALUES 
+        ('adherants','1')"
+);
+echo "||||";
 
+$pdo->exec(
+  "INSERT INTO role 
+        (nom, activate)
+        VALUES 
+        ('membre actif','1')"
+);
+echo "||||";
+
+$password = password_hash($config["passwordadmin"], PASSWORD_BCRYPT);
+
+$pdo->exec(
+  "INSERT INTO user 
+        (nom, prenom, mail, password, pin, token, tel, activate, verify)
+        VALUES 
+        ('admin','admin','" . $config['usernameadmin'] . "','{$password}','1234','coucou','0783346912','1','1')"
+);
+echo "||||";
+$pdo->exec(
+  "INSERT INTO role_liaison 
+        (id_role, id_user, created_at)
+        VALUES 
+        ('2','1', '2020-07-01 12:00:00')"
+);
+echo "||||]\n";
 if (!$demo) {
   /**
    * Sans le Mode demo avec donné 
@@ -115,19 +201,10 @@ if (!$demo) {
 
 
   $faker = Faker\Factory::create('fr_FR');
+
+
   echo "[||||";
-
-  $password = password_hash($passwordadmin, PASSWORD_BCRYPT);
-
-  $pdo->exec(
-    "INSERT INTO user 
-        (nom, prenom, mail, password, pin, token, tel, activate, verify)
-        VALUES 
-        ('admin','admin','{$usernameadmin}','{$password}','1234','coucou','0783346912','1','1')"
-  );
-  echo "||||";
-
-  $password = password_hash("test", PASSWORD_BCRYPT);
+  $password = password_hash("testtest", PASSWORD_BCRYPT);
 
   $pdo->exec(
     "INSERT INTO user 
@@ -136,6 +213,29 @@ if (!$demo) {
         ('admin','admin','test@test.fr','{$password}','1234','coucou','0783346912','1','1')"
   );
   echo "||||";
+  $pdo->exec(
+    "INSERT INTO role_liaison 
+        (id_role, id_user, created_at)
+        VALUES 
+        ('1','2', '2020-07-01 12:00:00')"
+  );
+  echo "||||";
+
+  $pdo->exec(
+    "INSERT INTO user 
+        (nom, prenom, mail, password, pin, token, tel, activate, verify)
+        VALUES 
+        ('admin','admin','test2@test.fr','{$password}','1234','coucou','0783346912','1','0')"
+  );
+  echo "||||";
+  $pdo->exec(
+    "INSERT INTO role_liaison 
+        (id_role, id_user, created_at)
+        VALUES 
+        ('3','3', '2020-07-01 12:00:00')"
+  );
+  echo "||||";
+
 
   $pdo->exec(
     "INSERT INTO forfait 
@@ -248,6 +348,21 @@ if (!$demo) {
         (id_user, created_at)
         VALUES 
         ('1','2020-07-29 07:00:00')"
+  );
+
+  echo "||||";
+  $pdo->exec(
+    "INSERT INTO compta_ligne 
+        (`description`, `credit`,`debit`,`date`, created_at)
+        VALUES 
+        ('test','0', '12','2020-07-29 07:00:00','2020-07-29 07:00:00')"
+  );
+  echo "||||";
+  $pdo->exec(
+    "INSERT INTO compta_ligne 
+        (`description`, `credit`,`debit`, `date`, created_at)
+        VALUES 
+        ('test2', '13', '0','2020-07-29 07:00:00','2020-07-29 07:00:00')"
   );
 
 

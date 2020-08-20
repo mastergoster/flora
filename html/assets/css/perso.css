@@ -1,0 +1,72 @@
+.tarif {
+    display: flex;
+    flex-direction: column;
+    font: arial !important;
+}
+
+.tarif ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.tarif ul li {
+    padding: 0;
+    margin: 0px 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+    flex-wrap: wrap;
+}
+
+.tarif ul li ul {
+    padding: 0;
+    margin: 10px 0 0;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+    border: solid 1px black;
+    border-radius: 30px;
+}
+
+.tarif ul li ul li {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+    font: arial !important;
+}
+
+.title {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.des {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.prix {
+    font-size: 2em;
+    font-weight: bold;
+    font: arial !important;
+}
+
+.featured img {
+    width: 100%;
+    height: auto;
+}

@@ -2,53 +2,76 @@
 
 namespace App\Controller;
 
-use App\Model\Table\UserTable;
+use App\Model\Table\UsersTable;
 use \Core\Controller\Controller;
 use \App\Model\Entity\UserEntity;
-use App\Model\Entity\RecapConsoEntity;
+use App\Model\Entity\UsersEntity;
+use Core\Controller\SmsController;
+use Core\Controller\FormController;
 use Core\Controller\EmailController;
-use \App\Model\Entity\UserInfosEntity;
+use App\Model\Entity\RecapConsoEntity;
+use Core\Controller\SecurityController;
+use Core\Controller\Helpers\TableauController;
 
 class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->loadModel('user');
-        $this->loadModel('forfait');
-        $this->loadModel('forfaitLog');
-        $this->loadModel('heures');
+        $this->loadModel('users');
+        $this->loadModel('packages');
+        $this->loadModel('packagesLog');
+        $this->loadModel('hours');
+        $this->loadModel('roles');
+        $this->loadModel('rolesLog');
     }
 
     public function login()
     {
-        if ($_SESSION['user']) {
-            header('location: /user/profile');
-            exit();
+        if ($this->security()->isConnect()) {
+            $this->redirect('userProfile');
         }
-        $message = false;
-        if (count($_POST) > 1) {
-            $password = htmlspecialchars($_POST['password']);
-            $user = $this->user->getUser(htmlspecialchars($_POST['mail']), $password);
-            if ($user) {
-                $_SESSION['user'] = $user;
-                header('location: /user/profile');
-                exit();
-            } else {
-                $message = "Adresse mail ou mot de passe incorrect";
+
+        $form = new FormController();
+        $form->field('mail', ["require", "mail"]);
+        $form->field('password', ["require", "length" => 7]);
+
+
+        $errors =  $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+            //verifie qu'il n'y ai pas d'erreurs
+            if (!$errors) {
+                if ($this->security()->login($datas["mail"], $datas["password"])) {
+
+                    if ($this->session()->has("redirect")) {
+                        $url = $this->session()->get("redirect");
+                        $this->session()->remove("redirect");
+                        $this->redirect($url);
+                        exit();
+                    }
+                    $this->redirect("userProfile");
+                }
+                $this->messageFlash()->error("mdp ou user invalide");
             }
         }
 
+
+        //supprime le mdp pour le renvoie a la vue
+        unset($datas["password"]);
+
+        if ($errors["post"]) {
+            unset($errors);
+        }
         return $this->render('user/login', [
             'page' => 'Connexion',
-            'message' => $message
+            "errors" => $errors
         ]);
     }
 
     public function logout(): void
     {
-        unset($_SESSION['user']);
-        header('location: /');
-        exit();
+        $this->security()->logout();
+        $this->redirect("home");
     }
 
     public function subscribe()
@@ -56,31 +79,40 @@ class UsersController extends Controller
 
         //Création d'un tableau regroupant les champs requis
         $form = new \Core\Controller\FormController();
-        $form->field('mail', ["require", "verify"]);
-        $form->field('password', ["require", "verify", "length" => 4]);
+        $form->field('email', ["require", "mail"]);
+        $form->field('password', ["require", "verify", "length" => 7]);
+        $form->field('last_name', ["require"]);
+        $form->field('first_name', ["require"]);
+        $form->field('phone_number', ["require", "tel"]);
 
 
         $errors =  $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
-
             //verifie qu'il n'y ai pas d'erreurs
             if (!$errors) {
 
-                /** @var UserTable $this->user */
-                $userTable = $this->user;
+                /** @var UsersTable $this->users */
+                $userTable = $this->users;
 
                 //verifier que l'adresse mail n'existe pas
-                if ($userTable->find($datas["mail"], "mail")) {
-                    return "crée message comme quoi le mail existe déjà";
+                if ($userTable->find($datas["email"], "email")) {
+                    $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
+                    $this->redirect("usersLogin");
                 }
 
                 //crypter password
                 $datas["password"] = password_hash($datas["password"], PASSWORD_BCRYPT);
                 //cree token
-                $datas["token"] = substr(md5(uniqid()), 0, 10);
+
+                $datas["token"] =  substr(md5(uniqid()), 0, 10);
+                $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
                 //persiter user en bdd
-                if ($userTable->newUser($datas)) {
+                if (!$userTable->create($datas)) {
+                    //formater erreure comme il faut
+                    throw new \Exception('erreur de sauvegarde');
+                }
+                if (!$this->rolesLog->create(["id_roles" => 2, "id_users" => $userTable->lastInsertId()])) {
                     //formater erreure comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
@@ -88,22 +120,33 @@ class UsersController extends Controller
                 $this->messageFlash()->success('Enregistrement reussi');
                 //evoyer mail de confirmation avec le token
                 $mail = new EmailController();
+                $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $datas["token"];
                 $mail->object('valiez votre inscription sur le site labiere.fr')
-                    ->to($datas['mail'])
+                    ->to($datas['email'])
                     ->message('confirmation', compact('datas'))
                     ->send();
-
+                // send sms
+                $sms = new SmsController();
+                $sms->numero($datas['phone_number'])
+                    ->send(
+                        'pour valier votre code pin : ' .  $datas["pin"]
+                            . ' merci de vous connecter via la borne tactile'
+                    );
                 //informer le client qu'il var devoir valier son adresse mail
-                $this->messageFlash()->success("Verifiez votre bote mail {$datas['mail']} ;)");
+                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mail']} ;)");
+                $this->messageFlash()->success("Nous vous avons envoyer un sms sur le numéro {$datas['tel']}");
                 //redirection pour se connecter
+
                 header('location: ' . $this->generateUrl('usersLogin'));
                 exit();
             }
         }
         //supprime le mdp pour le renvoie a la vue
         unset($datas["password"]);
-        unset($errors["post"]);
 
+        if ($errors["post"]) {
+            unset($errors);
+        }
         return $this->render('user/subscribe', ["datas" => $datas, "errors" => $errors]);
     }
 
@@ -112,15 +155,17 @@ class UsersController extends Controller
 
     public function profile($message = null)
     {
-        if (null !== $_SESSION['user'] && $_SESSION['user']) {
-            $file = 'profile';
-            $page = 'Mon profil';
-        } else {
-            header('location: /login');
-            exit();
+        //dd($this->session()->has('validate'));
+
+        if (!$this->security()->accessRole('adherants')) {
+            $this->redirect('/403');
         }
-        $user = $_SESSION['user'];
-        $forfaitsLog = (new RecapConsoEntity($user->getId()));
+        $user = $this->session()->get("users");
+        $forfaitsLog = new RecapConsoEntity($user->getId());
+
+        $roles = TableauController::assocId($this->roles->all());
+        $rolesLog = $this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at");
+        $roleUser = $roles[reset($rolesLog)->getIdRoles()];
 
 
 
@@ -128,6 +173,8 @@ class UsersController extends Controller
             'page' => 'Mon profil',
             'message' => $message,
             'user' => $user,
+            'roleUser' => $roleUser,
+            'admin' => $this->security()->isAdmin(),
             'forfait' => $forfaitsLog->GetHeurDispo(),
             'ForfaitExpiredAt' => $forfaitsLog->getLastForfaitExpiredAt(),
             'last' => $forfaitsLog->getLastDay(),
@@ -147,7 +194,7 @@ class UsersController extends Controller
             //Mise à jours bdd grace à methode update de /core/Table.php
             $bool = $this->UserInfos->update($id, 'user_id', $_POST);
             //Mise à jours de la SESSION['user']
-            $user = $this->user->getUserByid($id);
+            $user = $this->users->getUserByid($id);
             $_SESSION['user'] = $user;
 
             //Appel de la methode profile de ce controller pour redirection
@@ -158,7 +205,7 @@ class UsersController extends Controller
     public function changePassword()
     {
         if (count($_POST) > 0) {
-            $user = $this->user->getUserById(htmlspecialchars($_POST['id']));
+            $user = $this->users->getUserById(htmlspecialchars($_POST['id']));
             //Vérification de l'ancien mot de passe mots de passes
             if (password_verify(htmlspecialchars($_POST['old_password']), $user->getPassword())) {
                 //Vérification correspondance des mots de passe
@@ -167,7 +214,7 @@ class UsersController extends Controller
                     $password = password_hash(htmlspecialchars(htmlspecialchars($_POST['password'])), PASSWORD_BCRYPT);
 
                     //Mise à jour de la bdd grace à methode update de /core/Table.php
-                    if ($this->user->update($_POST['id'], 'id', ['password' => $password])) {
+                    if ($this->users->update($_POST['id'], 'id', ['password' => $password])) {
                         $message = 'Votre mot de passe a bien été modifié';
                     } else {
                         $message = 'Une erreur s\'est produite';
@@ -184,11 +231,58 @@ class UsersController extends Controller
 
     public function ajaxNewUserLine()
     {
-        if ($_SESSION["user"]->getId() != $_POST["id_user"]) {
+        if ($this->session()->get("users")->getId() != $_POST["id_user"]) {
             $this->jsonResponse403();
         }
         header('content-type:application/json');
 
-        echo json_encode($this->heures->ajout($_SESSION["user"]->getId()));
+        echo json_encode($this->hours->ajout($this->session()->get("users")->getId()));
+    }
+
+    public function validate(string $verify)
+    {
+        $token = $this->users->findAll($verify, "token");
+
+        if ($token && !is_null($verify)) {
+            $this->session()->set("validate", $verify);
+        }
+        if ($this->session()->has("users")) {
+            $this->redirect("userProfile");
+        }
+        $this->messageFlash()->error("Merci de vous connecter");
+        $this->redirect("usersLogin");
+    }
+
+    private function isValidate(UsersEntity $user)
+    {
+        if (isset($_SESSION["validate"]) && $user->getToken() == $_SESSION["validate"]) {
+            $this->users->update($user->getId(), 'id', ["activate" => '1', "token" => ""]);
+            $user->setToken("");
+            $user->setActivate("1");
+            unset($_SESSION["validate"]);
+        }
+        if ($user->getActivate() == '0' && $user->getVerify() == '0') {
+            $this->messageFlash()->error("Merci de valider votre compte (un mail vous a été envoyé)");
+            $_SESSION["user"] = "";
+            header('location: /login');
+            exit();
+        }
+    }
+
+    public function activatePage()
+    {
+        if (!$this->session()->has("users")) {
+            $this->redirect("usersLogin");
+        }
+        $user = $this->session()->get("users");
+        if ($user->getActivate()) {
+            $this->redirect("userProfile");
+        }
+        return $this->render(
+            "user/activate",
+            [
+                "user" => $user
+            ]
+        );
     }
 }

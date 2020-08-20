@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Facture</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="pdf.css" />
+  <style>
+  html, body, div, span, applet, object,
+iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+pre, a, abbr, acronym, address, big, cite,
+code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b,
+u, i, center, dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption,
+footer, header, hgroup, menu, nav, output, ruby,
+section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;}
+
+body {
+	line-height: 1;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+	blockquote:before, blockquote:after, q:before, q:after {
+		content: '';
+		content: none;
+	}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+	-webkit-text-size-adjust: none;
+}
+
+mark {
+	background-color: transparent;
+	color: inherit;
+}
+
+input::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+input, select, textarea {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+}
+
+html, body{
+    height: 100%;
+}
+
+body{
+    width: 800px;
+    position: relative;
+    color: #222;
+    font-family: "Helvetica Neue", Arial, Verdana, sens-serif;
+    line-height: 1.4;
+}
+
+h1{
+    font-size: 3em;
+    font-weight: bold;
+    margin: 0 0 70px 0;
+}
+
+.address_label, .infos_label{
+    color: #555;
+    float: left;
+    width: 105px;
+    text-align: right;
+}
+
+.address_content, .infos_content{
+    margin-left: 115px;
+    border-left: 1px solid #CCCCCC;
+    padding-left: 10px;
+}
+
+.address-from{
+    position: absolute;
+    top: 7px;
+    right: 0;
+    width: 50%;
+}
+
+.address-to{
+    float: left;
+    width: 50%;
+}
+
+.infos{
+    float: right;
+    width: 50%;
+}
+
+.infos_label, .infos_content{
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.cb{
+    clear: both;
+}
+
+.items{
+    margin: 50px 0;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.items tbody tr:nth-child(odd) {
+    background: #F6F6F6;
+}
+
+.items th{
+    border-bottom: 1px solid #DDDDDD;
+    text-align: left;
+    border-top: none;
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+.items td{
+    border: 1px solid #DDDDDD;
+    border-left: none;
+    border-right: none;
+    padding: 10px;
+}
+
+.total{
+    background-color: transparent !important;
+}
+
+.total td{
+    border: none !important;
+}
+
+.total_label{
+    text-align: right;
+    background-color: transparent;
+}
+
+.total-first td{
+    padding-top: 28px;
+}
+
+.total-big td{
+    padding-top: 10px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+footer{
+    border-top: 1px solid #CCCCCC;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1em 5px 0 5px;
+    font-size: 0.8em;
+}
+  </style>
+
+</head>
+
+<body>
+
+    <h1>Facture</h1>
+
+    <div class="address address-from">
+        <div class="address_label">De</div>
+        <div class="address_content">
+            <strong>CoWorkInMoulins</strong><br>
+            1 place Mal de Lattre de Tassigny<br>
+           	03000 Moulins<br>
+            W032006859<br>
+			07.83.34.69.12
+        </div>
+    </div>
+
+    <div class="address address-to">
+        <div class="address_label">Pour</div>
+        <div class="address_content">
+            <strong>Mathieu Quiévy</strong><br>
+            4 rue de la filature boite 23<br>
+            7034 obourg saint denis<br>
+			+32 494 77 40 20
+        </div>
+    </div>
+
+    <div class="infos">
+        <div class="infos_label">Facture n°</div>
+        <div class="infos_content"><strong>2020-07-001</strong></div>
+        <div class="infos_label">Émise le </div>
+        <div class="infos_content">31 Juillet 2020</div>
+    </div>
+
+    <div class="cb"></div>
+
+    <table class="items">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th style="width: 78px;">Quantité</th>
+                <th style="width: 78px;">Prix Unitaire</th>
+                <th style="width: 108px;">Prix Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Adhesion individuel 2020</td>
+                <td>1</td>
+                <td>20</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>forfait 55H</td>
+                <td>1</td>
+                <td>50</td>
+                <td>50</td>
+            </tr>
+            <tr class="total total-first">
+                <td colspan="3" class="total_label">Sous-total</td>
+                <td><strong>70 €</strong></td>
+            </tr>
+            <tr class="total total-big">
+                <td colspan="3" class="total_label">Total</td>
+                <td><strong>70 €</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer style="text-align: center;">
+	TVA non applicable, article 293 B du Code général des impôts<br>
+        Association loi de 1901<br>
+        CoWorkInMoulins.fr
+    </footer>
+
+</body>
+
+</html>

@@ -2,6 +2,9 @@
 
 namespace Core\Controller;
 
+use Cake\Database\ConstraintsInterface;
+use PHP_CodeSniffer\Generators\HTML;
+
 class FormController
 {
 
@@ -94,7 +97,8 @@ class FormController
     private function errorRequire(string $field, bool $value): void
     {
         $data = $this->postDatas[$field];
-        if (isset($data) && !empty($data)) {
+
+        if (isset($data) && (!empty($data) || $data === "0")) {
             $this->addToDatas($field);
         } else {
             $this->newError("$field", "le champ {$field} ne peut etre vide");
@@ -104,7 +108,8 @@ class FormController
     private function errorVerify(string $field, bool $value): void
     {
         $fieldVerify = $field . "Verify";
-        if (isset($this->postDatas[$fieldVerify]) &&
+        if (
+            isset($this->postDatas[$fieldVerify]) &&
             $this->postDatas[$fieldVerify] == $this->postDatas[$field]
         ) {
             $this->addToDatas($field);
@@ -122,9 +127,67 @@ class FormController
         }
     }
 
+    private function errorTel(string $field): void
+    {
+
+        $reg = "/^0[6-7]([0-9]{2}){4}$/";
+
+        if (preg_match($reg, $this->postDatas[$field])) {
+            $this->addToDatas($field);
+        } else {
+            $this->newError("$field", "le champ {$field} doit un numero de telephone valide");
+        }
+    }
+
+    private function errorMail(string $field): void
+    {
+
+        if (filter_var($this->datas[$field], FILTER_VALIDATE_EMAIL)) {
+            $this->addToDatas($field);
+        } else {
+            $this->newError("$field", "le champ {$field} doit un email valide");
+        }
+    }
+
+    private function errorInt(string $field): void
+    {
+        $data = $this->datas[$field];
+        $reg = "/^[0-9]*[\.\,]?[0-9]*$/";
+        preg_match($reg, $data, $match);
+
+        if ($match[0] !== null) {
+            $this->addToDatas($field, str_replace(".", ",", $match[0]));
+        } else {
+            $this->newError("$field", "le champ {$field} doit un nombre");
+        }
+    }
+
     private function newError(string $field, string $message): void
     {
         unset($this->datas[$field]);
         $this->errors["$field"][] = $message;
+    }
+
+    public function html()
+    {
+        $html = "<form class=\"form-inline\" method=\"post\">";
+
+        foreach ($this->fields as $field => $csonstraints) {
+            $error = "";
+            $errorDiv = "";
+            $html .= "<div class=\"form-group mb-2\">";
+            if (\key_exists($field, $this->errors) && !\key_exists('post', $this->errors)) {
+                $error = " is-invalid";
+            }
+
+            $html .= "<input type=\"text\" name=\"{$field}\" class=\"form-control{$error}\" id=\"staticEmail2\" placeholder=\"{$field}\">";
+            $html .= "</div>";
+        }
+
+        $html .= "<button type=\"submit\" class=\"btn btn-primary mb-2\">
+            <span data-feather=\"check-square\"></span>
+        </button>
+    </form>";
+        return $html;
     }
 }

@@ -1,7 +1,13 @@
 <?php
 return [
+    "stieName" => "",
     "usernameadmin" => "",
     "passwordadmin" => "",
     "tokenSms" => "",
-    "UrlSms" => ""
+    "urlSms" => "",
+    "MAILER_Host" => "",
+    "MAILER_Username" => "",
+    "MAILER_Password" => "",
+    "MAILER_Port" => "",
+    "ENV_DEV" => true
 ];

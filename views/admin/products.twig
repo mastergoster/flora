@@ -1,0 +1,35 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">Products</h1>
+{% endblock %}
+{% block content %}
+	<div class="table-responsive">
+		{{ form | raw }}
+			<table class="table table-striped table-sm text-center">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>nom</th>
+						<th>prix</th>
+						<th>duree</th>
+						<th>createdAt</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+						<tr>
+							<td>{{ item.id }}</td>
+							<td>{{ item.name }}</td>
+							<td>{{ item.price }}
+								€</td>
+							<td>{{ item.duration }}
+								h</td>
+							<td>{{ item.createdAt | date("d/m/Y") }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

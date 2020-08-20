@@ -1,31 +1,78 @@
-{% extends 'layout/default_beer.twig' %}
+{% extends 'layout/default.twig' %}
 
-{% block body %}
-  <section class="container mb-5 mt-5">
-        <h1>Inscription</h1>
-    
-        <form method="POST" action="">
-            <div class="row">
-                <div class="form-group col-12 col-sm">
-                    <label for="">Adresse mail</label>
-                    <input class="form-control" required type="email" name="mail" placeholder="Votre courriel">
-                </div>
-                <div class="form-group col-12 col-sm">
-                    <label for="">Verification adresse mail</label>
-                    <input class="form-control" required type="email" name="mailVerify" placeholder="vérification de votre courriel">
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-12 col-sm">
-                    <label for="">Mot de passe</label>
-                    <input class="form-control" required type="password" name="password" placeholder="Votre mot de passe">
-                </div>
-                <div class="form-group col-12 col-sm">
-                    <label for="">Répétez le mot de passe</label>
-                    <input class="form-control" required type="password" name="passwordVerify" placeholder="confirmez votre mot de passe">
-                </div>
-            </div>
-            <button class="btn btn-primary" required type="submit">S'inscrire</button>
-        </form>
-    </section>
+{% block content %}
+	<section>
+		<h2>Inscription</h2>
+		<p>Bienvenu dans l'espace Coworking de Moulins</p>
+		<form method="post" action="#">
+			<div class="fields">
+				<div class="field half">
+					<label for="last_name">Nom</label>
+					<input {% if errors.last_name %} class="invalid-feedback" {% endif %} type="text" name="last_name" id="last_name" value="{{ datas.last_name}}"/>
+					{% if errors.last_name %}
+						<div class="invalid-feedback">
+							{% for error in errors.last_name %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+				<div class="field half">
+					<label for="first_name">Prenom</label>
+					<input {% if errors.first_name %} class="invalid-feedback" {% endif %} type="text" name="first_name" id="first_name" value="{{ datas.first_name}}"/>
+					{% if errors.first_name %}
+						<div class="invalid-feedback">
+							{% for error in errors.first_name %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+				<div class="field half">
+					<label for="email">Email</label>
+					<input {% if errors.email %} class="invalid-feedback" {% endif %} type="email" name="email" id="email" value="{{ datas.email}}"/>
+					{% if errors.mail %}
+						<div class="invalid-feedback">
+							{% for error in errors.email %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+				<div class="field half">
+					<label for="phone_number">Portable</label>
+					<input {% if errors.phone_number %} class="invalid-feedback" {% endif %} type="text" name="phone_number" id="phone_number" value="{{ datas.phone_number}}"/>
+					{% if errors.phone_number %}
+						<div class="invalid-feedback">
+							{% for error in errors.phone_number %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+				<div class="field half">
+					<label for="password">Mot de passe</label>
+					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="password" id="password"/>
+					{% if errors.password %}
+						<ul class="invalid-feedback">
+							{% for error in errors.password %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+				<div class="field half">
+					<label for="passwordVerify">Vérification du mot de passe</label>
+					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="passwordVerify" id="passwordVerify"/>
+				</div>
+			</div>
+			<ul class="actions">
+				<li><input type="submit" value="S'inscrire"/></li>
+			</ul>
+			<div class="align-center">
+				<a href="/login">connexion</a>
+			</div>
+		</form>
+	</section>
+
 {% endblock %}

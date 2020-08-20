@@ -1,0 +1,51 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">Dashboard Compta ligne</h1>
+	<div class="btn-group mr-2">
+		<a href="/admin/compta/ndf" type="button" class="btn btn-sm btn-outline-secondary">Note de frais</a>
+	</div>
+{% endblock %}
+{% block content %}
+	<table class="table table-hover" id="recap">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">description</th>
+				<th scope="col">credit</th>
+				<th scope="col">debit</th>
+				<th scope="col">date</th>
+				<th scope="col">creation</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<form method="POST" action="/admin/compta/add">
+					<th scope="row">new</th>
+					<td><input type="text" name="description"/></td>
+					<td><input type="text" name="credit" value="0"/></td>
+					<td><input type="text" name="debit" value="0"/></td>
+					<td><input type="date" name="date" value="{{ item.id | date("Y-m-d")}}"/></td>
+					<td>
+						<button class="btn btn-primary" type="submit">validate</button>
+					</td>
+				</form>
+			</tr>
+
+			{% for item in items %}
+				<tr>
+					<th scope="row">{{ item.id }}</th>
+					<td>{{ item.description }}</td>
+					<td>{{ item.credit }}</td>
+					<td>{{ item.debit }}</td>
+					<td>{{ item.date }}</td>
+					<td>{{ item.createdAt }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block script %}
+	<script src="/assets/js/admin.js"></script>
+{% endblock %}

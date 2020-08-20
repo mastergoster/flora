@@ -1,0 +1,40 @@
+{% extends 'layout/admin.twig' %}
+{% block options %}
+	<h1 class="h2">User</h1>
+{% endblock %}
+{% block content %}
+	<div class="table-responsive">
+		<table class="table table-striped table-sm">
+			<thead>
+				<tr>
+					<th></th>
+					<th>nom</th>
+					<th>prenom</th>
+					<th>mail</th>
+					<th>status</th>
+					<th>date</th>
+					<th>a</th>
+					<th>v</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+					<tr {% if user.presence %} class="table-success" {% endif %}>
+						<td>
+							<a href="/admin/users/{{ user.id }}">
+								<span data-feather="edit"></span>
+							</a>
+						</td>
+						<td>{{ user.firstName }}</td>
+						<td>{{ user.LastName }}</td>
+						<td>{{ user.email }}</td>
+						<td>{{ user.role.name }}</td>
+						<td>{{ user.role.createdAt }}</td>
+						<td class="rounded-circle {% if user.activate %} bg-success {% else %} bg-danger {% endif %}"></td>
+						<td class="rounded-circle {% if user.verify %} bg-success {% else %} bg-danger {% endif %}"></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</tbody>
+	</table>
+</div>{% endblock %}

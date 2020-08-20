@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use \Core\Controller\Controller;
 use Core\Controller\SmsController;
+use Core\Controller\EmailController;
+use Core\Extension\Twig\LinkExtension;
 
 class ShopController extends Controller
 {
@@ -62,6 +64,9 @@ class ShopController extends Controller
 
     public function contact()
     {
-        return $this->render('shop/contact', []);
+        require \App\App::rootfolder() . '/db/migrations/20200813111853.php';
+        $test = new \V20200813111853("developpement", "test");
+        dd($test);
+        return $this->render('shop/invoce', []);
     }
 }

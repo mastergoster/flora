@@ -11,10 +11,9 @@ class SmsController extends Controller
 
     public function __construct()
     {
-        $this->loadModel("User");
+        $this->loadModel("Users");
         $this->token = $this->getConfig("tokenSms");
         $this->url = $this->getConfig("urlSms");
-        dd($this->url);
     }
 
 

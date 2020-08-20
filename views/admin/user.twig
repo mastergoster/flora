@@ -1,0 +1,216 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">User</h1>
+	<div class="btn-toolbar mb-2 mb-md-0">
+		<div class="btn-group mr-2">
+			<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+			<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<ul class="list-group col-6">
+			<li class="list-group-item">id :
+				{{ users.id }}</li>
+			<li class="list-group-item">nom :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="first_name" type="text" class="form-control" value="{{ users.firstName }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">prenom :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="last_name" type="text" class="form-control" value="{{ users.lastName }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">mail :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="email" type="text" class="form-control" value="{{ users.email }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">password :
+				{{ users.password }}</li>
+			<li class="list-group-item">pin :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="pin" type="text" class="form-control" value="{{ users.pin }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">token :
+				{{ users.token }}</li>
+			<li class="list-group-item">tel :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="phone_number" type="text" class="form-control" value="{{ users.phoneNumber }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">activate :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="activate" type="text" class="form-control" value="{{ users.activate }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">verify :
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<input name="verify" type="text" class="form-control" value="{{ users.verify }}">
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+			</li>
+			<li class="list-group-item">role :
+
+				<form class="form-inline" method="post">
+					<div class="form-group mb-2">
+						<input name="id" type="hidden" class="form-control" id="id" value="{{ users.id }}">
+						<input name="roleLineId" type="hidden" class="form-control" id="id" value="{{ userRoles.id }}">
+					</div>
+					<div class="form-group mx-sm-3 mb-2">
+						<select name="role" class="form-control">
+							{% for role in roles %}
+								<option value="{{ role.id }}" {% if role.id == userRoles[0].idRoles %} selected {% endif %}>{{ role.name }}</option>
+							{% endfor %}
+						</select>
+
+					</div>
+					<button type="submit" class="btn btn-primary mb-2">
+						<span data-feather="check-square"></span>
+					</button>
+				</form>
+				<ul>
+					{% for userRole in userRoles %}
+						<li>
+							{{ roles[userRole.idRoles].name }}
+							du
+							{{ userRole.createdAt | date("d/m/Y") }}
+							au
+							{{ userRole.updatedAt | date("d/m/Y") }}
+						</li>
+					{% endfor %}
+				</ul>
+
+			</li>
+		</ul>
+
+		<div class="accordion col-3" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="modifheur">
+					<h2 class="mb-0">
+						<a href="/admin/users/{{ users.id }}/modifheure">
+							<button class="btn btn-link btn-block text-left" type="button">
+								correction pointage
+							</button>
+						</a>
+					</h2>
+				</div>
+			</div>
+			{% for key, lines in recap.heuresLog %}
+
+				<div class="card">
+					<div class="card-header" id="{{ key }}">
+						<h2 class="mb-0">
+							<button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#col{{ key }}" aria-expanded="false" aria-controls="{{ key }}">
+								le
+								{{ key | date("d/m/Y") }}
+								:
+								{{(recap.consoByJour[key] / 60 / 60) | round(2, 'floor') }}
+								h
+							</button>
+						</h2>
+					</div>
+
+					<div id="col{{ key }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div class="card-body">
+							{% for ligne in lines %}
+								{{ligne}}
+								<br/>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+
+			{% endfor %}
+		</div>
+		<ul class="list-group col-3">
+			{% for forfait in forfaits %}
+				<li class="list-group-item">
+					<form class="form-inline" method="post">
+						<div class="form-group mb-2">
+							<input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="{{ forfait.name }}">
+						</div>
+						<input name="idForfait" type="hidden" value="{{ forfait.id }}">
+						<button type="submit" class="btn btn-primary mb-2">
+							<span data-feather="check-square"></span>
+						</button>
+					</form>
+				</li>
+			{% endfor %}
+			{% for forfaitUser in forfaitsUser %}
+				<li class="list-group-item">{{ forfaitUser.createdat | date("d/m/Y") }}
+					nom :
+					{{ forfaits[forfaitUser.idPackages].name }}
+					<form class="form-inline" method="post">
+						<input name="idForfaitDel" type="hidden" value="{{ forfaitUser.id }}">
+						<button type="submit" class="btn btn-danger mb-2">
+							<span data-feather="trash-2"></span>
+						</button>
+					</form>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

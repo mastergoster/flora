@@ -9,19 +9,21 @@ class DisplayController extends Controller
 
     public function __construct()
     {
-        $this->loadModel('user');
-        $this->loadModel('heures');
+        if ($this->security()->isConnect()) {
+            $this->redirect("userProfile");
+        }
+        $this->loadModel('users');
+        $this->loadModel('hours');
     }
 
     public function tactile()
     {
-        if ($_SESSION["user"]) {
-            header('Location: /user/profile');
-            exit();
-        }
-        $users = $this->user->all();
+
+
+        $users = $this->users->all();
+
         foreach ($users as $user) {
-            $user->presence = $this->heures->presence($user->getId());
+            $user->presence = $this->hours->presence($user->getId());
         }
         return $this->render(
             "display/tactile",
@@ -30,18 +32,26 @@ class DisplayController extends Controller
             ]
         );
     }
+    public function tv()
+    {
+        return $this->render(
+            "display/tv",
+            []
+        );
+    }
 
     public function ajaxDisplayNewLine()
     {
-        if ($_SESSION["user"]) {
-            header('Location: /user/profile');
-            exit();
-        }
-        $user = $this->user->connect($_POST["user_mail"], $_POST["pin"]);
-        if (!$user) {
+        if (!$this->security()->login($_POST["user_email"], $_POST["pin"], true)) {
             $this->jsonResponse403();
         }
-        header('content-type:application/json');
-        echo json_encode($this->heures->ajout($user->getId()));
+
+        $user = $this->session()->get("users");
+
+        if (!$user->getVerify()) {
+            $this->users->update($user->getId(), 'id', ["verify" => true]);
+        }
+        $this->session()->remove("users");
+        $this->jsonResponse($this->hours->create(["id_users" => $user->getId()]));
     }
 }

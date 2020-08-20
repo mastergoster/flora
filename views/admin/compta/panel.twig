@@ -1,0 +1,21 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">Dashboard Compta</h1>
+	<div class="btn-toolbar mb-2 mb-md-0">
+		<div class="btn-group mr-2">
+			<a href="/admin/compta/ligne" type="button" class="btn btn-sm btn-outline-secondary">add ligne</a>
+			<a href="/admin/compta/ndf" type="button" class="btn btn-sm btn-outline-secondary">Note de frais</a>
+		</div>
+	</div>
+{% endblock %}
+{% block content %}
+	achat :{{ items.achats }}€
+	<br/>
+	dépense :{{ items.recettes }}€
+	<br/>
+	solde virtuel :
+	{{ items.recettes - items.achats }}€
+{% endblock %}
+
+{% block script %}{% endblock %}

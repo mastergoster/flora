@@ -1,116 +1,140 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoWorkInMoulins / panel / profile</title>
-    <link rel="stylesheet" href="/css/panel.css">
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>CoWorkInMoulins / panel / profile</title>
+		<link rel="stylesheet" href="/css/panel.css">
+	</head>
 
-<body>
-    <div class="container">
-        <aside class="left-nav">
-            <h1>Panel</h1>
-            <nav>
-                <ul>
-                    <li>a venir ;)</li>
-                    <li><a href="/user/logout">deconexion</a></li>
-                </ul>
-            </nav>
-            <footer>FLORA by Apprendre.co v1.0</footer>
-        </aside>
-        <section class="body">
-            <article>
-                <h1>{{ user.prenom }} {{ user.nom }}</h1>
-                <div>
-                    <p class="muted">Membre actif</p>
-                    <p>mail : {{ user.mail }} (validé)</p>
-                    <p>telephone : {{ user.tel }} (validé)</p>
-                    <p>mon code pin : {{ user.pin }}</p>
-                </div>
-            </article>
-            <article class="forfait">
-                <h1>Forfait</h1>
-                <div>
-                    <p class="muted">expire le : {{ ForfaitExpiredAt | date("d/m/Y")  }}</p>
-                    <p class="big">{{ forfait.h}}<span>H</span>{{forfait.m }}<span>min</span></p>
-                </div>
-            </article>
-            <article class="forfait">
-                <h1>Présences</h1>
-                <div>
-                    <p>denière présence le :</p>
-                    <p>{{last.date | date("d/m/Y") }} durée {{last.h}}h {{last.m}}min</p>
-                </div>
-            </article>
-            <article id="presence" class="{% if presence %}green{% endif %}">
-                {% if presence %}
-                <h1>tu es au coworking</h1>
-                {% else %}
-                <h1>tu n'es pas au coworking</h1>
-                {% endif %}
-                <div>
-                    <p class="muted">aujourd'hui tu a passé :</p>
-                    <p class="big" id="compteur">
-                        {{ today.h }}<span>H</span>{{ today.m }}<span>min</span>
-                    </p>
-                    {% if presence %}
-                    <p class="muted">arreter ma journée</p>
-                    {% else %}
-                    <p class="muted">continuer ma journée</p>
-                    {% endif %}
+	<body>
+		<div class="container">
+			<aside class="left-nav">
+				<h1>Panel</h1>
+				<nav>
+					<ul>
+						<li>a venir ;)</li>
+						<li>
+							<a href="/user/logout">deconexion</a>
+						</li>
+						{% if admin %}
+							<li>
+								<a href="/admin">administration</a>
+							</li>
+						{% endif %}
+					</ul>
+				</nav>
+				<footer>FLORA by Apprendre.co v1.0</footer>
+			</aside>
+			<section class="body">
+				<article>
+					<h1>{{ user.firstName }}
+						{{ user.lastName }}</h1>
+					<div>
+						<p class="muted">{{ roleUser.name }}</p>
+						<p>mail :
+							{{ user.email }}<br>
+							(
+							{% if user.activate %}validé{% else %}non validé
+							{% endif %})</p>
+						<p>telephone :
+							{{ user.phoneNumber }}
+							<br>(
+							{% if user.verify %}validé{% else %}non validé
+							{% endif %})</p>
+						<p>mon code pin :
+							{% if user.verify %}
+								{{ user.pin }}
+							{% else %}
+								valider votre tel
+							{% endif %}
+						</p>
+					</div>
+				</article>
+				<article class="forfait">
+					<h1>Forfait</h1>
+					<div>
+						<p class="muted">expire le :
+							{{ ForfaitExpiredAt | date("d/m/Y")  }}</p>
+						<p class="big">{{ forfait.h}}<span>H</span>
+							{{forfait.m }}<span>min</span>
+						</p>
+					</div>
+				</article>
+				<article class="forfait">
+					<h1>Présences</h1>
+					<div>
+						<p>denière présence le :</p>
+						<p>{{last.date | date("d/m/Y") }}
+							durée
+							{{last.h}}h
+							{{last.m}}min</p>
+					</div>
+				</article>
+				<article id="presence" class="{% if presence %}green{% endif %}">
+					{% if presence %}
+						<h1>tu es au coworking</h1>
+					{% else %}
+						<h1>tu n'es pas au coworking</h1>
+					{% endif %}
+					<div>
+						<p class="muted">aujourd'hui tu a passé :</p>
+						<p class="big" id="compteur">
+							{{ today.h }}<span>H</span>
+							{{ today.m }}<span>min</span>
+						</p>
+						{% if presence %}
+							<p class="muted">arreter ma journée</p>
+						{% else %}
+							<p class="muted">continuer ma journée</p>
+						{% endif %}
 
-                </div>
-            </article>
+					</div>
+				</article>
 
-        </section>
-    </div>
-    <script>
-        var heure = {{ today.h }};
-        var min = {{ today.m }};
-        document.addEventListener('DOMContentLoaded', function () {
-            {% if presence %}
-            var compteur = document.getElementById("compteur");
-            var sec = 0;
-            var refresh = setInterval(function () {
-                sec += 1;
-                if (sec >= 60) {
-                    min += 1;
-                    sec = 0;
-                    if (min >= 60) {
-                        heure += 1;
-                        min = 0;
-                    }
-                }
-                compteur.innerHTML = heure + '<span>H</span>' + min + '<span>min</span>';
-            }, 1000);
-            {% endif %}
-            function reloadpage() {
-                setInterval(function () {
-                    document.location.reload(true);
-                }, 3000);
+			</section>
+		</div>
+		<script>
+			var heure = {{ today.h }};
+var min = {{ today.m }};
+document.addEventListener('DOMContentLoaded', function () {
+{% if presence %}
+var compteur = document.getElementById("compteur");
+var sec = 0;
+var refresh = setInterval(function () {
+sec += 1;
+if (sec >= 60) {
+min += 1;
+sec = 0;
+if (min >= 60) {
+heure += 1;
+min = 0;
+}
+}
+compteur.innerHTML = heure + '<span>H</span>' + min + '<span>min</span>';
+}, 1000);{% endif %}function reloadpage() {
+setInterval(function () {
+document.location.reload(true);
+}, 1000);
 
-            }
+}
 
-            function submitajax(e) {
-                e.preventDefault();
+function submitajax(e) {
+e.preventDefault();
 
-                let formData = new FormData();
-                formData.append("id_user", {{ user.id }});
+let formData = new FormData();
+formData.append("id_user", {{ user.id }});
 
-        fetch("/user/admin/newline", {
-            method: "post",
-            body: formData
-        })
-            .then(response => response.json())
-            .then(json => console.log(json))
-            .then(reloadpage());
-        return false;
-            };
-        var formlist = document.getElementById('presence').addEventListener('click', submitajax);
-        });
-    </script>
-</body>
+fetch("/user/admin/newline", {
+method: "post",
+body: formData
+}).then(response => response.json()).then(json => console.log(json)).then(reloadpage());
+return false;
+};
+var formlist = document.getElementById('presence').addEventListener('click', submitajax);
+});
+		</script>
+	</body>
 
 </html>

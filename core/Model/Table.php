@@ -3,9 +3,15 @@
 namespace Core\Model;
 
 use \Core\Controller\Database\DatabaseController;
+use Core\Controller\Database\DatabaseMysqliteController;
 
 abstract class Table
 {
+    /**
+     * Undocumented variable
+     *
+     * @var DatabaseMysqliteController
+     */
     protected $db;
 
     protected $table;
@@ -55,17 +61,36 @@ abstract class Table
 
     public function find($id, $column = 'id')
     {
-        return $this->query("SELECT * FROM {$this->table} WHERE $column=?", [$id], true);
+        if (\is_array($id)) {
+            foreach ($id as $k => $v) {
+                $sql[] = "$k=:$k";
+            }
+            $sql = join(" AND ", $sql);
+        } else {
+            $sql = "$column=?";
+            $id = [$id];
+        }
+        return $this->query("SELECT * FROM {$this->table} WHERE $sql", $id, true);
     }
 
-    public function findAll($value, $column)
+    public function findAll($value, $column, $order = false, $colomunOrder = "id")
     {
-        return $this->query("SELECT * FROM {$this->table} WHERE $column=?", [$value]);
+        if ($order) {
+            $order = " ORDER BY " . $colomunOrder . " " . ($order === true ? "ASC" : "DESC");
+        } else {
+            $order = "";
+        }
+        return $this->query("SELECT * FROM {$this->table} WHERE $column=? {$order}", [$value]);
     }
 
-    public function all()
+    public function all($order = false, $colomun = "id")
     {
-        return $this->query("SELECT * FROM $this->table");
+        if ($order) {
+            $order = " ORDER BY " . $colomun . " " . ($order === true ? "ASC" : "DESC");
+        } else {
+            $order = "";
+        }
+        return $this->query("SELECT * FROM $this->table" . $order);
     }
 
     public function create($fields, $class = false)
@@ -84,11 +109,13 @@ abstract class Table
             $fields = $array;
         }
         foreach ($fields as $k => $v) {
-            $sql_parts[] = "$k = ?";
+            $sql_parts[] = $k;
+            $sql_parts2[] = "?";
             $attributes[] = $v;
         }
         $sql_part = implode(', ', $sql_parts);
-        return $this->query("INSERT INTO {$this->table} SET $sql_part", $attributes, true);
+        $sql_part2 = implode(', ', $sql_parts2);
+        return $this->query("INSERT INTO {$this->table} ({$sql_part}) VALUES ({$sql_part2})", $attributes, true);
     }
 
     public function update($id, $column, $fields)
@@ -129,5 +156,10 @@ abstract class Table
                 $one
             );
         }
+    }
+
+    public function lastInsertId()
+    {
+        return $this->db->lastInsertId();
     }
 }

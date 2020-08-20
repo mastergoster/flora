@@ -1,0 +1,87 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">Note de frais</h1>
+	<div class="btn-group mr-2">
+		<a href="/admin/compta/ligne" type="button" class="btn btn-sm btn-outline-secondary">add ligne</a>
+	</div>
+{% endblock %}
+{% block content %}
+	<table class="table table-hover" id="recap">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">description</th>
+				<th scope="col">user</th>
+				<th scope="col">ligne</th>
+				<th scope="col">action</th>
+				<th scope="col">creation</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<form method="POST" action="/admin/compta/ndf">
+					<th scope="row">new</th>
+					<td><input type="text" name="description"/></td>
+					<td>
+						<select name="id_user" class="form-control">
+							<option value="">
+								---- SELECTIONNEZ ----
+							</option>
+							{% for user in users %}
+								<option value="{{ user.id }}">
+									{{ user.nom }}
+									{{ user.prenom }}
+								</option>
+							{% endfor %}
+						</select>
+					</td>
+					<td>
+						<select name="id_ligne" class="form-control">
+							<option value="">
+								---- SELECTIONNEZ ----
+							</option>
+							{% for ligne in lignes %}
+								{% if ligne.debit > 0 %}
+
+									<option value="{{ ligne.id }}">
+										{{ ligne.description }}
+										({{ ligne.debit }}€)
+									</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</td>
+					<td>
+						<button class="btn btn-primary" type="submit">create</button>
+					</td>
+				</form>
+			</tr>
+			{% for item in items %}
+				<tr>
+					<th scope="row">{{ item.id }}</th>
+					<td>{{ item.description }}</td>
+					<td>{{ item.idUser }}</td>
+					<td>{{ item.idLigne }}</td>
+					<td>
+						{% if item.payeAt %}
+							{{ item.payeAt }}
+						{% else %}
+							<form method="POST" action="/admin/compta/ndf">
+								<input type="hidden" name="id" value="{{ item.id }}"/>
+								<input type="hidden" name="paye_at" value="ok"/>
+								<button class="btn btn-success">Payer</button>
+							</form>
+						{% endif %}
+
+
+					</td>
+					<td>{{ item.createdAt }}</td>
+				</tr>
+			{% endfor %}
+
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block script %}{% endblock %}

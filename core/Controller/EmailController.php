@@ -3,11 +3,14 @@
 
 namespace Core\Controller;
 
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\PHPMailer;
+use Symfony\Component\Mailer\MailerInterface;
+
 class EmailController extends controller
 {
 
-    private $mailservice;
-    private $message;
+    private $mail;
 
     /**
      * EmailController constructor.
@@ -16,52 +19,55 @@ class EmailController extends controller
     public function __construct(string $objet = null)
     {
 
-        if (getenv('ENV_DEV')) {
-            $transport = new \Swift_SmtpTransport('mailcatcher', 1025);
-            $sender = ["mail@test.fr" => "mail test"];
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        if ($this->getConfig('ENV_DEV')) {
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->Host         = 'localhost';
+            $mail->Port         = '1025';
+            $sender = ["mail@test.fr", "mail test"];
         } else {
-            $transport = new \Swift_SmtpTransport('smtp.gmail.com', 587, 'tls');
-            $transport->setUsername(getenv('GMAIL_USER'));
-            $transport->setPassword(getenv('GMAIL_PWD'));
-            $sender = [
-                getenv('GMAIL_USER') => getenv('GMAIL_PSEUDO')
-            ];
+            $mail->Host         = $this->getConfig('MAILER_Host');
+            $mail->SMTPAuth     = true;
+            $mail->Username     = $this->getConfig('MAILER_Username');
+            $mail->Password     = $this->getConfig('MAILER_Password');
+            $mail->SMTPSecure   = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port         = $this->getConfig('MAILER_Port');
+            $sender = [$this->getConfig('MAILER_Username'), $this->getConfig('stieName')];
         }
-
-        $this->mailservice = new \Swift_Mailer($transport);
-        $message = new \Swift_Message($objet);
-        $message->setFrom($sender);
-
-        $headers = $message->getHeaders();
-        $headers->addMailboxHeader('From', $sender);
-        $headers->addMailboxHeader('Reply-to', $sender);
-        $this->message = $message;
+        $mail->setFrom($sender[0], $sender[1]);
+        $this->mail = $mail;
     }
 
 
     public function object(string $objet): self
     {
-        $this->message->setSubject($objet);
+        $this->mail->Subject = $objet;
         return $this;
     }
 
     public function to(string $mail): self
     {
-        $this->message->setTo($mail);
+        $this->mail->addAddress($mail);
         return $this;
     }
 
     public function message(string $template, array $data = null): self
     {
 
-        $this->message->setBody($this->render("email/" . $template . ".html", $data), 'text/html');
-        $this->message->addPart($this->render("email/" . $template . ".txt", $data), 'text/plain');
+        $this->mail->isHTML(true);
+        $this->mail->Body = $this->render("email/" . $template . ".html", $data);
+        $this->mail->AltBody = $this->render("email/" . $template . ".txt", $data);
         return $this;
     }
 
 
     public function send(): void
     {
-        $this->mailservice->send($this->message);
+        try {
+            $this->mail->send();
+        } catch (\Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
+        }
     }
 }

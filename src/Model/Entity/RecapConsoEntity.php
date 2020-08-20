@@ -2,8 +2,10 @@
 
 namespace App\Model\Entity;
 
+use DateTime;
 use Core\Model\Entity;
 use Core\Controller\Helpers\HController;
+use Core\Controller\Helpers\TableauController;
 
 class RecapConsoEntity extends Entity
 {
@@ -15,15 +17,20 @@ class RecapConsoEntity extends Entity
     private $heurDispo;
     private $presence = false;
     private $consoByJour;
+    /**
+     * lastday
+     *
+     * @var bool|Datetime
+     */
     private $lastday = false;
 
 
     public function __construct(int $id_user)
     {
         $app = \App\App::getInstance();
-        $forfaitsId     =   $app->getTable('forfait')->allAssocId();
-        $forfaitsLog    =   $app->getTable('forfaitLog')->findAllByIdUser($id_user);
-        $heureslog       =   $app->getTable('heures')->findAll($id_user, 'id_user');
+        $forfaitsId     =   TableauController::assocId($app->getTable('packages')->all());
+        $forfaitsLog    =   TableauController::assocId($app->getTable('packagesLog')->findAll($id_user, 'id_users', 'DESC', 'created_at'));
+        $heureslog       =   $app->getTable('hours')->findAll($id_user, 'id_users');
 
         $this->hydrateForfait($forfaitsLog, $forfaitsId);
         $this->hydrateHeure($heureslog);
@@ -32,12 +39,13 @@ class RecapConsoEntity extends Entity
     }
     private function hydrateForfait($forfaitsLog, $forfaitsId)
     {
+
         foreach ($forfaitsLog as $key => $value) {
             $createdAt = $value->getCreatedAt();
-            $forfaitsLog[$key] = $forfaitsId[$value->getId()];
+            $forfaitsLog[$key] = $forfaitsId[$value->getIdPackages()];
             $forfaitsLog[$key]->setCreatedAt($createdAt);
-            $this->total_achat_heure += $forfaitsLog[$key]->getDuree();
-            $this->LastForfaitExpiredAt = $forfaitsLog[0]->getExpiredAt();
+            $this->total_achat_heure += $forfaitsLog[$key]->getDuration();
+            $this->LastForfaitExpiredAt = reset($forfaitsLog)->getExpiredAt();
             $this->all_forfaits = $forfaitsLog;
         }
     }
@@ -58,11 +66,12 @@ class RecapConsoEntity extends Entity
         foreach ($this->heuresLog as $key => $heures) {
             if ($key <= $now) {
                 $this->consoByJour[$key] = $this->consoByJour($heures, $key == $now);
-                if (!$now) {
+                if ($key != $now) {
                     $this->consototal += $this->consoByJour[$key];
                 }
             }
         }
+
         $this->heurDispo = ($this->total_achat_heure * 60 * 60)  -  $this->consototal;
     }
 
@@ -146,5 +155,29 @@ class RecapConsoEntity extends Entity
     public function getPresence()
     {
         return $this->presence;
+    }
+
+    /**
+     * Get the value of consoByJour
+     */
+    public function getConsoByJour()
+    {
+        return $this->consoByJour;
+    }
+
+    /**
+     * Get the value of all_forfaits
+     */
+    public function getAllForfaits()
+    {
+        return $this->all_forfaits;
+    }
+
+    /**
+     * Get the value of heuresLog
+     */
+    public function getHeuresLog()
+    {
+        return $this->heuresLog;
     }
 }
