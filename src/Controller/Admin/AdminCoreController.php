@@ -20,7 +20,7 @@ class AdminCoreController extends Controller
         //     return dd("mode dev impossible de faire ceci");
         // }
         chdir("/var/www");
-        //putenv("COMPOSER_HOME=/var/www/.config/composer");
+        putenv("COMPOSER_HOME=/var/www/.config/composer");
 
         if (!file_exists("composer.phar")) {
 
@@ -37,7 +37,7 @@ class AdminCoreController extends Controller
             echo `php -r "unlink('composer-setup.php');"`;
         }
         exec("sudo git pull", $git);
-        $composer[] = shell_exec("sudo composer update");
+        $composer[] = shell_exec("composer.phar update");
         exec("vendor/bin/phinx migrate", $phinx);
 
 
