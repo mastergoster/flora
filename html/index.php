@@ -25,6 +25,7 @@ $app->getRouter($basePath)
     //->get('/boutique/commande', 'Shop#purchaseOrder', 'shopPurchaseOrder')
 
 
+    ->get('/admin/update', 'AdminCore#update', 'update')
     ->get('/validation/[*:slug]', 'users#validate', 'validate')
     ->get('/tactile', 'Display#tactile', 'tactile')
     ->get('/tv', 'Display#tv', 'tv')
