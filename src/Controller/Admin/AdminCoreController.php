@@ -19,7 +19,7 @@ class AdminCoreController extends Controller
         // if (\getenv("ENV_DEV")) {
         //     return dd("mode dev impossible de faire ceci");
         // }
-        exec("cd /var/www && git pull", $returns, $code);
+        exec("cd /var/www && sudo git pull", $returns, $code);
         exec("cd .. && composer update", $returns2, $code2);
         \dump($code);
         dump($returns);
