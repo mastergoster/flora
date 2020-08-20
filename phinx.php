@@ -3,8 +3,8 @@ require 'html/index.php';
 return
     [
         'paths' => [
-            'migrations' => '%%PHINX_CONFIG_DIR%%/db/migrations',
-            'seeds' => '%%PHINX_CONFIG_DIR%%/db/seeds'
+            'migrations' => '%%PHINX_CONFIG_DIR%%/phinx/migrations',
+            'seeds' => '%%PHINX_CONFIG_DIR%%/phinx/seeds'
         ],
         'environments' => [
             'default_migration_table' => 'phinxlog',
