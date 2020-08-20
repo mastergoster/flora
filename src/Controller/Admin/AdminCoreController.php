@@ -38,7 +38,8 @@ class AdminCoreController extends Controller
         }
         echo `vendor/bin/phinx migrate`;
 
-        echo `sudo composer update`;
+        echo shell_exec("sudo composer update 2>&1");
+        echo shell_exec("sudo git pull 2>&1");
 
         dd();
     }
