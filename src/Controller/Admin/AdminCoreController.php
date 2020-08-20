@@ -16,10 +16,10 @@ class AdminCoreController extends Controller
 
     public function update()
     {
-        if (\getenv("ENV_DEV")) {
-            return dd("mode dev impossible de faire ceci");
-        }
-        exec("cd .. && git pull", $returns);
+        // if (\getenv("ENV_DEV")) {
+        //     return dd("mode dev impossible de faire ceci");
+        // }
+        exec("cd .. && git pull git@github.com:mastergoster/flora.git master", $returns);
         exec("cd .. && composer update", $returns2);
         dump($returns);
         dd($returns2);
