@@ -41,7 +41,7 @@ class AdminCoreController extends Controller
         exec("sudo composer update --no-dev -o", $composer, $codecomposer);
         exec("vendor/bin/phinx migrate", $phinx);
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
-        return $this->render("admin/update", ["item" => [
+        return $this->render("admin/update", ["itemss" => [
             'git' => $git,
             "codecomposer" => $codecomposer,
             "phinx" => $phinx,
