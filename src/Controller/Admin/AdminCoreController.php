@@ -50,7 +50,7 @@ class AdminCoreController extends Controller
         exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
         return $this->render("admin/update", ["itemss" => [
             "git" => $git,
-            "composer" => $composer2,
+            "composer" => $composer,
             "phinx" => $phinx,
             "codechmod" => $codechmod
         ]]);
