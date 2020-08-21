@@ -9,7 +9,7 @@
 		<span class="image fit"><img src="{{event.cover}}" alt="{{event.title}}"></span>
 		<h2>{{event.title}}</h2>
 		<span class="date">{{ item.dateAt | date("l j F Y \à H:i", "Europe/Paris")}}</span>
-		<blockquote>{{ event.description | raw }}</blockquote>
+		<blockquote>{{ event.description|raw }}</blockquote>
 		{% if form == true %}
 			<form action="" method="post">
 				<div class="fields">
