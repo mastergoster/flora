@@ -26,6 +26,8 @@ class EventsController extends Controller
 
     public function booking($id, $slug, $email = "")
     {
+
+
         $form = false;
         $booking = false;
         $email = filter_var($email, \FILTER_VALIDATE_EMAIL);
@@ -46,6 +48,7 @@ class EventsController extends Controller
                 ]
             );
         }
+
         if ($this->bookingEvents->find(["email" => $email, "id_events" => $event->getId()])) {
             $this->messageFlash()->success("vous êtes déjà inscrit pour cet évènement");
             $booking = true;
@@ -65,7 +68,8 @@ class EventsController extends Controller
                 $this->redirect('usersLogin');
             }
         } elseif (!empty($email) && !$booking) {
-            $this->bookingEvents->create(["id" => $id, "email" => $email]);
+
+            $this->bookingEvents->create(["id_events" => $id, "email" => $email]);
             $this->messageFlash()->success("vous êtes bien inscrit pour cet évènement");
         } elseif (!$booking) {
             if ($this->security()->isConnect()) {
