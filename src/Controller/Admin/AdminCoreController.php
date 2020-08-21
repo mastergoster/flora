@@ -39,7 +39,7 @@ class AdminCoreController extends Controller
         }
 
         exec("sudo git pull", $git);
-        $composer = `php composer.phar update -v --no-dev -o 2>&1`;
+        $composer = `composer update -v --no-dev -o 2>&1`;
         $composer2 = [];
         for ($i = 2; $i < strlen($composer); $i++) {
             $composer2[] = ctype_upper($composer[$i]) ? "°" . $composer[$i] : $composer[$i];
