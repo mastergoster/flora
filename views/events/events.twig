@@ -169,7 +169,7 @@
 					</h2>
 				</header>
 				<a href="#" class="image fit"><img src="{{ item.cover }}" alt=""/></a>
-				<p>{{ item.description }}</p>
+				<p>{{ item.description|raw }}</p>
 				<ul class="actions special">
 					<li>
 						<a href="{{ path("eventsBooking", {id: item.id, slug: item.slug}) }}" class="button">Participer</a>
