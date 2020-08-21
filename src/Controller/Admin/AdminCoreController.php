@@ -51,13 +51,12 @@ class AdminCoreController extends Controller
             $phinx = ["non lancé"];
         }
 
-        exec("sudo chown -R www-data:www-data *", $chmod, $codechmod);
+        `sudo chown -R www-data:www-data *`;
 
         return $this->render("admin/update", ["itemss" => [
             "git" => $git,
             "composer" => $composer,
-            "phinx" => $phinx,
-            "codechmod" => $codechmod
+            "phinx" => $phinx
         ]]);
     }
 
