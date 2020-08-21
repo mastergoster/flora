@@ -25,6 +25,7 @@ class AdminCoreController extends Controller
                 ["itemss" => ["erreur" => ["mode dev impossible de faire ceci"]]]
             );
         }
+
         $this->md5("composer.json");
         $this->md5("phinx");
 
@@ -32,6 +33,7 @@ class AdminCoreController extends Controller
 
 
         if (!$this->md5("composer.json", true)) {
+            putenv("COMPOSER_HOME=/var/www/.config/composer");
             $composer = `composer update -v --no-dev -o 2>&1`;
             $composer2 = [];
             for ($i = 2; $i < strlen($composer); $i++) {
