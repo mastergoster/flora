@@ -1,7 +1,12 @@
 {% extends 'layout/admin.twig' %}
 
 {% block options %}
-	<h1 class="h2">Products</h1>
+	<h1 class="h2">Events</h1>
+	<div class="btn-toolbar mb-2 mb-md-0">
+		<div class="btn-group mr-2">
+			<a href="{{ path('adminEventSingle') }}" class="btn btn-sm btn-outline-secondary">New</a>
+		</div>
+	</div>
 {% endblock %}
 {% block content %}
 	<div class="table-responsive">
@@ -11,13 +16,11 @@
 					<tr>
 						<th>Id</th>
 						<th>title</th>
-						<th>slug</th>
-						<th>description</th>
-						<th>cover</th>
 						<th>publish</th>
 						<th>date_at</th>
 						<th>created_at</th>
 						<th>updated_at</th>
+						<th>actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -25,11 +28,6 @@
 						<tr>
 							<td>{{ item.id }}</td>
 							<td>{{ item.title }}</td>
-							<td>
-								<a href="{{ path("eventsBooking", {id: item.id, slug: item.slug})}}">{{ item.slug }}</a>
-							</td>
-							<td>{{ item.description }}</td>
-							<td>{{ item.cover }}</td>
 							<td>{{ item.publish }}</td>
 							<td>{{ item.dateAt | date("d/m/Y") }}</td>
 							<td>{{ item.createdAt | date("d/m/Y") }}</td>
@@ -37,6 +35,25 @@
 								{% if item.updatedAt %}
 									{{ item.updatedAt | date("d/m/Y") }}
 								{% endif %}
+							</td>
+							<td class="form-inline">
+								<div class="form-inline">
+
+									<a class="btn btn-secondary" href="{{ path("eventsBooking", {id: item.id, slug: item.slug})}}" target="_blank">
+										<span data-feather="link"></span>
+									</a>
+									<a class="btn btn-primary" href="{{ path("adminEventSingle", {id: item.id })}}">
+										<span data-feather="edit"></span>
+									</a>
+								</div>
+								<form class="form-inline" method="post" onsubmit="return confirm('Êtes vous sur de vouloir supprimer {{ item.title }}? \n \n La demarche est définitive et ne peut être inversée.')">
+									<div class="form-group">
+										<input name="id" type="hidden" class="form-control" id="id" value="{{ item.id }}">
+									</div>
+									<button type="submit" class="btn btn-danger">
+										<span data-feather="trash-2"></span>
+									</button>
+								</form>
 							</td>
 						</tr>
 					{% endfor %}

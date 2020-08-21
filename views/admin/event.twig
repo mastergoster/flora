@@ -1,7 +1,10 @@
 {% extends 'layout/admin.twig' %}
 
 {% block options %}
-	<h1 class="h2">Products</h1>
+	<h1 class="h2">event</h1>
+	<div class="btn-group mr-2">
+		<a href="{{ path('adminEvents') }}" class="btn btn-sm btn-outline-secondary">All</a>
+	</div>
 {% endblock %}
 {% block content %}
-	{{ form | raw}}{% endblock %}
+	{{ form | raw }}{% endblock %}

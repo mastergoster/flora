@@ -2,8 +2,9 @@
 
 namespace Core\Controller;
 
-use Cake\Database\ConstraintsInterface;
+use Core\Model\Entity;
 use PHP_CodeSniffer\Generators\HTML;
+use Cake\Database\ConstraintsInterface;
 
 class FormController
 {
@@ -148,6 +149,15 @@ class FormController
             $this->newError("$field", "le champ {$field} doit un email valide");
         }
     }
+    private function errorBoolean(string $field): void
+    {
+
+        if ($this->postDatas[$field]) {
+            $this->addToDatas($field, '1');
+        } else {
+            $this->addToDatas($field, '0');
+        }
+    }
 
     private function errorInt(string $field): void
     {
@@ -162,10 +172,36 @@ class FormController
         }
     }
 
+    private function errorDate(string $field): void
+    {
+        $data = $this->datas[$field];
+        $reg = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$/";
+        preg_match($reg, $data, $match);
+
+        if ($match[0] !== null) {
+            $this->addToDatas($field, $match[0]);
+        } else {
+            $this->newError("$field", "le champ {$field} doit être une date au foramt 2020/11/20 12:30:00");
+        }
+    }
+
     private function newError(string $field, string $message): void
     {
         unset($this->datas[$field]);
         $this->errors["$field"][] = $message;
+    }
+
+    public function hydrate($entity = false)
+    {
+        if ($entity) {
+            foreach ($this->fields as $field => $v) {
+                $method = "get" . join(array_map(function ($cell) {
+                    return ucfirst($cell);
+                }, explode("_", $field)));
+                $this->datas[$field] = $entity->$method();
+            }
+        }
+        return $this;
     }
 
     public function html()
@@ -179,8 +215,12 @@ class FormController
             if (\key_exists($field, $this->errors) && !\key_exists('post', $this->errors)) {
                 $error = " is-invalid";
             }
-
-            $html .= "<input type=\"text\" name=\"{$field}\" class=\"form-control{$error}\" id=\"staticEmail2\" placeholder=\"{$field}\">";
+            if ($this->datas[$field]) {
+                $value = " value=\"" . $this->datas[$field] . '"';
+            } else {
+                $value = "";
+            }
+            $html .= "<input type=\"text\" name=\"{$field}\" class=\"form-control{$error}\" id=\"staticEmail2\" {$value} placeholder=\"{$field}\">";
             $html .= "</div>";
         }
 

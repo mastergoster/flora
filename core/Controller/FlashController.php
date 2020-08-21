@@ -3,6 +3,8 @@
 
 namespace Core\Controller;
 
+use App\App;
+
 class FlashController
 {
 
@@ -10,12 +12,12 @@ class FlashController
 
     private $message;
 
+    private $session;
+
 
     public function __construct()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        $this->session = App::getInstance()->request->getSession();
     }
 
 
@@ -60,8 +62,8 @@ class FlashController
     private function sessionGet(string $key, $default = null)
     {
 
-        if (array_key_exists($key, $_SESSION)) {
-            return $_SESSION[$key];
+        if ($this->session->has($key)) {
+            return $this->session->get($key);
         }
         return $default;
     }
@@ -75,8 +77,7 @@ class FlashController
      */
     private function sessionSet(string $key, $value): void
     {
-
-        $_SESSION[$key] = $value;
+        $this->session->set($key, $value);
     }
 
     /**
@@ -87,7 +88,6 @@ class FlashController
      */
     private function sessionDelete(string $key): void
     {
-
-        unset($_SESSION[$key]);
+        $this->session->remove($key);
     }
 }
