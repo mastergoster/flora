@@ -49,7 +49,6 @@ class AdminEventsController extends Controller
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
             if (!$errors) {
-                dd($datas);
                 if ($id) {
                     if ($this->events->update($id, 'id', $datas)) {
                         $datas["updated_at"] = date("Y-m-d H:i:s");
