@@ -9,7 +9,10 @@
 			<br/>
 			<h2>{{keys}}</h2>
 			{% for item in items %}
-				<li>{{item}}</li>
+				<li>{{item}}
+					{% if item == 0 %}good
+					{% endif %}
+				</li>
 			{% endfor %}
 		{% endfor %}
 	</ul>
