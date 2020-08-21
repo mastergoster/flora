@@ -28,11 +28,11 @@ class AdminCoreController extends Controller
 
         $this->md5("composer.json");
         $this->md5("phinx");
-
+        $request = $this->request()->query;
         exec("sudo git pull", $git);
 
 
-        if (!$this->md5("composer.json", true)) {
+        if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {
             putenv("COMPOSER_HOME=/var/www/.config/composer");
             $composer = `composer update -v --no-dev -o 2>&1`;
             $composer2 = [];
@@ -45,7 +45,7 @@ class AdminCoreController extends Controller
             $composer = ["non lancé"];
         }
 
-        if (!$this->md5("phinx", true)) {
+        if (!$this->md5("phinx", true) || $request->get("phinx") == "force") {
             exec("vendor/bin/phinx migrate", $phinx);
         } else {
             $phinx = ["non lancé"];
