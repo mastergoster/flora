@@ -17,6 +17,8 @@ class FormController
 
     private $datas = [];
 
+    private $param = [];
+
     private $isverify = false;
 
     public function __construct()
@@ -35,7 +37,7 @@ class FormController
      * @param array $constraints
      * @return self
      */
-    public function field(string $field, array $constraints = []): self
+    public function field(string $field, array $constraints = [], array $params = []): self
     {
         //$field = 'mail'    $constraints =  ["require", "verify"]
         foreach ($constraints as $key => $value) {
@@ -44,6 +46,7 @@ class FormController
                 $constraints[$value] = true;
             }
         }
+        $this->params[$field] =  $params;
         $this->fields[$field] =  $constraints;
         return $this;
     }
@@ -64,7 +67,11 @@ class FormController
     private function addToDatas(string $key, $data = null): void
     {
         if (is_null($data)) {
-            $data = htmlspecialchars($this->postDatas[$key]);
+            if (\array_key_exists("safe", $this->params[$key])) {
+                $data = $this->postDatas[$key];
+            } else {
+                $data = htmlspecialchars($this->postDatas[$key]);
+            }
         }
         $this->datas[$key] = $data;
     }
