@@ -13,9 +13,9 @@ class UsersTable extends Table
     //             role_liaison.created_at AS role_created_at,
     //             role.nom AS role_nom,
     //             role.activate AS role_activate
-    //         FROM $this->table 
-    //         LEFT JOIN role_liaison ON $this->table.id = role_liaison.id_user 
-    //         LEFT JOIN role ON role.id = role_liaison.id_role 
+    //         FROM $this->table
+    //         LEFT JOIN role_liaison ON $this->table.id = role_liaison.id_user
+    //         LEFT JOIN role ON role.id = role_liaison.id_role
     //         WHERE mail = ?", [$mail], true);
     //     if ($user) {
     //         if (password_verify($password, $user->getPassword())) {
@@ -33,8 +33,8 @@ class UsersTable extends Table
     //             role_liaison.created_at AS role_created_at,
     //             role.nom AS role_nom,
     //             role.activate AS role_activate
-    //         FROM $this->table 
-    //         LEFT JOIN role_liaison ON $this->table.id = role_liaison.id_user 
+    //         FROM $this->table
+    //         LEFT JOIN role_liaison ON $this->table.id = role_liaison.id_user
     //         LEFT JOIN role ON role.id = role_liaison.id_role");
     //     return $user;
     // }
@@ -46,8 +46,8 @@ class UsersTable extends Table
     //     role_liaison.created_at AS role_created_at,
     //     role.nom AS role_nom,
     //     role.activate AS role_activate
-    //     FROM $this->table 
-    //     LEFT JOIN role_liaison ON $this->table.id = role_liaison.id_user 
+    //     FROM $this->table
+    //     LEFT JOIN role_liaison ON $this->table.id = role_liaison.id_user
     //     LEFT JOIN role ON role.id = role_liaison.id_role
     //     WHERE $this->table.id = ?", [$id], true);
     // }
@@ -55,9 +55,9 @@ class UsersTable extends Table
 
     // public function newUser($fields)
     // {
-    //     $this->query("INSERT INTO user 
+    //     $this->query("INSERT INTO user
     //     (nom, prenom, mail, password, pin, token, tel, activate, verify)
-    //     VALUES 
+    //     VALUES
     //     (:name, :lastname, :mail, :password, :pin, :token, :tel,'0','0')", $fields);
     // }
 

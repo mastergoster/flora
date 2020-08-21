@@ -29,7 +29,9 @@ class RecapConsoEntity extends Entity
     {
         $app = \App\App::getInstance();
         $forfaitsId     =   TableauController::assocId($app->getTable('packages')->all());
-        $forfaitsLog    =   TableauController::assocId($app->getTable('packagesLog')->findAll($id_user, 'id_users', 'DESC', 'created_at'));
+        $forfaitsLog    =   TableauController::assocId(
+            $app->getTable('packagesLog')->findAll($id_user, 'id_users', 'DESC', 'created_at')
+        );
         $heureslog       =   $app->getTable('hours')->findAll($id_user, 'id_users');
 
         $this->hydrateForfait($forfaitsLog, $forfaitsId);

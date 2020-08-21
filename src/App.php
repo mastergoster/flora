@@ -34,7 +34,7 @@ class App
     public static function load()
     {
         $install = true;
-        $app = SELF::getInstance();
+        $app = self::getInstance();
         $app->request = Request::createFromGlobals();
         $app->request->setSession(new Session());
         $app->request->getSession()->start();
@@ -52,14 +52,14 @@ class App
 
         $app->response = new Response();
 
-        $config = SELF::getInstance()->rootfolder();
+        $config = self::getInstance()->rootfolder();
         if (file_exists($config . "/.env")) {
             $dotenv = \Dotenv\Dotenv::createImmutable($config, "/.env");
             $dotenv->load();
             $install = false;
         }
         if (file_exists($config . "/config.php")) {
-            foreach (SELF::getInstance()->getConfig() as $key => $value) {
+            foreach (self::getInstance()->getConfig() as $key => $value) {
                 if (!\array_key_exists($key, $_ENV)) {
                     putenv("$key=$value");
                 }

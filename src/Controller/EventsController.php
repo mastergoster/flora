@@ -34,7 +34,6 @@ class EventsController extends Controller
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
             if (!$errors) {
-
                 $email = $datas["email"];
             }
         }
@@ -49,7 +48,6 @@ class EventsController extends Controller
             $this->redirect("events");
         }
         if ($event->getSlug() != $slug) {
-
             $this->redirect(
                 "eventsBooking",
                 [
@@ -65,12 +63,11 @@ class EventsController extends Controller
             $booking = true;
         }
         if (!empty($email) && $user = $this->users->find($email, "email") && !$booking) {
-
             if ($this->security()->isConnect()) {
                 $this->bookingEvents->create(["id_events" => $id, "email" => $email]);
                 $this->messageFlash()->success("vous êtes bien inscrit pour cet évènement");
             } else {
-                $this->session()->set("redirect", $this->generateUrl("eventsBooking",  [
+                $this->session()->set("redirect", $this->generateUrl("eventsBooking", [
                     "id" => $id,
                     "slug" => $event->getSlug(),
                     "email" => $email
@@ -79,7 +76,6 @@ class EventsController extends Controller
                 $this->redirect('usersLogin');
             }
         } elseif (!empty($email) && !$booking) {
-
             $this->bookingEvents->create(["id_events" => $id, "email" => $email]);
             $this->messageFlash()->success("vous êtes bien inscrit pour cet évènement");
         } elseif (!$booking) {

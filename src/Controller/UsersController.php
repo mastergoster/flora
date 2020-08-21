@@ -42,7 +42,6 @@ class UsersController extends Controller
             //verifie qu'il n'y ai pas d'erreurs
             if (!$errors) {
                 if ($this->security()->login($datas["mail"], $datas["password"])) {
-
                     if ($this->session()->has("redirect")) {
                         $url = $this->session()->get("redirect");
                         $this->session()->remove("redirect");

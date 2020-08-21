@@ -5,7 +5,6 @@ namespace Core\Controller;
 
 use App\Model\Entity\UsersEntity;
 
-
 class SecurityController extends controller
 {
     public function __construct()
@@ -30,11 +29,8 @@ class SecurityController extends controller
 
         $user = $this->session()->get('users');
         if (!$user->getActivate()) {
-
             if ($this->session()->has('validate')) {
-
                 if ($this->session()->get('validate') == $user->getToken()) {
-
                     $this->users->update($user->getId(), "id", ["activate" => 1]);
                     $this->session()->remove('validate');
                     $this->session()->set('users', $this->users->find($user->getId()));
@@ -74,8 +70,7 @@ class SecurityController extends controller
     {
         $user = $this->users->find($mail, "email");
         if ($user) {
-            if (
-                \password_verify($password, $user->getPassword()) ||
+            if (\password_verify($password, $user->getPassword()) ||
                 ($pin && $user->getPin() == $password)
             ) {
                 $this->session()->set("users", $user);
