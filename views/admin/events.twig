@@ -20,7 +20,9 @@
 						<th>date_at</th>
 						<th>created_at</th>
 						<th>updated_at</th>
+						<th>nb count</th>
 						<th>actions</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -36,6 +38,7 @@
 									{{ item.updatedAt | date("d/m/Y") }}
 								{% endif %}
 							</td>
+							<td>{{ count[item.id]["nb"]}}</td>
 							<td class="form-inline">
 								<div class="form-inline">
 
@@ -55,6 +58,7 @@
 									</button>
 								</form>
 							</td>
+
 						</tr>
 					{% endfor %}
 				</tbody>

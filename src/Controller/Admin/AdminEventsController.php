@@ -14,10 +14,19 @@ class AdminEventsController extends Controller
             $this->redirect('userProfile');
         }
         $this->loadModel("events");
+        $this->loadModel("bookingEvents");
     }
 
     public function events()
     {
+        $eventsbooking = $this->bookingEvents->all();
+        $eventsbyid = [];
+        foreach ($eventsbooking as $value) {
+            $eventsbyid[$value->getIdEvents()][] = $value;
+        }
+        foreach ($eventsbyid as $key => $values) {
+            $eventsbyid[$key]["nb"] = count($values);
+        }
         $form = new FormController();
         $form->field("id", ["require", "int"]);
         $errors =  $form->hasErrors();
@@ -31,7 +40,8 @@ class AdminEventsController extends Controller
         return $this->render(
             "admin/events",
             [
-                "items" => $items
+                "items" => $items,
+                "count" => $eventsbyid
             ]
         );
     }
