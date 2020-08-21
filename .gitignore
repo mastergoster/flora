@@ -7,4 +7,3 @@ config.php
 .config
 composer.phar
 composer.lock
-/displaycopy
