@@ -37,7 +37,7 @@ class AdminCoreController extends Controller
             $composer = `composer update -v --no-dev -o 2>&1`;
             $composer2 = [];
             for ($i = 2; $i < strlen($composer); $i++) {
-                $composer2[] = ctype_upper($composer[$i]) ? "°" . $composer[$i] : $composer[$i];
+                $composer2[] = (ctype_upper($composer[$i]) && $composer[$i - 1] == " ") ? "°" . $composer[$i] : $composer[$i];
             }
             $composer = join($composer2);
             $composer = explode("°", $composer);
