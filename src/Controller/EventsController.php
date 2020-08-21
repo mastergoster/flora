@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use \Core\Controller\Controller;
+use Core\Controller\FormController;
 
 class EventsController extends Controller
 {
@@ -26,7 +27,17 @@ class EventsController extends Controller
 
     public function booking($id, $slug, $email = "")
     {
+        $form = new FormController();
+        $form->field("email", ["require"]);
 
+        $errors =  $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+            if (!$errors) {
+
+                $email = $datas["email"];
+            }
+        }
 
         $form = false;
         $booking = false;
