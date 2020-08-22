@@ -61,6 +61,7 @@ $app->getRouter($basePath)
     ->get('/contact', 'Shop#contact', 'contact')
     //POSTS URLS
 
+    ->post('/mails', 'Users#mail', 'mailSend')
     ->post('/user/admin/newline', 'Users#ajaxNewUserLine', 'post_AjaxNewUserLine')
     ->post('/display/admin/new/line', 'Display#ajaxDisplayNewLine', 'post_ajaxDisplayNewLine')
     ->post('/login', 'Users#login', 'post_usersLogin')

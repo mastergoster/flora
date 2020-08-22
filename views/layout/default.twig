@@ -85,17 +85,17 @@
 									<li class="title">Quand on est de passage</li>
 									<li>
 										<ul>
-											<li class="title">non adhérant</li>
+											<li class="title">non adhérent</li>
 											<li class="des">l'heure</li>
 											<li class="prix">5 €</li>
 										</ul>
 										<ul>
-											<li class="title">non adhérant</li>
+											<li class="title">non adhérent</li>
 											<li class="des">la demis journée</li>
 											<li class="prix">12 €</li>
 										</ul>
 										<ul>
-											<li class="title">non adhérant</li>
+											<li class="title">non adhérent</li>
 											<li class="des">la journée</li>
 											<li class="prix">20 €</li>
 										</ul>
@@ -103,17 +103,17 @@
 									<li class="title">Quand on veux rester un peut plus</li>
 									<li>
 										<ul>
-											<li class="title">adhérant</li>
+											<li class="title">adhérent</li>
 											<li class="des">l'heure</li>
 											<li class="prix">2,5 €</li>
 										</ul>
 										<ul>
-											<li class="title">adhérant</li>
+											<li class="title">adhérent</li>
 											<li class="des">la demis journée</li>
 											<li class="prix">6 €</li>
 										</ul>
 										<ul>
-											<li class="title">adhérant</li>
+											<li class="title">adhérent</li>
 											<li class="des">la journée</li>
 											<li class="prix">10 €</li>
 										</ul>
@@ -139,12 +139,12 @@
 									<li class="title">Là c'est pour que ca devienne votre maison</li>
 									<li>
 										<ul>
-											<li class="title">Adhesion individuel</li>
+											<li class="title">Adhesion individuelle</li>
 											<li class="des"></li>
 											<li class="prix">20 € / an</li>
 										</ul>
 										<ul>
-											<li class="title">Adhesion professionel</li>
+											<li class="title">Adhesion professionelle</li>
 											<li class="des"></li>
 											<li class="prix">200 € / an</li>
 										</ul>
@@ -167,7 +167,7 @@
 				<!-- Footer -->
 				<footer id="footer">
 					<section>
-						<form method="post" action="#">
+						<form method="post" id="contactMail" action="{{ path("mailSend") }}">
 							<div class="fields">
 								<div class="field">
 									<label for="name">Nom</label>
@@ -190,31 +190,26 @@
 					<section class="split contact">
 						<section class="alt">
 							<h3>adresse</h3>
-							<p>1 place Maréchal de lattre de tassigny<br/>
+							<p>1 place Maréchal de Lattre de Tassigny<br/>
 								03000 Moulins</p>
 						</section>
 						<section>
 							<h3>telephone</h3>
 							<p>
-								<a href="#">07.83.34.69.12</a>
+								<a href="tel:+33783346912">07.83.34.69.12</a>
 							</p>
 						</section>
 						<section>
 							<h3>Email</h3>
 							<p>
-								<a href="#">Contact@coworkinmoulins.fr</a>
+								<a href="mailto:Contact@coworkinmoulins.fr">Contact@coworkinmoulins.fr</a>
 							</p>
 						</section>
 						<section>
 							<h3>Social</h3>
 							<ul class="icons alt">
 								<li>
-									<a href="#" class="icon brands alt fa-twitter">
-										<span class="label">Twitter</span>
-									</a>
-								</li>
-								<li>
-									<a href="#" class="icon brands alt fa-facebook-f">
+									<a href="https://www.facebook.com/espaceCWM" class="icon brands alt fa-facebook-f">
 										<span class="label">Facebook</span>
 									</a>
 								</li>

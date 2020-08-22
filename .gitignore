@@ -8,3 +8,4 @@ config.php
 composer.phar
 composer.lock
 .ssh
+.vscode

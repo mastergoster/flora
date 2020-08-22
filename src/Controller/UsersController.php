@@ -23,6 +23,7 @@ class UsersController extends Controller
         $this->loadModel('hours');
         $this->loadModel('roles');
         $this->loadModel('rolesLog');
+        $this->loadModel('messages');
     }
 
     public function login()
@@ -283,5 +284,24 @@ class UsersController extends Controller
                 "user" => $user
             ]
         );
+    }
+
+    public function mail()
+    {
+        $form = new FormController();
+        $form->field("name", ["require"]);
+        $form->field("email", ["require", "mail"]);
+        $form->field("message", ["require"]);
+        $errors =  $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+            if (!$errors) {
+                $this->messages->create($datas);
+                $errors["error"] = false;
+            } else {
+                $errors["error"] = true;
+            }
+        }
+        return $this->jsonResponse($errors);
     }
 }
