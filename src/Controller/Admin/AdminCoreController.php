@@ -18,7 +18,6 @@ class AdminCoreController extends Controller
 
     public function update()
     {
-
         if (\getenv("ENV_DEV")) {
             return $this->render(
                 "admin/update",
@@ -29,24 +28,18 @@ class AdminCoreController extends Controller
         $this->md5("composer.json");
         $this->md5("phinx");
         $request = $this->request()->query;
-        exec("sudo git pull", $git);
+        $git = explode("\n", `sudo git pull 2>&1`);
 
 
         if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {
             putenv("COMPOSER_HOME=/var/www/.config/composer");
-            $composer = `composer update -v --no-dev -o 2>&1`;
-            $composer2 = [];
-            for ($i = 2; $i < strlen($composer); $i++) {
-                $composer2[] = (ctype_upper($composer[$i]) && $composer[$i - 1] == " ") ? "°" . $composer[$i] : $composer[$i];
-            }
-            $composer = join($composer2);
-            $composer = explode("°", $composer);
+            $composer = explode("\n", `composer update -v --no-dev -o 2>&1`);
         } else {
             $composer = ["non lancé"];
         }
 
         if (!$this->md5("phinx", true) || $request->get("phinx") == "force") {
-            exec("vendor/bin/phinx migrate", $phinx);
+            $phinx = explode("\n", `vendor/bin/phinx migrate 2>&1`);
         } else {
             $phinx = ["non lancé"];
         }
