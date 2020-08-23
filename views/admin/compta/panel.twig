@@ -10,12 +10,18 @@
 	</div>
 {% endblock %}
 {% block content %}
-	achat :{{ items.achats }}€
+	recette :{{ items.recettes }}€
 	<br/>
-	dépense :{{ items.recettes }}€
+	dépense :{{ items.achats }}€
 	<br/>
 	solde virtuel :
 	{{ items.recettes - items.achats }}€
+	<br/>
+	total ndf non remboursé :
+	{{ items.recettesndf - items.achatsndf }}€
+	<br/>
+	total caisse :
+	{{ (items.recettes - items.achats) + (items.recettesndf - items.achatsndf) }}€
 {% endblock %}
 
 {% block script %}{% endblock %}

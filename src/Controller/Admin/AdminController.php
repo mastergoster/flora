@@ -21,6 +21,7 @@ class AdminController extends Controller
         $this->loadModel('packagesLog');
         $this->loadModel('roles');
         $this->loadModel('rolesLog');
+        $this->loadModel("messages");
     }
 
     public function panel()
@@ -185,6 +186,17 @@ class AdminController extends Controller
             "admin/heures",
             [
                 "items" => $recap,
+            ]
+        );
+    }
+
+    public function messages()
+    {
+        $messages = $this->messages->all();
+        return $this->render(
+            "admin/messages",
+            [
+                "items" => $messages,
             ]
         );
     }

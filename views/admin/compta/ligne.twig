@@ -22,10 +22,10 @@
 			<tr>
 				<form method="POST" action="/admin/compta/add">
 					<th scope="row">new</th>
-					<td><input type="text" name="description"/></td>
+					<td><input type="text" name="desc"/></td>
 					<td><input type="text" name="credit" value="0"/></td>
 					<td><input type="text" name="debit" value="0"/></td>
-					<td><input type="date" name="date" value="{{ item.id | date("Y-m-d")}}"/></td>
+					<td><input type="datetime-local" name="date_at" value="{{ item.id | date("Y-m-d H:m:s")}}"/></td>
 					<td>
 						<button class="btn btn-primary" type="submit">validate</button>
 					</td>
@@ -35,10 +35,10 @@
 			{% for item in items %}
 				<tr>
 					<th scope="row">{{ item.id }}</th>
-					<td>{{ item.description }}</td>
+					<td>{{ item.desc }}</td>
 					<td>{{ item.credit }}</td>
 					<td>{{ item.debit }}</td>
-					<td>{{ item.date }}</td>
+					<td>{{ item.dateAt }}</td>
 					<td>{{ item.createdAt }}</td>
 				</tr>
 			{% endfor %}

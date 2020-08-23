@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Model\Entity\RecapConsoEntity;
 use \Core\Controller\Controller;
 use Core\Controller\FormController;
+use Core\Controller\Helpers\TableauController;
 
 class AdminComptaController extends Controller
 {
@@ -14,21 +15,28 @@ class AdminComptaController extends Controller
         if (!$this->security()->isAdmin()) {
             $this->redirect('userProfile');
         }
-        $this->loadModel("comptaLigne");
+        $this->loadModel("comptaLines");
         $this->loadModel("comptaNdf");
-        $this->loadModel("user");
+        $this->loadModel("users");
     }
 
     public function index()
     {
 
-        $items = $this->comptaLigne->all(true, "date");
+        $items = $this->comptaLines->all(true, "date_at");
         $return["achats"] = 0;
         $return["recettes"] = 0;
         foreach ($items as $item) {
             $return["recettes"] += $item->getCredit();
-
             $return["achats"] += $item->getDebit();
+        }
+
+        $items = $this->comptaNdf->all();
+        $return["achatsndf"] = 0;
+        $return["recettesndf"] = 0;
+        foreach ($items as $item) {
+            $return["recettesndf"] += $item->getCredit();
+            $return["achatsndf"] += $item->getDebit();
         }
         return $this->render(
             "admin/compta/panel",
@@ -41,7 +49,7 @@ class AdminComptaController extends Controller
     public function ligne()
     {
 
-        $items = $this->comptaLigne->all("desc");
+        $items = $this->comptaLines->all("desc");
         return $this->render(
             "admin/compta/ligne",
             [
@@ -53,46 +61,52 @@ class AdminComptaController extends Controller
     public function add()
     {
         $form = new FormController();
-        $form->field("description", ["require"]);
+        $form->field("desc", ["require"]);
         $form->field("credit", ["require", "int"]);
         $form->field("debit", ["require", "int"]);
-        $form->field("date", ["require"]);
+        $form->field("date_at", ["require"]);
         $error = $form->hasErrors();
         if ($error) {
             return $this->jsonResponse(["err" => $error]);
         }
         $datas = $form->getDatas();
+        $datas["date_at"] = str_replace("T", " ", $datas["date_at"]) . ":00";
+
         $datas["created_at"] = date("Y-m-d h:i:s");
-        $this->comptaLigne->create($datas);
-        $datas["id"] = $this->comptaLigne->lastInsertId();
+        $this->comptaLines->create($datas);
+        $datas["id"] = $this->comptaLines->lastInsertId();
         return $this->jsonResponse($datas);
     }
 
     public function ndf()
     {
         $form = new FormController();
-        $form->field("description", ["require"]);
-        $form->field("id_user", ["require"]);
-        $form->field("id_ligne", ["require"]);
+        $form->field("desc", ["require"]);
+        $form->field("debit", ["require", "int"]);
+        $form->field("credit", ["require", "int"]);
+        $form->field("id_users", ["require"]);
         $error = $form->hasErrors();
         if (!$error) {
             $datas = $form->getDatas();
             $datas["created_at"] = date("Y-m-d h:i:s");
-            $this->comptaNdf->create($datas);
-        }
-        if (isset($_POST["id"]) && isset($_POST["paye_at"])) {
-            $this->comptaNdf->update($_POST["id"], "id", ["paye_at" => date("Y-m-d H:i:s")]);
-        }
-        $lignes = $this->comptaLigne->all();
-        $users = $this->users->all();
-        $ndfs = $this->comptaNdf->all();
-        foreach ($lignes as $key => $ligne) {
-            foreach ($ndfs as $ndf) {
-                if ($ligne->getId == $ndf->getIdLigne) {
-                    unset($lignes[$key]);
+            if ($this->comptaNdf->create($datas)) {
+                if ($datas["debit"] < 0.001) {
+                    $id = $this->comptaNdf->lastInsertId();
+                    $datas["desc"] = "NDF n°$id : " . $datas["desc"];
+                    $datas["date_at"] = $datas["created_at"];
+                    $credit = $datas["credit"];
+                    $debit = $datas["debit"];
+                    $datas["debit"] = $credit;
+                    $datas["credit"] = $debit;
+                    unset($datas["id_users"]);
+                    $this->comptaLines->create($datas);
                 }
+            } else {
+                $this->messageFlash()->error("erreur d'enregistrement");
             }
         }
-        return $this->render("admin/compta/ndf", ["users" => $users, "lignes" => $lignes, "items" => $ndfs]);
+        $users = TableauController::assocId($this->users->all());
+        $ndfs = $this->comptaNdf->all();
+        return $this->render("admin/compta/ndf", ["users" => $users, "items" => $ndfs]);
     }
 }

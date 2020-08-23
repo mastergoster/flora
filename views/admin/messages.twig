@@ -1,0 +1,51 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">Messages</h1>
+
+{% endblock %}
+{% block content %}
+	<div class="table-responsive">
+		{{ form | raw }}
+			<table class="table table-striped table-sm text-center">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>name</th>
+						<th>email</th>
+						<th>message</th>
+						<th>idUsers</th>
+						<th>idRoles</th>
+						<th>createdAt</th>
+						<th>action</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+						<tr>
+							<td>{{ item.id }}</td>
+							<td>{{ item.name }}</td>
+							<td>{{ item.email }}</td>
+							<td>{{ item.message }}</td>
+							<td>{{ item.idUsers }}</td>
+							<td>{{ item.idRoles }}</td>
+							<td>{{ item.createdAt | date("d/m/Y") }}</td>
+							<td class="form-inline">
+								<form class="form-inline" method="post" onsubmit="return confirm('Êtes vous sur de vouloir supprimer {{ item.title }}? \n \n La demarche est définitive et ne peut être inversée.')">
+									<div class="form-group">
+										<input name="id" type="hidden" class="form-control" id="id" value="{{ item.id }}">
+									</div>
+									<button type="submit" class="btn btn-danger">
+										<span data-feather="trash-2"></span>
+									</button>
+								</form>
+							</td>
+
+						</tr>
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

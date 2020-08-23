@@ -50,6 +50,7 @@ $app->getRouter($basePath)
     ->get('/admin/users', 'Admin#users', 'adminUsers')
     ->get('/admin/roles', 'Admin#roles', 'adminRoles')
     ->get('/admin/roles/[i:id]', 'Admin#role', 'adminRole')
+    ->get('/admin/messages', 'Admin#messages', 'adminMessages')
 
     ->match('/admin/products', 'Admin#products', 'adminProducts')
     ->get('/admin/orders', 'Admin#orders', 'adminOrders')

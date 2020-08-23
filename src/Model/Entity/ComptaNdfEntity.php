@@ -9,116 +9,29 @@ use Core\Controller\Helpers\TextController;
 class ComptaNdfEntity extends Entity
 {
     private $id;
-
-    private $description;
-
-    private $id_user;
-
-    private $id_ligne;
-
-    private $paye_at;
-
+    private $desc;
+    private $debit;
+    private $credit;
+    private $id_users;
     private $created_at;
-
-
-
+    private $updated_at;
 
     /**
-     * Get the value of id
+     * Get the value of desc
      */
-    public function getId()
+    public function getDesc()
     {
-        return $this->id;
+        return $this->desc;
     }
 
     /**
-     * Set the value of id
+     * Set the value of desc
      *
      * @return  self
      */
-    public function setId($id)
+    public function setDesc($desc)
     {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of description
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the value of description
-     *
-     * @return  self
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of created_at
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Set the value of created_at
-     *
-     * @return  self
-     */
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of date
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set the value of date
-     *
-     * @return  self
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of credit
-     */
-    public function getCredit()
-    {
-        return $this->credit;
-    }
-
-    /**
-     * Set the value of credit
-     *
-     * @return  self
-     */
-    public function setCredit($credit)
-    {
-        $this->credit = $credit;
+        $this->desc = $desc;
 
         return $this;
     }
@@ -144,61 +57,101 @@ class ComptaNdfEntity extends Entity
     }
 
     /**
-     * Get the value of id_user
+     * Get the value of credit
      */
-    public function getIdUser()
+    public function getCredit()
     {
-        return $this->id_user;
+        return $this->credit;
     }
 
     /**
-     * Set the value of id_user
+     * Set the value of credit
      *
      * @return  self
      */
-    public function setIdUser($id_user)
+    public function setCredit($credit)
     {
-        $this->id_user = $id_user;
+        $this->credit = $credit;
 
         return $this;
     }
 
     /**
-     * Get the value of id_ligne
+     * Get the value of id_users
      */
-    public function getIdLigne()
+    public function getIdUsers()
     {
-        return $this->id_ligne;
+        return $this->id_users;
     }
 
     /**
-     * Set the value of id_ligne
+     * Set the value of id_users
      *
      * @return  self
      */
-    public function setIdLigne($id_ligne)
+    public function setIdUsers($id_users)
     {
-        $this->id_ligne = $id_ligne;
+        $this->id_users = $id_users;
 
         return $this;
     }
 
     /**
-     * Get the value of paye_at
+     * Get the value of created_at
      */
-    public function getPayeAt()
+    public function getCreatedAt()
     {
-        return $this->paye_at;
+        return $this->created_at;
     }
 
     /**
-     * Set the value of paye_at
+     * Set the value of created_at
      *
      * @return  self
      */
-    public function setPayeAt($paye_at)
+    public function setCreatedAt($created_at)
     {
-        $this->paye_at = $paye_at;
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of updated_at
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set the value of updated_at
+     *
+     * @return  self
+     */
+    public function setUpdatedAt($updated_at)
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }

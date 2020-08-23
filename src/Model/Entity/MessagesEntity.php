@@ -8,11 +8,13 @@ use Core\Controller\Helpers\TextController;
 
 class MessagesEntity extends Entity
 {
+    private $id;
+
     private $name;
 
     private $email;
 
-    private $description;
+    private $message;
 
     private $id_users;
 
@@ -136,6 +138,46 @@ class MessagesEntity extends Entity
     public function setCreatedAt($created_at)
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set the value of message
+     *
+     * @return  self
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
 
         return $this;
     }

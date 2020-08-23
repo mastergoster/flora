@@ -6,7 +6,7 @@ use Core\Model\Entity;
 
 use Core\Controller\Helpers\TextController;
 
-class ComptaLigneEntity extends Entity
+class ComptaLinesEntity extends Entity
 {
     private $id;
 
@@ -86,9 +86,9 @@ class ComptaLigneEntity extends Entity
     /**
      * Get the value of date
      */
-    public function getDate()
+    public function getDateAt()
     {
-        return $this->date;
+        return $this->date_at;
     }
 
     /**
@@ -96,9 +96,9 @@ class ComptaLigneEntity extends Entity
      *
      * @return  self
      */
-    public function setDate($date)
+    public function setDateAt($date)
     {
-        $this->date = $date;
+        $this->date_at = $date;
 
         return $this;
     }

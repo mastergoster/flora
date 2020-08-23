@@ -5,17 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             document.getElementById("recap").insertRow([2]).innerHTML =
                 "<th scope=\"row\">" + datas.id + "</th>" +
-                "<td>" + datas.description + "</td>" +
+                "<td>" + datas.desc + "</td>" +
                 "<td>" + datas.credit + "</td>" +
                 "<td>" + datas.debit + "</td>" +
-                "<td>" + datas.date + "</td>" +
-                "<td>" + datas.createdAt + "</td>"
+                "<td>" + datas.date_at + "</td>" +
+                "<td>" + datas.created_at + "</td>"
 
         }
     }
-    function eraseForm(e) {
-        var form = e.target
-        form.description.value = ""
+    function eraseForm(form) {
+        form.desc.value = ""
         form.credit.value = "0"
         form.debit.value = "0"
         current_datetime = new Date()
@@ -24,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             month = "0" + (current_datetime.getMonth() + 1)
         }
-        form.date.value = current_datetime.getFullYear() + "-" + month + "-" + current_datetime.getDate()
-        //console.log(current_datetime.getFullYear() + "-" + month + "-" + current_datetime.getDate())
+        form.date_at.value = current_datetime.getFullYear() + "-" + month + "-" + current_datetime.getDate()
     }
+
     function submitajax(e) {
         e.preventDefault();
 
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: new FormData(form)
         }).then(response => response.json())
             .then(json => tableNewLine(json))
-            .then(eraseForm(e));
+            .then(eraseForm(form));
         return false;
     };
 
