@@ -36,6 +36,21 @@ class AdminInvocesController extends Controller
                 $invocesServices->getNewInvoce($datas);
             }
         }
+        if ($this->request()->query->has("delete")) {
+            $form = new FormController();
+            $form->field("id", ["require"]);
+            $errorsDelete =  $form->hasErrors();
+            if ($errorsDelete["post"] != ["no-data"]) {
+                $datasDel = $form->getDatas();
+                if (!$errorsDelete) {
+                    if ($this->invoces->find($datasDel["id"])->getActivate() == 0) {
+                        $this->invoces->delete($datasDel["id"]);
+                    } else {
+                        $this->messageFlash()->error("impossible de supprimer une facture validé");
+                    }
+                }
+            }
+        }
         $invoces = $this->invoces->all();
         $users = TableauController::assocID($this->users->all());
         return $this->render(
