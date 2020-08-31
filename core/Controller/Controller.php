@@ -27,6 +27,41 @@ abstract class Controller
         );
     }
 
+    protected function renderPdf(string $view, array $variables = [])
+    {
+        // header("Content-type:application/pdf");
+        // header("Content-Disposition:inline;filename=" . $variables["title"] ?: "pdf");
+        $folder  = $this->getApp()->rootfolder() . "/files/$view/";
+        $name = ($variables["title"] ?: "pdf") . ".pdf";
+
+        if (!file_exists($folder . $name) || $rerender == true) {
+            $mpdf = new \Mpdf\Mpdf();
+            $mpdf->SetTitle($variables["title"] ?: "pdf");
+            $mpdf->WriteHTML($this->render($view, $variables));
+            $folderLink = "";
+            foreach (explode("/", $folder) as $value) {
+
+                if (!is_dir($folderLink . "/" . $value) && $value != "") {
+                    \mkdir($folderLink . "/" . $value);
+                }
+                if ($value != "") {
+                    $folderLink = $folderLink . "/" . $value;
+                }
+            }
+
+            $mpdf->Output($folder . $name, \Mpdf\Output\Destination::FILE);
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($folder . $name) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($folder . $name));
+        readfile($folder . $name);
+    }
+
     private function getTwig()
     {
         if (is_null($this->twig)) {

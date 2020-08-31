@@ -1,106 +1,121 @@
-<!DOCTYPE html>
-<html lang="fr">
+{% extends 'layout/user.twig' %}
+{% block title %}User Dashboard
+{% endblock %}
+{% block titlePage %}Dashboard
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
 
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>CoWorkInMoulins / panel / profile</title>
-		<link rel="stylesheet" href="/css/panel.css">
-	</head>
-
-	<body>
-		<div class="container">
-			<aside class="left-nav">
-				<h1>Panel</h1>
-				<nav>
-					<ul>
-						<li>a venir ;)</li>
-						<li>
-							<a href="/user/logout">deconexion</a>
-						</li>
-						{% if admin %}
-							<li>
-								<a href="/admin">administration</a>
-							</li>
-						{% endif %}
-					</ul>
-				</nav>
-				<footer>FLORA by Apprendre.co v1.0</footer>
-			</aside>
-			<section class="body">
-				<article>
-					<h1>{{ user.firstName }}
-						{{ user.lastName }}</h1>
-					<div>
-						<p class="muted">{{ roleUser.name }}</p>
-						<p>mail :
-							{{ user.email }}<br>
-							(
-							{% if user.activate %}validé{% else %}non validé
-							{% endif %})</p>
-						<p>telephone :
-							{{ user.phoneNumber }}
-							<br>(
-							{% if user.verify %}validé{% else %}non validé
-							{% endif %})</p>
-						<p>mon code pin :
-							{% if user.verify %}
-								{{ user.pin }}
-							{% else %}
-								valider votre tel
-							{% endif %}
-						</p>
-					</div>
-				</article>
-				<article class="forfait">
-					<h1>Forfait</h1>
-					<div>
-						<p class="muted">expire le :
-							{{ ForfaitExpiredAt | date("d/m/Y")  }}</p>
-						<p class="big">{{ forfait.h}}<span>H</span>
-							{{forfait.m }}<span>min</span>
-						</p>
-					</div>
-				</article>
-				<article class="forfait">
-					<h1>Présences</h1>
-					<div>
-						<p>denière présence le :</p>
-						<p>{{last.date | date("d/m/Y") }}
-							durée
-							{{last.h}}h
-							{{last.m}}min</p>
-					</div>
-				</article>
-				<article id="presence" class="{% if presence %}green{% endif %}">
-					{% if presence %}
-						<h1>tu es au coworking</h1>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="card card-profile">
+				<div class="card-avatar">
+					<img class="img" src="{% if user.img %}{{user.img}}{% else %}/assets/img/faces/avatar.jpg{% endif %}">
+				</div>
+				<div class="card-body">
+					<h6 class="card-category text-gray">{{ roleUser.name }}</h6>
+					<h4 class="card-title">{{ user.firstName }}
+						{{ user.lastName }}</h4>
+					<h4 class="card-title">mail :
+						{{ user.email }}<br>
+						(
+						{% if user.activate %}validé{% else %}non validé
+						{% endif %})</p>
+				</h4>
+				<h4 class="card-title">telephone :{{ user.phoneNumber }}<br>(
+					{% if user.verify %}validé{% else %}non validé
+					{% endif %})</h4>
+				<h4 class="card-title">mon code pin :
+					{% if user.verify %}
+						{{ user.pin }}
 					{% else %}
-						<h1>tu n'es pas au coworking</h1>
+						valider votre tel
 					{% endif %}
-					<div>
-						<p class="muted">aujourd'hui tu a passé :</p>
-						<p class="big" id="compteur">
-							{{ today.h }}<span>H</span>
-							{{ today.m }}<span>min</span>
-						</p>
-						{% if presence %}
-							<p class="muted">arreter ma journée</p>
-						{% else %}
-							<p class="muted">continuer ma journée</p>
-						{% endif %}
-
-					</div>
-				</article>
-
-			</section>
+				</h4>
+				<p class="card-description">
+					{{ user.desc }}
+				</p>
+			</div>
 		</div>
-		<script>
-			var heure = {{ today.h }};
+	</div>
+	<div class="col-md-8 row">
+		<div class="col-lg-6 col-md-6 col-sm-6">
+			<div class="card card-stats">
+				<div class="card-header card-header-warning card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">access_time</i>
+					</div>
+					<p class="card-category">Forfait</p>
+					<h3 class="card-title">{{ forfait.h}}
+						<small>H</small>
+						{{forfait.m }}<small>min</small>
+					</h3>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						expire le :
+						{{ ForfaitExpiredAt | date("d/m/Y")  }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6" style="cursor: pointer;" id="presence">
+			<div class="card card-stats">
+				<div class="card-header card-header-{% if presence %}success{% else %}danger{% endif %} card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">store</i>
+					</div>
+					<p class="card-category">
+						{% if presence %}
+							tu es au coworking
+						{% else %}
+							tu n'es pas au coworking
+						{% endif %}
+					</p>
+					<h3 class="card-title" id="compteur">
+						{{ today.h }}<small>H</small>
+						{{ today.m }}<small>min</small>
+					</h3>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						<i class="material-icons">date_range</i>
+						{% if presence %}
+							arreter ma journée
+						{% else %}
+							continuer ma journée
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+			<div class="card card-stats">
+				<div class="card-header card-header-info card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">info_outline</i>
+					</div>
+					<p class="card-category">Dernière présences</p>
+					<h3 class="card-title">{{last.h}}<small>H</small>
+						{{last.m}}<small>min</small>
+					</h3>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						<i class="material-icons">local_offer</i>
+						denière présence le :
+						{{last.date | date("d/m/Y") }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}{% block script %}
+<script>
+	var heure = {{ today.h }};
 var min = {{ today.m }};
 document.addEventListener('DOMContentLoaded', function () {
-{% if presence %}
-var compteur = document.getElementById("compteur");
+var compteur;{% if presence %}compteur = document.getElementById("compteur");
 var sec = 0;
 var refresh = setInterval(function () {
 sec += 1;
@@ -134,7 +149,4 @@ return false;
 };
 var formlist = document.getElementById('presence').addEventListener('click', submitajax);
 });
-		</script>
-	</body>
-
-</html>
+</script>{% endblock %}

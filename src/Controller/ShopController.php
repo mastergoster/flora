@@ -64,9 +64,7 @@ class ShopController extends Controller
 
     public function contact()
     {
-        require \App\App::rootfolder() . '/db/migrations/20200813111853.php';
-        $test = new \V20200813111853("developpement", "test");
-        dd($test);
-        return $this->render('shop/invoce', []);
+
+        return $this->render('shop/contact', []);
     }
 }

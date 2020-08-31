@@ -102,8 +102,17 @@ abstract class Table
             $array = [];
             foreach ($methods as $value) {
                 if (strrpos($value, 'get') === 0) {
-                    $column = strtolower(explode('get', $value)[1]);
-                    $array[$column] = $fields->$value();
+                    if ($fields->$value() !== null) {
+                        $column = str_replace('get', '', $value);
+                        $columname = $column[0];
+                        for ($i = 1; $i < strlen($column); $i++) {
+                            if (ctype_upper($column[$i])) {
+                                $columname .= "_";
+                            }
+                            $columname .= $column[$i];
+                        }
+                        $array[strtolower($columname)] = $fields->$value();
+                    }
                 }
             }
             $fields = $array;
@@ -116,6 +125,40 @@ abstract class Table
         $sql_part = implode(', ', $sql_parts);
         $sql_part2 = implode(', ', $sql_parts2);
         return $this->query("INSERT INTO {$this->table} ({$sql_part}) VALUES ({$sql_part2})", $attributes, true);
+    }
+    public function updateByClass($obj, $columnDef = "id")
+    {
+        $sql_parts = [];
+        $attributes = [];
+        if (\is_object($obj)) {
+            $methods = get_class_methods($obj);
+            $array = [];
+            foreach ($methods as $value) {
+                if (strrpos($value, 'get') === 0) {
+                    if ($obj->$value() !== null) {
+                        $column = str_replace('get', '', $value);
+                        $columname = $column[0];
+                        for ($i = 1; $i < strlen($column); $i++) {
+                            if (ctype_upper($column[$i])) {
+                                $columname .= "_";
+                            }
+                            $columname .= $column[$i];
+                        }
+                        $array[strtolower($columname)] = $obj->$value();
+                    }
+                }
+            }
+            $fields = $array;
+        } else {
+            throw new \Exception("ceci n'est pas un objet", 1);
+        }
+        foreach ($fields as $k => $v) {
+            $sql_parts[] = "$k = :$k";
+            $attributes[$k] = $v;
+        }
+
+        $sql_part = implode(', ', $sql_parts);
+        return $this->query("UPDATE {$this->table} SET $sql_part WHERE $columnDef = :$columnDef", $attributes, true);
     }
 
     public function update($id, $column, $fields)

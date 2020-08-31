@@ -27,13 +27,19 @@ class LinkExtension extends AbstractExtension
 
 
 
-    public function getActive(string $link = "home"): string
+    public function getActive(string $link = "home", bool $html = true, int $count = 1): string
     {
-
-        if (explode("/", $this->router->url($link))[1] == explode("/", $_SERVER["REQUEST_URI"])[1]) {
-            return ' class="active"';
+        if ($html) {
+            $text = ' class="active"';
+        } else {
+            $text = ' active';
         }
-        return "";
+        for ($i = 1; $i <= $count; $i++) {
+            if (explode("/", $this->router->url($link))[$i] != explode("/", $_SERVER["REQUEST_URI"])[$i]) {
+                return "";
+            }
+        }
+        return  $text;
     }
 
 

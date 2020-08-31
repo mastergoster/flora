@@ -1,0 +1,65 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Invoces
+{% endblock %}
+{% block titlePage %}Factures
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title ">Liste des factures</h4>
+				<p class="card-category">
+					voici la liste de vos factures</p>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table">
+						<thead class=" text-primary">
+							<tr>
+								<th>
+									ref
+								</th>
+								<th>
+									date
+								</th>
+								<th>
+									montant
+								</th>
+								<th>
+									autre
+								</th>
+								<th>
+									action
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for invoce in invoces %}
+								<tr>
+									<td>
+										{{ invoce.ref }}
+									</td>
+									<td>
+										{{ invoce.dateAt| date("d/m/Y") }}
+									</td>
+									<td>
+										{{ invoce.price }}€
+									</td>
+									<td>
+										autre
+									</td>
+									<td class="text-primary">
+										<a href="{{ path("userInvoce", {id: invoce.id}) }}" class="btn btn-primary">
+											<i class="material-icons">cloud_download</i>
+										</a>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

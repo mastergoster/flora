@@ -1,0 +1,85 @@
+{% extends 'layout/admin.twig' %}
+
+{% block options %}
+	<h1 class="h2">invoces</h1>
+{% endblock %}
+{% block content %}
+
+	id :
+	{{ item.id }}
+	<br>
+	ref :
+	{{ item.ref }}<br>
+	client :
+	{{ users.lastName }}
+	{{ users.firstName }}<br>
+	date :
+	{{ item.dateAt | date("d/m/Y") }}<br>
+	date de creation :
+	{{ item.createdAt | date("d/m/Y") }}<br>
+	{% if item.updatedAt %}
+		date de mise a jour :
+		{{ item.updatedAt | date("d/m/Y") }}<br>
+	{% endif %}
+	validé :
+	{% if item.activate %}
+		oui
+	{% else %}
+		non
+	{% endif %}
+	<br><br><br>
+	{% if item.activate == 0 %}
+		<div class="form-inline">
+
+			<form method="POST" class="form-inline">
+				<th scope="row">new product</th>
+				<td>
+					<select name="id_products" class="form-control">
+						<option value="">
+							---- SELECTIONNEZ ----
+						</option>
+						{% for product in products %}
+							<option value="{{ product.id }}">
+								{{ product.ref }}
+								-
+								{{ product.name }}
+								-
+								{{ product.price }}
+							</option>
+						{% endfor %}
+					</select>
+				</td>
+				<td>
+					<button class="btn btn-primary" type="submit">create</button>
+				</td>
+			</form>
+
+			<form method="POST" action="{{ path("adminInvoceValidate", {id: item.id}) }}" class="form-inline">
+				<td>
+					<input type="hidden" name="validate" id="validate">
+				</td>
+				<td>
+					<button class="btn btn-success" type="submit">Validate</button>
+				</td>
+			</form>
+		</div>
+	{% endif %}
+	<br><br><br>
+
+	{% for invocesLine in invocesLines %}
+		{{invocesLine.id}}
+		| ref :
+		{{invocesLine.ref}}
+		| name :
+		{{invocesLine.name}}
+		| prix unitaire :
+		{{invocesLine.price}}€ | qté :
+		{{invocesLine.qte}}
+		|
+		{{invocesLine.discount}}<br>
+		{{invocesLine.desc}}<br>
+		<hr>
+
+
+	{% endfor %}
+{% endblock %}

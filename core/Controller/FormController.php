@@ -116,7 +116,8 @@ class FormController
     private function errorVerify(string $field, bool $value): void
     {
         $fieldVerify = $field . "Verify";
-        if (isset($this->postDatas[$fieldVerify]) &&
+        if (
+            isset($this->postDatas[$fieldVerify]) &&
             $this->postDatas[$fieldVerify] == $this->postDatas[$field]
         ) {
             $this->addToDatas($field);
@@ -128,6 +129,14 @@ class FormController
     private function errorLength(string $field, int $value): void
     {
         if (strlen($this->postDatas[$field]) >= $value) {
+            $this->addToDatas($field);
+        } else {
+            $this->newError("$field", "le champ {$field} doit avoir au minimum {$value} caractères");
+        }
+    }
+    private function errorExactLength(string $field, int $value): void
+    {
+        if (strlen($this->postDatas[$field]) == $value) {
             $this->addToDatas($field);
         } else {
             $this->newError("$field", "le champ {$field} doit avoir au minimum {$value} caractères");

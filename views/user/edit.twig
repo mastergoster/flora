@@ -1,0 +1,148 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Profil
+{% endblock %}
+{% block titlePage %}Profil
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Edition du Profile</h4>
+					<p class="card-category">Complete ton profile</p>
+				</div>
+				<div class="card-body">
+					<form method="post" action="?user">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group">
+									<label class="form-group bmd-label-floating ">Adresse Email</label>
+									<input type="email" name="email" value="{{ user.email }}" class="form-control" disabled>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group">
+									<label class="form-group bmd-label-floating ">Telephone</label>
+									<input type="text" name="phone_number" value="{{ user.phoneNumber }}" class="form-control" disabled>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group">
+									<label class="form-group bmd-label-floating ">Code pin</label>
+									<input type="number" min="0000" max="9999" name="pin" value="{{ user.pin }}" class="form-control" {% if user.verify == 0 %} disabled {% endif %}>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group{% if errors['first_name'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Prenom</label>
+									<input type="text" name="first_name" value="{{ user.firstName }}" class="form-control">
+									{% if errors['first_name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group {% if errors['last_name'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Nom</label>
+									<input type="text" name="last_name" value="{{ user.lastName }}" class="form-control">
+									{% if errors['last_name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group bmd-form-group {% if errors['street'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Adresse</label>
+									<input type="text" name="street" value="{{ user.street }}" class="form-control">
+									{% if errors['street'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group {% if errors['city'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Ville</label>
+									<input type="text" name="city" value="{{ user.city }}" class="form-control">
+									{% if errors['city'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group {% if errors['postal_code'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Code Postal</label>
+									<input type="text" name="postal_code" value="{{ user.postalCode }}" class="form-control">
+									{% if errors['postal_code'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Biographie</label>
+									<div class="form-group bmd-form-group {% if errors['desc'] %} has-danger{% endif %}">
+										<label class="bmd-label-floating">
+											Une petite description de toi ;)</label>
+										<textarea class="form-control" name="desc" rows="5">{{ user.desc }}</textarea>
+										{% if errors['first_name'] %}
+											<span class="material-icons form-control-feedback">clear</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">Mettre à jour mon Profile</button>
+						<div class="clearfix"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Modification du mot de passe</h4>
+				</div>
+				<div class="card-body">
+					<form method="post" action="?password">
+
+						<input type="hidden" value="{{ user.id }}" name="id" class="form-control">
+						<div class="col-md-12">
+							<div class="form-group bmd-form-group{% if errorsP['password'] %} has-danger{% endif %}">
+								<label class="bmd-label-floating">mot de passe actuel</label>
+								<input type="password" name="password" class="form-control">
+								{% if errorsP['password'] %}
+									<span class="material-icons form-control-feedback">clear</span>
+								{% endif %}
+							</div>
+							<div class="form-group bmd-form-group{% if errorsP['password_new'] %} has-danger{% endif %}">
+								<label class="bmd-label-floating">Nouveau mot de passe</label>
+								<input type="password" name="password_new" class="form-control">
+								{% if errorsP['password_new'] %}
+									<span class="material-icons form-control-feedback">clear</span>
+								{% endif %}
+							</div>
+							<div class="form-group bmd-form-group{% if errorsP['password_new_verify'] %} has-danger{% endif %}">
+								<label class="bmd-label-floating">verification du mot de passe</label>
+								<input type="password" name="password_newVerify" class="form-control">
+								{% if errorsP['password_new_verify'] %}
+									<span class="material-icons form-control-feedback">clear</span>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary pull-right">changer mon mot de passe</button>
+					<div class="clearfix"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}{% block script %}{% endblock %}

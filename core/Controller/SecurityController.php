@@ -70,7 +70,8 @@ class SecurityController extends controller
     {
         $user = $this->users->find($mail, "email");
         if ($user) {
-            if (\password_verify($password, $user->getPassword()) ||
+            if (
+                \password_verify($password, $user->getPassword()) ||
                 ($pin && $user->getPin() == $password)
             ) {
                 $this->session()->set("users", $user);
@@ -86,5 +87,15 @@ class SecurityController extends controller
             return true;
         }
         return false;
+    }
+
+    public function updatePassword($password): bool
+    {
+        if (!$this->session()->has('users')) {
+            return false;
+        }
+        $user = $this->session()->get('users');
+        $passwordh = password_hash($password, PASSWORD_BCRYPT);
+        return $this->users->update($user->getId(), "id", ["password" => $passwordh]);;
     }
 }

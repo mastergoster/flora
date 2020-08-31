@@ -24,6 +24,8 @@ class UsersController extends Controller
         $this->loadModel('roles');
         $this->loadModel('rolesLog');
         $this->loadModel('messages');
+        $this->loadModel('invoces');
+        $this->loadModel('invocesLines');
     }
 
     public function login()
@@ -303,5 +305,98 @@ class UsersController extends Controller
             }
         }
         return $this->jsonResponse($errors);
+    }
+
+    public function invoces()
+    {
+        if (!$this->session()->has("users")) {
+            $this->redirect("usersLogin");
+        }
+        $user = $this->session()->get("users");
+
+        $invoce = $this->invoces->allActivateByUser($user->getId());
+        return $this->render(
+            "user/invoces",
+            [
+                "invoces" => $invoce
+            ]
+        );
+    }
+    public function invoce($id)
+    {
+        if (!$this->session()->has("users")) {
+            $this->redirect("usersLogin");
+        }
+        $user = $this->session()->get("users");
+        $invoce = $this->invoces->findActivate($id, "id");
+        if (!$invoce || $user->getId() != $invoce->getIdUsers()) {
+            $this->messageFlash()->error("action non permise");
+            $this->redirect("userInvoces");
+        }
+        return $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
+    }
+
+    public function edit()
+    {
+
+        if (!$this->session()->has("users")) {
+            $this->redirect("usersLogin");
+        }
+        $user = $this->session()->get("users");
+
+
+        $formUpdate = new FormController();
+        $formUpdate->field("first_name", ["require"]);
+        $formUpdate->field("last_name", ["require"]);
+        $formUpdate->field("street", ["require"]);
+        $formUpdate->field("city", ["require"]);
+        $formUpdate->field("postal_code", ["require"]);
+        $formUpdate->field("desc", ["require"]);
+        $formUpdate->field("pin", ["ExactLength" => 4, "int"]);
+        $errors = [];
+        if ($this->request()->query->has("user")) {
+            $errors =  $formUpdate->hasErrors();
+            if ($errors["post"] != ["no-data"]) {
+                $datas = $formUpdate->getDatas();
+                if (!$errors) {
+                    $this->users->update($user->getId(), "id", $datas);
+                }
+            }
+        }
+
+        $formPassword = new FormController();
+        $formPassword->field("id", ["require"]);
+        $formPassword->field("password", ["require", "length" => 7]);
+        $errorsPassword = [];
+        $formPassword->field("password_new", ["require", "verify"]);
+        if ($this->request()->query->has("password")) {
+            $errorsPassword =  $formPassword->hasErrors();
+            if ($errorsPassword["post"] != ["no-data"]) {
+                $datasPassword = $formPassword->getDatas();
+                if (!$errorsPassword) {
+                    if (
+                        $user->getId() == $datasPassword["id"] &&
+                        $this->security()->login($user->getEmail(), $datasPassword["password"])
+                    ) {
+                        if ($this->security()->updatePassword($datasPassword["password_new"])) {
+                            $this->messageFlash()->success("Le mot de passe a bien été changé");
+                        } else {
+                            $this->messageFlash()->error("erreur inatendu lol");
+                        }
+                    } else {
+                        $this->messageFlash()->error("mot de passe invalide");
+                    }
+                }
+            }
+        }
+        $user = $this->users->find($user->getId(), 'id');
+        $this->session()->set("users", $user);
+        foreach ($errors as $error) {
+            $this->messageFlash()->error($error[0]);
+        }
+        foreach ($errorsPassword as $error) {
+            $this->messageFlash()->error($error[0]);
+        }
+        return $this->render("user/edit", ["user" => $user, "errors" => $errors, "errorsP" => $errorsPassword]);
     }
 }

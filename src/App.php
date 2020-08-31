@@ -39,7 +39,7 @@ class App
         $app->request->setSession(new Session());
         $app->request->getSession()->start();
         $app->request->hasPreviousSession();
-        $session = $_SESSION;
+        $session = $_SESSION ?: [];
         //retrocomptatibility
         unset($session["_sf2_attributes"]);
         unset($session["_symfony_flashes"]);
@@ -127,6 +127,8 @@ class App
             $name = getenv('DB_Name');
             if (getenv("ENV_DEV")) {
                 $name .= ".dev";
+            } elseif (getenv("ENV_DEV") == 'test') {
+                $name .= ".test";
             } else {
                 $name .= ".prod";
             }

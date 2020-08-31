@@ -51,6 +51,11 @@ $app->getRouter($basePath)
     ->get('/admin/roles', 'Admin#roles', 'adminRoles')
     ->get('/admin/roles/[i:id]', 'Admin#role', 'adminRole')
     ->get('/admin/messages', 'Admin#messages', 'adminMessages')
+    ->match('/admin/invoces', 'AdminInvoces#all', 'adminInvoces')
+    ->match('/admin/invoces/[i:id]/pdf', 'AdminInvoces#invocePdf', 'adminInvocePdf')
+    ->post('/admin/invoces/[i:id]/validate', 'AdminInvoces#validate', 'adminInvoceValidate')
+    ->match('/admin/invoces/[i:id]', 'AdminInvoces#single', 'adminInvoceEdit')
+
 
     ->match('/admin/products', 'Admin#products', 'adminProducts')
     ->get('/admin/orders', 'Admin#orders', 'adminOrders')
@@ -58,6 +63,9 @@ $app->getRouter($basePath)
 
     ->get('/user/logout', 'users#logout', 'userLogout')
     ->get('/user/profile', 'users#profile', 'userProfile')
+    ->get('/user/invoces', 'users#invoces', 'userInvoces')
+    ->match('/user/edit', 'users#edit', 'userEdit')
+    ->get('/user/invoces/[i:id]', 'users#invoce', 'userInvoce')
     ->get('/activate', 'users#activatePage', 'activatePage')
     ->get('/contact', 'Shop#contact', 'contact')
     //POSTS URLS

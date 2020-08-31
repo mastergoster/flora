@@ -87,6 +87,8 @@ class UsersEntity extends Entity
 
     private $email;
 
+    private $postal_code;
+
     /**
      * Get undocumented variable
      *
@@ -368,6 +370,26 @@ class UsersEntity extends Entity
     public function setEmail($email)
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of postal_code
+     */
+    public function getPostalCode()
+    {
+        return $this->postal_code;
+    }
+
+    /**
+     * Set the value of postal_code
+     *
+     * @return  self
+     */
+    public function setPostalCode($postal_code)
+    {
+        $this->postal_code = $postal_code;
 
         return $this;
     }
