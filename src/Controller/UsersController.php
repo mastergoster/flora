@@ -157,8 +157,6 @@ class UsersController extends Controller
 
     public function profile($message = null)
     {
-        //dd($this->session()->has('validate'));
-
         if (!$this->security()->accessRole('adherants')) {
             $this->redirect('/403');
         }

@@ -29,8 +29,8 @@ abstract class Controller
 
     protected function renderPdf(string $view, array $variables = [])
     {
-        // header("Content-type:application/pdf");
-        // header("Content-Disposition:inline;filename=" . $variables["title"] ?: "pdf");
+        header("Content-type:application/pdf");
+        header("Content-Disposition:inline;filename=" . $variables["title"] ?: "pdf");
         $folder  = $this->getApp()->rootfolder() . "/files/$view/";
         $name = ($variables["title"] ?: "pdf") . ".pdf";
 
@@ -67,7 +67,10 @@ abstract class Controller
         if (is_null($this->twig)) {
             $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__DIR__)) . '/views/');
             $this->twig = new \Twig\Environment($loader);
-            $this->twig->addGlobal('session', $_SESSION);
+            if ($this->session()->has("users")) {
+                $this->security()->userHydrateSession();
+            }
+            $this->twig->addGlobal('session', $this->session()->all());
             $this->twig->addGlobal('constant', get_defined_constants());
             $this->twig->addExtension(new FlashExtension());
             $this->twig->addExtension(new LinkExtension());

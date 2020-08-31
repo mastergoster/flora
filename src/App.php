@@ -47,9 +47,9 @@ class App
         foreach ($session as $key => $value) {
             $app->request->getSession()->set($key, $value);
         }
-        setlocale(\LC_TIME, 'fr', 'fr_FR', 'fr_FR.ISO8859-1', 'eu_FR.UTF-8');
+        setlocale(\LC_TIME, 'fr', 'fr_FR', 'fr_FR.ISO8859-1', 'fr_FR.utf8');
 
-
+        date_default_timezone_set('Europe/Paris');
         $app->response = new Response();
 
         $config = self::getInstance()->rootfolder();

@@ -98,4 +98,21 @@ class SecurityController extends controller
         $passwordh = password_hash($password, PASSWORD_BCRYPT);
         return $this->users->update($user->getId(), "id", ["password" => $passwordh]);;
     }
+
+    public function userHydrateSession()
+    {
+        $user = $this->users->find($this->session()->get("users")->getId(), 'id');
+        $levelsUser = $this->rolesLog->findAll(
+            $user->getId(),
+            "id_users",
+            "desc",
+            "created_at"
+        );
+
+        $levelUser = $this->roles->find(
+            $levelsUser[0]->getIdRoles()
+        )->getLevel();
+        $this->session()->set("users", $user);
+        $this->session()->get("users")->level = $levelUser;
+    }
 }
