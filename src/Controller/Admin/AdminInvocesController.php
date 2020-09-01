@@ -144,6 +144,7 @@ class AdminInvocesController extends Controller
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
             if (!$errors) {
+                $this->products->create($datas);
             }
         }
         return $this->render('admin/products', ["form" => $form->html(),  'items' => $this->products->all()]);
