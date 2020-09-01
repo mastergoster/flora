@@ -103,7 +103,7 @@ class UsersController extends Controller
                     $this->redirect("usersLogin");
                 }
                 if ($userTable->find($datas["phone_number"], "phone_number")) {
-                    $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
+                    $this->messageFlash()->error("Ce numero de téléphone existe déjà, merci de vous connecter");
                     $this->redirect("usersLogin");
                 }
 
