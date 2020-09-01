@@ -354,7 +354,9 @@ class UsersController extends Controller
         $formUpdate->field("city", ["require"]);
         $formUpdate->field("postal_code", ["require"]);
         $formUpdate->field("desc", ["require"]);
-        $formUpdate->field("pin", ["ExactLength" => 4, "int"]);
+        if ($user->getVerify() == "1") {
+            $formUpdate->field("pin", ["ExactLength" => 4, "int"]);
+        }
         $errors = [];
         if ($this->request()->query->has("user")) {
             $errors =  $formUpdate->hasErrors();
