@@ -102,6 +102,10 @@ class UsersController extends Controller
                     $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
                     $this->redirect("usersLogin");
                 }
+                if ($userTable->find($datas["phone_number"], "phone_number")) {
+                    $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
+                    $this->redirect("usersLogin");
+                }
 
                 //crypter password
                 $datas["password"] = password_hash($datas["password"], PASSWORD_BCRYPT);
