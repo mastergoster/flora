@@ -46,7 +46,7 @@ class AdminInvocesController extends Controller
                     if ($this->invoces->find($datasDel["id"])->getActivate() == 0) {
                         $this->invoces->delete($datasDel["id"]);
                     } else {
-                        $this->messageFlash()->error("impossible de supprimer une facture validé");
+                        $this->invoces->update($datasDel["id"], "id", ["activate" => 0]);
                     }
                 }
             }
