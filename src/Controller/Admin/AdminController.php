@@ -114,7 +114,7 @@ class AdminController extends Controller
 
         $users = $this->packages->all();
         return $this->render(
-            "admin/products",
+            "admin/packages",
             [
                 "items" => $users,
                 "form"  => $form->html()

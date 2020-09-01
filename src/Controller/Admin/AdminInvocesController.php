@@ -131,4 +131,21 @@ class AdminInvocesController extends Controller
         $invoces->setInvocesLines($this->invocesLines->findall($id, "id_invoces"));
         return $this->renderPdf("user/invoce", ["invoce" => $invoces, "user" => $user, "title" => $invoces->getRef()]);
     }
+
+    public function products()
+    {
+        $form = new FormController();
+        $form->field("ref", ["require"]);
+        $form->field("name", ["require"]);
+        $form->field("desc", ["require"]);
+        $form->field("price", ["require", "int"]);
+        $form->field("activate", ["require", "boolean"]);
+        $errors =  $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+            if (!$errors) {
+            }
+        }
+        return $this->render('admin/products', ["form" => $form->html(),  'items' => $this->products->all()]);
+    }
 }

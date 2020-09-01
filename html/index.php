@@ -57,7 +57,8 @@ $app->getRouter($basePath)
     ->match('/admin/invoces/[i:id]', 'AdminInvoces#single', 'adminInvoceEdit')
 
 
-    ->match('/admin/products', 'Admin#products', 'adminProducts')
+    ->match('/admin/products', 'AdminInvoces#products', 'adminProducts')
+    ->match('/admin/packages', 'Admin#products', 'adminPackages')
     ->get('/admin/orders', 'Admin#orders', 'adminOrders')
 
 
