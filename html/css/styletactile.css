@@ -145,7 +145,7 @@ body {
     position: relative;
     width: 175px !important;
     height: 175px !important;
-    margin: 10px;
+    margin: 10px 20px;
 }
 
 .container .option_item .checkbox {
