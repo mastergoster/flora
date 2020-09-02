@@ -99,6 +99,7 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
+    overflow: hidden;
 }
 
 .down {
@@ -136,6 +137,7 @@ body {
     background: #585c68;
     display: flex;
     flex-wrap: wrap;
+    overflow: hidden;
 }
 
 .container .option_item {
