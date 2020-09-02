@@ -9,15 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
             var value = document.getElementById("inputcode").value
             document.getElementById("inputcode").value = "" // value.substr(0, value.length - 1)
 
-
         } else {
             document.getElementById("inputcode").value += this.innerText
         }
         if (document.getElementById("inputcode").value.length == 4) {
             document.getElementById('okvalide').click();
         }
-
-
     }
     var pave = document.getElementsByClassName('touche');
     Array.from(pave).forEach(element => {
