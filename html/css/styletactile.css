@@ -164,7 +164,7 @@ body {
     border-radius: 5px;
     text-align: center;
     padding: 58px 40px;
-    cursor: pointer;
+    cursor: none;
     color: #585c68;
     display: block;
     border: 5px solid transparent;
