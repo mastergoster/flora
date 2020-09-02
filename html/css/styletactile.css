@@ -101,8 +101,38 @@ body {
     font-family: "Montserrat", sans-serif;
 }
 
+.down {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 135px;
+    right: 20px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.up {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
 .container {
     width: 100vw;
+    height: 195px;
+    overflow: scroll;
     background: #585c68;
     display: flex;
     flex-wrap: wrap;
@@ -111,8 +141,8 @@ body {
 .container .option_item {
     display: block;
     position: relative;
-    width: 175px;
-    height: 175px;
+    width: 175px !important;
+    height: 175px !important;
     margin: 10px;
 }
 

@@ -53,7 +53,9 @@ class InvocesServices extends Controller
     public function activate(InvocesEntity $invoce)
     {
         $invoce->setActivate(true);
-        $invoce->setRef($this->numfact(true));
+        if (\substr($invoce->getRef(), 0, 5) == "PROV_") {
+            $invoce->setRef($this->numfact(true));
+        }
         $lines = $this->invocesLines->findAll($invoce->getID(), "id_invoces");
         foreach ($lines as $line) {
             $invoce->setPrice($invoce->getPrice() + (($line->getPrice() * $line->getQte()) - $line->getDiscount()));

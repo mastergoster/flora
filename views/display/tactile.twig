@@ -10,6 +10,8 @@
 	</head>
 
 	<body class="unselectable">
+		<div class="up clicouille" onclick="viewscroll(-195)">^</div>
+		<div class="down clicouille" onclick="viewscroll(195)">v</div>
 		<form action="/display/admin/new/line" method="post" class="form">
 			<div class="container">
 				{% for user in users %}

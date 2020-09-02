@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\App;
 use \Core\Controller\Controller;
 use App\Services\InvocesServices;
 use Core\Controller\FormController;
@@ -21,6 +22,7 @@ class AdminInvocesController extends Controller
         $this->loadModel('users');
         $this->loadModel('invocesLines');
         $this->loadModel('products');
+        $this->loadModel('comptaLines');
     }
 
     public function all()
@@ -43,10 +45,21 @@ class AdminInvocesController extends Controller
             if ($errorsDelete["post"] != ["no-data"]) {
                 $datasDel = $form->getDatas();
                 if (!$errorsDelete) {
-                    if ($this->invoces->find($datasDel["id"])->getActivate() == 0) {
-                        $this->invoces->delete($datasDel["id"]);
+                    $inv = $this->invoces->find($datasDel["id"]);
+                    if ($inv->getActivate() == 0) {
+                        if (\substr($inv->getRef(), 0, 5) == "FACT_") {
+                            $this->messageFlash()->error("la facture a deja une ref comptable il faut faire un avoir");
+                        } else {
+                            $this->messageFlash()->success("la facture est supprimé");
+                            $this->invoces->delete($datasDel["id"]);
+                        }
                     } else {
-                        $this->invoces->update($datasDel["id"], "id", ["activate" => 0]);
+                        if ($this->comptaLines->find($inv->getRef(), "desc")) {
+                            $this->messageFlash()->error("la facture payer impossible de supprimer");
+                        } else {
+                            $this->invoces->update($datasDel["id"], "id", ["activate" => 0]);
+                            $this->messageFlash()->success("la facture est désactivé");
+                        }
                     }
                 }
             }
@@ -119,7 +132,19 @@ class AdminInvocesController extends Controller
             $service = new InvocesServices();
             $service->activate($invoces);
             $this->invoces->updateByClass($invoces);
-            // dd($invoces);
+        }
+        $this->messageFlash()->success("la facture est activé");
+        $this->redirect('adminInvoces');
+    }
+
+    public function actualise($id)
+    {
+        $invoces = $this->invoces->find($id);
+        if ($invoces->getActivate() == 1) {
+            $file = App::getInstance()->rootFolder() . "/files/user/invoce/" . $invoces->getRef() . ".pdf";
+            if (file_exists($file)) {
+                unlink($file);
+            }
         }
         $this->redirect('adminInvoces');
     }

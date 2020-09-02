@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     function pavetactile(e) {
+        this.style.backgroundColor = "red";
+        var touche = this
+        setTimeout(function () {
+            touche.style.removeProperty("background-color");
+        }, 100)
         if (this.innerText == "sup") {
             var value = document.getElementById("inputcode").value
             document.getElementById("inputcode").value = "" // value.substr(0, value.length - 1)
@@ -17,12 +22,22 @@ document.addEventListener('DOMContentLoaded', function () {
         element.addEventListener('mouseover', pavetactile);
     });
     document.getElementById('okvalide').addEventListener('mouseover', (e) => {
+        var background = document.getElementById('okvalide').style.backgroundColor;
+        document.getElementById('okvalide').style.backgroundColor = "red";
+        setTimeout(function () {
+            document.getElementById('okvalide').style.backgroundColor = background;
+        }, 100)
         document.getElementById('okvalide').click();
     });
 
     var clicouille = document.getElementsByClassName('clicouille');
     Array.from(clicouille).forEach(element => {
         element.addEventListener('mouseover', (e) => {
+            var background = element.style.backgroundColor;
+            element.style.backgroundColor = "red";
+            setTimeout(function () {
+                element.style.backgroundColor = background;
+            }, 100)
             element.click();
         });
     });
@@ -63,7 +78,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
+
+
 });
+function viewscroll(saut) {
+    var container = document.getElementsByClassName('container')[0];
+    var position = container.scrollTop;
+    container.scroll(0, position + saut);
+}
+
 var refresh = setInterval(function () {
     document.location.reload(true);
 }, 60000);

@@ -56,8 +56,8 @@ $app->getRouter($basePath)
     ->post('/admin/invoces/[i:id]/validate', 'AdminInvoces#validate', 'adminInvoceValidate')
     ->match('/admin/invoces/[i:id]', 'AdminInvoces#single', 'adminInvoceEdit')
 
-
     ->match('/admin/products', 'AdminInvoces#products', 'adminProducts')
+    ->match('/admin/invoces/[i:id]/actualise', 'AdminInvoces#actualise', 'adminActualise')
     ->match('/admin/packages', 'Admin#products', 'adminPackages')
     ->get('/admin/orders', 'Admin#orders', 'adminOrders')
 
