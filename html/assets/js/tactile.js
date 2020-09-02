@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } else {
             document.getElementById("inputcode").value += this.innerText
-
+        }
+        if (document.getElementById("inputcode").value.length == 4) {
+            document.getElementById('okvalide').click();
         }
 
 
@@ -21,14 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(pave).forEach(element => {
         element.addEventListener('mouseover', pavetactile);
     });
-    document.getElementById('okvalide').addEventListener('mouseover', (e) => {
-        var background = document.getElementById('okvalide').style.backgroundColor;
-        document.getElementById('okvalide').style.backgroundColor = "red";
-        setTimeout(function () {
-            document.getElementById('okvalide').style.backgroundColor = background;
-        }, 100)
-        document.getElementById('okvalide').click();
-    });
+    // document.getElementById('okvalide').addEventListener('mouseover', (e) => {
+    //     var background = document.getElementById('okvalide').style.backgroundColor;
+    //     document.getElementById('okvalide').style.backgroundColor = "red";
+    //     setTimeout(function () {
+    //         document.getElementById('okvalide').style.backgroundColor = background;
+    //     }, 100)
+    //     document.getElementById('okvalide').click();
+    // });
 
     var clicouille = document.getElementsByClassName('clicouille');
     Array.from(clicouille).forEach(element => {
