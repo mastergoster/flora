@@ -40,8 +40,7 @@ class InvocesServices extends Controller
         $prefix = $validate ? "FACT_" : "PROV_";
         $invoces = $this->invoces->findAll($validate, "activate", true, 'ref');
         foreach ($invoces as $invoce) {
-
-            if ($invoce->getRef() != $prefix . $ref) {
+            if (substr($invoce->getRef(), -4, 4) != substr($prefix . $ref, -4, 4)) {
                 throw new \Exception("non conformité des numero de facture", 1);
             } else {
                 $ref += 1;
