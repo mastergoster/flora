@@ -2,7 +2,7 @@
 
 $basePath = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 
-require_once $basePath . 'vendor/autoload.php';
+require_once $basePath . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 $app = App\App::getInstance();
 $app->setStartTime();
 $app::load();

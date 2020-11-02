@@ -23,8 +23,8 @@ class EmailController extends controller
         $mail->isSMTP();
         if ($this->getConfig('ENV_DEV')) {
             //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            $mail->Host         = 'localhost';
-            $mail->Port         = '1025';
+            $mail->Host         = $this->getConfig('MAILER_Host');
+            $mail->Port         = $this->getConfig('MAILER_Port');
             $sender = ["mail@test.fr", "mail test"];
         } else {
             $mail->Host         = $this->getConfig('MAILER_Host');

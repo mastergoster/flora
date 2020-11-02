@@ -4,7 +4,6 @@ namespace App\Model\Table;
 
 use Core\Model\Table;
 
-
 class InvocesTable extends Table
 {
 

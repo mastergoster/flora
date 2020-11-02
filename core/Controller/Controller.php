@@ -40,7 +40,6 @@ abstract class Controller
             $mpdf->WriteHTML($this->render($view, $variables));
             $folderLink = "";
             foreach (explode("/", $folder) as $value) {
-
                 if (!is_dir($folderLink . "/" . $value) && $value != "") {
                     \mkdir($folderLink . "/" . $value);
                 }
