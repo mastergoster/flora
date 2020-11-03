@@ -85,9 +85,9 @@ class BookingEventsEntity extends Entity
      *
      * @return  self
      */
-    public function setCreatedAt($created_at)
+    public function setCreatedAt($createdAt)
     {
-        $this->created_at = $created_at;
+        $this->created_at = $createdAt;
 
         return $this;
     }

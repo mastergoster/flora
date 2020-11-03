@@ -20,6 +20,7 @@ class AdminComptaController extends Controller
         $this->loadModel("users");
     }
 
+
     public function index()
     {
 

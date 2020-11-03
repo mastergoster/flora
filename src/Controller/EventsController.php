@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use \Core\Controller\Controller;
-use Core\Controller\FormController;
+use \Core\Controller\FormController;
 
 class EventsController extends Controller
 {
