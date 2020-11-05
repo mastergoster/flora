@@ -52,7 +52,7 @@
 				</div>
 				<div class="field half">
 					<label for="password">Mot de passe</label>
-					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="password" id="password"/>
+					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="password" id="password" placeholder="7 caratères minimum"/>
 					{% if errors.password %}
 						<ul class="invalid-feedback">
 							{% for error in errors.password %}

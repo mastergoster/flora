@@ -78,7 +78,6 @@ class UsersController extends Controller
 
     public function subscribe()
     {
-
         //Création d'un tableau regroupant les champs requis
         $form = new \Core\Controller\FormController();
         $form->field('email', ["require", "mail"]);
@@ -87,17 +86,16 @@ class UsersController extends Controller
         $form->field('first_name', ["require"]);
         $form->field('phone_number', ["require", "tel"]);
 
-
-        $errors =  $form->hasErrors();
+        $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
-            //verifie qu'il n'y ai pas d'erreurs
+            //verifie qu'il n'y a pas d'erreur
             if (!$errors) {
 
                 /** @var UsersTable $this->users */
                 $userTable = $this->users;
 
-                //verifier que l'adresse mail n'existe pas
+                //verifier que l'adresse mail et/ou que le numéro de téléphone n'existe(nt) pas
                 if ($userTable->find($datas["email"], "email")) {
                     $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
                     $this->redirect("usersLogin");
@@ -107,46 +105,52 @@ class UsersController extends Controller
                     $this->redirect("usersLogin");
                 }
 
-                //crypter password
+                //crypter le password
                 $datas["password"] = password_hash($datas["password"], PASSWORD_BCRYPT);
-                //cree token
-
+                
+                //créer token et pin
                 $datas["token"] =  substr(md5(uniqid()), 0, 10);
                 $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
+
                 //persiter user en bdd
                 if (!$userTable->create($datas)) {
-                    //formater erreure comme il faut
+                    //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
                 if (!$this->rolesLog->create(["id_roles" => 2, "id_users" => $userTable->lastInsertId()])) {
-                    //formater erreure comme il faut
+                    //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
+
                 //informer que l'enregistrement c'est bien passé
-                $this->messageFlash()->success('Enregistrement reussi');
-                //evoyer mail de confirmation avec le token
+                $this->messageFlash()->success('Enregistrement réussi');
+
+                //envoyer le mail de confirmation avec le token
                 $mail = new EmailController();
                 $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $datas["token"];
-                $mail->object('valiez votre inscription sur le site ' . getenv('stieName'))
+                $mail->object('Validez votre inscription sur le site ' . getenv('stieName'))
                     ->to($datas['email'])
                     ->message('confirmation', compact('datas'))
                     ->send();
-                // send sms
+
+                //envoyer le sms
                 $sms = new SmsController();
                 $sms->numero($datas['phone_number'])
                     ->send(
                         'pour valier votre code pin : ' .  $datas["pin"]
                             . ' merci de vous connecter via la borne tactile'
                     );
-                //informer le client qu'il var devoir valier son adresse mail
-                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mail']} ;)");
-                $this->messageFlash()->success("Nous vous avons envoyer un sms sur le numéro {$datas['tel']}");
-                //redirection pour se connecter
 
+                //informer le client qu'il va devoir valider son adresse mail
+                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mail']} ;)");
+                $this->messageFlash()->success("Nous vous avons envoyé un sms sur le numéro {$datas['tel']}");
+
+                //redirection pour se connecter
                 header('location: ' . $this->generateUrl('usersLogin'));
                 exit();
             }
         }
+
         //supprime le mdp pour le renvoie a la vue
         unset($datas["password"]);
 
