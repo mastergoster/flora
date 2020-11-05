@@ -24,8 +24,8 @@ class AAInitSeeder extends AbstractSeed
                 'pin'    => 'foo',
                 'token'    => 'foo',
                 'phone_number'    => 'foo',
-                'activate'    => 'foo',
-                'verify'    => 'foo'
+                'activate'    => '1',
+                'verify'    => '1'
             ]
         ];
 
