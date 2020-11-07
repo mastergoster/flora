@@ -160,7 +160,13 @@ class UsersController extends Controller
         return $this->render('user/subscribe', ["datas" => $datas, "errors" => $errors]);
     }
 
-
+    public function mdpoublie()
+    {
+        return $this->render('user/mdpoublie', [
+            'page' => 'Mot de passe oublié',
+            "errors" => $errors
+        ]);
+    }
 
 
     public function profile($message = null)

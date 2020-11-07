@@ -1,0 +1,29 @@
+{% extends 'layout/default.twig' %}
+
+{% block content %}
+	<section>
+		<h2>Mot de passe oublié ?</h2>
+		<p>Indiquez l'adresse mail utilisée pour votre compte membre de l'espace Coworking de Moulins</p>
+		<form method="post" action="#">
+			<div class="fields">
+				<div class="field third">
+					<label for="mailmdpoublie">Email</label>
+					<input type="text" name="mailmdpoublie" id="mailmdpoublie"/>
+				</div>
+
+			</div>
+			<ul class="actions">
+				<li>
+					<input type="submit" value="Envoyer le mail"/>
+				</li>
+			</ul>
+			<div class="align-center">
+				<a href="/inscription">S'inscrire</a>
+				/
+				<a href="/login">Se connecter</a>
+			</div>
+		</form>
+
+	</section>
+
+{% endblock %}

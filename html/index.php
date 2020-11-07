@@ -40,8 +40,12 @@ $app->getRouter($basePath)
 
     ->match('/inscription', 'Users#subscribe', 'usersSubscribe')
 
+    ->get('/mdpoublie', 'Users#mdpoublie', 'usersMdpoublie') // ajout de cette ligne, voir si correcte
+
     ->get('/login', 'Users#login', 'usersLogin')
 
+
+    
     ->get('/admin', 'Admin#panel', 'adminPanel')
     ->match('/admin/users/[i:id]/modifheure', 'Admin#modifHeure', 'adminUserModifHeure')
     ->match('/admin/users/[i:id]', 'Admin#user', 'adminUser')
