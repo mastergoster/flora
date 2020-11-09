@@ -136,7 +136,7 @@ class UsersController extends Controller
                 $sms = new SmsController();
                 $sms->numero($datas['phone_number'])
                     ->send(
-                        'pour valier votre code pin : ' .  $datas["pin"]
+                        'pour valider votre code pin : ' .  $datas["pin"]
                             . ' merci de vous connecter via la borne tactile'
                     );
 
@@ -163,8 +163,14 @@ class UsersController extends Controller
     public function mdpoublie()
     {
         //Création d'un tableau regroupant les champs requis
-        $form = new \Core\Controller\FormController();
-        $form->field('mailmdpoublie', ["require", "mail"]);
+        // $form = new \Core\Controller\FormController();
+        // $form->field('mailmdpoublie', ["require", "mail"]);
+
+        $mail = new EmailController();
+        $mail->object('Validez votre inscription sur le site ' . getenv('stieName'))
+            ->to('belzepof@gmail.com')
+            ->message('confirmation', compact('datas'))
+            ->send();
 
 
         // Vérifier si le mail existe dans la BD
