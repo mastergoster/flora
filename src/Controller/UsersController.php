@@ -57,7 +57,6 @@ class UsersController extends Controller
             }
         }
 
-
         //supprime le mdp pour le renvoie a la vue
         unset($datas["password"]);
 
@@ -160,11 +159,28 @@ class UsersController extends Controller
         return $this->render('user/subscribe', ["datas" => $datas, "errors" => $errors]);
     }
 
+
     public function mdpoublie()
     {
+        //Création d'un tableau regroupant les champs requis
+        $form = new \Core\Controller\FormController();
+        $form->field('mailmdpoublie', ["require", "mail"]);
+
+
+        // Vérifier si le mail existe dans la BD
+            // Si non : message d'erreur avertissant que le mail saisi est inconnu
+            // Si oui : vérifier que le mail a été validé après l'inscription
+                // Si non : message pour indiquer que ce mail n'a pas été validé et qu'il faut le faire
+                // Si oui : vérifier si le "rôle" permet une connexion à l'espace membre
+                    // Si non : message pour indiquer que le statut du compte ne permet pas d'accéder à un espace membre
+                    // Si oui : 2 choix de workflow à décideer pour la suite
+        
+
+        
+        // Pour afficher la view en l'état
         return $this->render('user/mdpoublie', [
-            'page' => 'Mot de passe oublié',
-            "errors" => $errors
+            'page' => 'Mot de passe oublié', // a voir car je ne vois pas ce que cela fait
+            "errors" => $errors // erreur à ce niveau car variable undefined
         ]);
     }
 
