@@ -9,5 +9,6 @@ return [
     "MAILER_Username" => "",
     "MAILER_Password" => "",
     "MAILER_Port" => "",
-    "ENV_DEV" => true
+    "ENV_DEV" => true,
+    "DB_Name" => "application"
 ];

@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Model\Entity\InvocesEntity;
 use Core\Controller\Controller;
 
-
 class InvocesServices extends Controller
 {
     public function __construct()

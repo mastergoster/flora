@@ -28,7 +28,7 @@ class AdminCoreController extends Controller
         $this->md5("composer.json");
         $this->md5("phinx");
         $request = $this->request()->query;
-        $git = explode("\n", `sudo git pull 2>&1`);
+        $git = explode("\n", `sudo git pull origin prod 2>&1`);
 
 
         if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {
