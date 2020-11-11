@@ -136,8 +136,8 @@ class UsersController extends Controller
                 $sms = new SmsController();
                 $sms->numero($datas['phone_number'])
                     ->send(
-                        'pour valider votre code pin : ' .  $datas["pin"]
-                            . ' merci de vous connecter via la borne tactile'
+                        'Pour valider votre code pin : ' .  $datas["pin"]
+                            . ', merci de vous connecter via la borne tactile.'
                     );
 
                 //informer le client qu'il va devoir valider son adresse mail
@@ -163,30 +163,39 @@ class UsersController extends Controller
     public function mdpoublie()
     {
         //Création d'un tableau regroupant les champs requis
-        // $form = new \Core\Controller\FormController();
-        // $form->field('mailmdpoublie', ["require", "mail"]);
+        $form = new \Core\Controller\FormController();
+        $form->field('mailmdpoublie', ["require", "mail"]);
 
-        $mail = new EmailController();
-        $mail->object('Validez votre inscription sur le site ' . getenv('stieName'))
-            ->to('belzepof@gmail.com')
-            ->message('confirmation', compact('datas'))
-            ->send();
+        $errors = $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+            //verifie qu'il n'y a pas d'erreur
+            if (!$errors) {
 
+                //informe de l'envoi du mail
+                $this->messageFlash()->success('Mail envoyé !');
 
-        // Vérifier si le mail existe dans la BD
-            // Si non : message d'erreur avertissant que le mail saisi est inconnu
-            // Si oui : vérifier que le mail a été validé après l'inscription
-                // Si non : message pour indiquer que ce mail n'a pas été validé et qu'il faut le faire
-                // Si oui : vérifier si le "rôle" permet une connexion à l'espace membre
-                    // Si non : message pour indiquer que le statut du compte ne permet pas d'accéder à un espace membre
-                    // Si oui : 2 choix de workflow à décideer pour la suite
-        
+                // Envoi du mail de confirmation
+                $mail = new EmailController();
+                $mail->object('Votre demande de changement de mot de passe effectuee sur le site ' . getenv('stieName'))
+                    ->to('poil@test.fr')
+                    ->message('confirmation', compact('datas'))
+                    ->send();
+                
+                //redirection pour se connecter
+                header('location: ' . $this->generateUrl('usersLogin'));
+                exit();
+            }
+        }
 
-        
+        if ($errors["post"]) {
+            unset($errors);
+        }
+
         // Pour afficher la view en l'état
         return $this->render('user/mdpoublie', [
-            'page' => 'Mot de passe oublié', // a voir car je ne vois pas ce que cela fait
-            "errors" => $errors // erreur à ce niveau car variable undefined
+            "page" => 'MDPOublie',
+            "errors" => $errors
         ]);
     }
 
