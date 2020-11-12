@@ -162,27 +162,44 @@ class UsersController extends Controller
 
     public function mdpoublie()
     {
-        //Création d'un tableau regroupant les champs requis
-        $form = new \Core\Controller\FormController();
+        // Création d'un tableau regroupant les champs requis
+        $form = new FormController();
         $form->field('mailmdpoublie', ["require", "mail"]);
 
         $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
-            //verifie qu'il n'y a pas d'erreur
+            // Verifie qu'il n'y a pas d'erreur
             if (!$errors) {
 
-                //informe de l'envoi du mail
-                $this->messageFlash()->success('Mail envoyé !');
+                /** @var UsersTable $this->users */
+                $userTable = $this->users;
+
+                // Verifie que l'adresse mail existe
+                if (!$userTable->find($datas["mailmdpoublie"], "email")) {
+                    $this->messageFlash()->error("Vérifiez votre boite mail.");
+                    $this->redirect("usersSubscribe");
+                }
+                dd($userTable);
 
                 // Envoi du mail de confirmation
                 $mail = new EmailController();
-                $mail->object('Votre demande de changement de mot de passe effectuee sur le site ' . getenv('stieName'))
-                    ->to('poil@test.fr')
-                    ->message('confirmation', compact('datas'))
+                $mail->object(getenv('stieName') . ' - Votre demande de changement de mot de passe')
+                    ->to($datas['mailmdpoublie'])
+                    ->message('oublimdp', compact('datas')) // le contenu du message ne fonctionne pas avec ca et l emailne part pas, il fonctionne si je met "confirmation"
                     ->send();
+
+                // Informe de l'envoi du mail
+                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mailmdpoublie']}.");
                 
-                //redirection pour se connecter
+                // Envoi d'un sms d'information
+                $sms = new SmsController();
+                $sms->numero('0606060606') // A modifier avec le numéro de tel de l'user !!!!!!!!!!
+                    ->send(
+                        'Vous avez demandé le changement du mot de passe de connexion à votre espace membre de l\'espace Coworking de MOULINS. Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] . '. L\'espace de Coworking By CoWorkInMoulins.'
+                    );
+
+                // Redirection pour se connecter
                 header('location: ' . $this->generateUrl('usersLogin'));
                 exit();
             }
@@ -197,6 +214,7 @@ class UsersController extends Controller
             "page" => 'MDPOublie',
             "errors" => $errors
         ]);
+
     }
 
 
