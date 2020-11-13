@@ -202,7 +202,7 @@ class UsersController extends Controller
                     // Vérifie si le code PIN saisi est identique à celui de la BDD
                     if ($datas["pin"] != $datas["pinmdpoublie"]) {
                         $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer !
-                        $this->redirect("usersLogin");
+                        $this->redirect("usersMdpoublie");
                     }
 
                     // Envoi du mail de confirmation
@@ -243,10 +243,7 @@ class UsersController extends Controller
 
     public function mdpchange(string $slug)
     {
-        $token = $this->users->findAll($slug, "token");
-
-        // dump($slug);
-        // dd($token);
+        $token = $this->users->find($slug, "token");
 
         if (!$token || is_null($slug)) {
             $this->messageFlash()->error("Merci de vous connecter.");
@@ -265,6 +262,25 @@ class UsersController extends Controller
                 $datas = $form->getDatas();
                 // Verifie qu'il n'y a pas d'erreur
                 if (!$errors) {
+
+                    // dump($slug);
+                    // dump($token);
+                    // dump($datas);
+                    // dump($token->getPin());
+
+                    $testPin = $token->getPin();
+                    // dump($datas);
+                    // dd($testPin);
+
+                    // Vérifie si le code PIN saisi est identique à celui de la BDD
+                    if ($testPin != $datas["pinmdchange"]) {
+                        $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer !
+                        return $this->render('user/mdpchange', [
+                            "page" => 'Changer le mot de passe',
+                            "errors" => $errors
+                            ]);
+                    }
+
                     $this->messageFlash()->success("Votre mot de passe à été changé.");
                     $this->messageFlash()->success("Votre pouvez vous connecter.");
                     $this->redirect("usersLogin");
