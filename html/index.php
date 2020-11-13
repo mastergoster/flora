@@ -39,13 +39,11 @@ $app->getRouter($basePath)
 
 
     ->match('/inscription', 'Users#subscribe', 'usersSubscribe')
-
-    ->match('/mdpoublie', 'Users#mdpoublie', 'usersMdpoublie') // ajout de cette ligne, voir si correcte
-
     ->get('/login', 'Users#login', 'usersLogin')
+    ->match('/mdpoublie', 'Users#mdpoublie', 'usersMdpoublie')
+    ->get('/mdpchange/[*:slug]', 'Users#mdpchange', 'usersMdpchange') // Nouveau, à vérifier
 
 
-    
     ->get('/admin', 'Admin#panel', 'adminPanel')
     ->match('/admin/users/[i:id]/modifheure', 'Admin#modifHeure', 'adminUserModifHeure')
     ->match('/admin/users/[i:id]', 'Admin#user', 'adminUser')

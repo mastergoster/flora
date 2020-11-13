@@ -1,0 +1,13 @@
+{% extends 'layout/default.twig' %}
+
+{% block content %}
+	<section class="align-center">
+		<h2>Changez votre mot de passe</h2>
+		<p class="align-center">Vous avez recu un mail a l'adresse
+			{{ user.email }}</p>
+		<p class="align-center">Merci de suivre le lien qui est dans celui-ci</p>
+		<a href="/user/logout" class="button">Annuler</a>
+
+	</section>
+
+{% endblock %}

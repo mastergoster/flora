@@ -165,6 +165,7 @@ class UsersController extends Controller
         // Création d'un tableau regroupant les champs requis
         $form = new FormController();
         $form->field('mailmdpoublie', ["require", "mail"]);
+        $form->field('pinmdpoublie', ["require"]);
 
         $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
@@ -177,28 +178,36 @@ class UsersController extends Controller
 
                 // Verifie que l'adresse mail existe
                 if (!$userTable->find($datas["mailmdpoublie"], "email")) {
-                    $this->messageFlash()->error("Vérifiez votre boite mail.");
+                    $this->messageFlash()->error("Mail inexistant"); // Message pour vérification, à changer !
                     $this->redirect("usersSubscribe");
                 }
 
                 if ($userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
 
-                    // dump($userTest);
+                    // Récupération de information du compte
                     $datas["phoneNumber"] = $userTest->getPhoneNumber();
                     $datas["activate"] = $userTest->getActivate();
+                    $datas["pin"] = $userTest->getPin();
+                    $datas["token"] = $userTest->getToken();
                     // $datas["verify"] = $userTest->getVerify();
-                    // $datas["pin"] = $userTest->getPin();
-                    // $datas["token"] = $userTest->getToken();
+                    // dump($userTest);
                     // dd($datas);
 
                     // Vérifie si mail a été activé
                     if (!$datas["activate"]) {
-                        $this->messageFlash()->error("Ce mail n'a pas été activé après inscritpion.");
+                        $this->messageFlash()->error("Ce mail n'a pas été activé après inscritpion.");  // Message pour vérification, à changer !
+                        $this->redirect("usersLogin");
+                    }
+
+                    // Vérifie si le code PIN saisi est identique à celui de la BDD
+                    if ($datas["pin"] != $datas["pinmdpoublie"]) {
+                        $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer !
                         $this->redirect("usersLogin");
                     }
 
                     // Envoi du mail de confirmation
                     $mail = new EmailController();
+                    $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/mdpchange/" . $datas["token"];
                     $mail->object(getenv('stieName') . ' - Votre demande de changement de mot de passe')
                         ->to($datas['mailmdpoublie'])
                         ->message('oublimdp', compact('datas'))
