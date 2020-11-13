@@ -239,7 +239,29 @@ class UsersController extends Controller
             "page" => 'MDPOublie',
             "errors" => $errors
         ]);
+    }
 
+    public function mdpchange(string $slug)
+    {
+        $token = $this->users->findAll($slug, "token");
+
+        // dump($slug);
+        // dd($token);
+
+        if (!$token || is_null($slug)) {
+            $this->messageFlash()->error("Merci de vous connecter.");
+            $this->redirect("usersLogin");
+        }
+
+        if ($token && !is_null($slug)) {
+            $this->messageFlash()->error("Veuillez renseigner tous les champs.");
+        }
+
+        // Pour afficher la view en l'état
+        return $this->render('user/mdpchange', [
+        "page" => 'Changer le mot de passe',
+        "errors" => $errors
+        ]);
     }
 
 

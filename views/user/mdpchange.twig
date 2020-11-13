@@ -1,13 +1,70 @@
 {% extends 'layout/default.twig' %}
 
 {% block content %}
-	<section class="align-center">
+	<section>
 		<h2>Changez votre mot de passe</h2>
-		<p class="align-center">Vous avez recu un mail a l'adresse
-			{{ user.email }}</p>
-		<p class="align-center">Merci de suivre le lien qui est dans celui-ci</p>
-		<a href="/user/logout" class="button">Annuler</a>
+		<p>Merci de renseigner tous les champs suivants</p>
 
-	</section>
+        <form method="post" action="#">
+			<div class="fields">
+				<div class="field third">
+					<label for="password_new">Nouveau mot de passe</label>
+					<input {% if errors.password_new %} class="invalid-feedback" {% endif %} type="text" name="password_new" id="password_new"/>
+					{% if errors.password_new %}
+						<div class="invalid-feedback">
+							{% for error in errors.password_new %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+                <div class="field third">
+					<label for="password_newVerify">verification du mot de passe</label>
+					<input {% if errors.password_newVerify %} class="invalid-feedback" {% endif %} type="text" name="password_newVerify" id="password_newVerify"/>
+					{% if errors.password_newVerify %}
+						<div class="invalid-feedback">
+							{% for error in errors.password_newVerify %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+				<div class="field third">
+					<label for="pinmdpoublie">Code PIN</label>
+					<input {% if errors.pinmdpoublie %} class="invalid-feedback" {% endif %} type="password" name="pinmdpoublie" id="pinmdpoublie" placeholder="Votre code PIN personnel"/>
+					{% if errors.pinmdpoublie %}
+						<div class="invalid-feedback">
+							{% for error in errors.pinmdpoublie %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+            <div class="align-center">
+                <input type="submit" class="btn btn-primary" value="changer mon mot de passe"/>
+            </div>
+		</form>
+        <div class="align-center">
+            <a href="/user/logout" class="button">Annuler</a>
+        </div>
+    </section>
+
+
+            {# <form method="post" action="?password">
+                <input type="hidden" value="{{ user.id }}" name="id" class="form-control">
+                <div class="col-md-12">
+                    <div class="form-group bmd-form-group{% if errorsP['password'] %} has-danger{% endif %}">
+                        <label class="bmd-label-floating">mot de passe actuel</label>
+                        <input type="password" name="password" class="form-control">
+                        {% if errorsP['password'] %}
+                            <span class="material-icons form-control-feedback">clear</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right">changer mon mot de passe</button>
+                <div class="clearfix"></div>
+            </form> #}
+
 
 {% endblock %}
