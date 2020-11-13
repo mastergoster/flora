@@ -181,30 +181,38 @@ class UsersController extends Controller
                     $this->redirect("usersSubscribe");
                 }
 
-                if ((array) $userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
+                if ($userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
 
-                    dump($userTest);
-                    dump($userTable);
+                    // dump($userTest);
+                    $datas["phoneNumber"] = $userTest->getPhoneNumber();
+                    $datas["activate"] = $userTest->getActivate();
+                    // $datas["verify"] = $userTest->getVerify();
+                    // $datas["pin"] = $userTest->getPin();
+                    // $datas["token"] = $userTest->getToken();
+                    // dd($datas);
 
-                    dd($datas);
-                    
+                    // Vérifie si mail a été activé
+                    if (!$datas["activate"]) {
+                        $this->messageFlash()->error("Ce mail n'a pas été activé après inscritpion.");
+                        $this->redirect("usersLogin");
+                    }
 
                     // Envoi du mail de confirmation
                     $mail = new EmailController();
                     $mail->object(getenv('stieName') . ' - Votre demande de changement de mot de passe')
                         ->to($datas['mailmdpoublie'])
-                        ->message('oublimdp', compact('datas')) // le contenu du message ne fonctionne pas avec ca et l emailne part pas, il fonctionne si je met "confirmation"
+                        ->message('oublimdp', compact('datas'))
                         ->send();
 
                     // Informe de l'envoi du mail
                     $this->messageFlash()->success("Verifiez votre boite mail {$datas['mailmdpoublie']}.");
                     
                     // Envoi d'un sms d'information
-                    // $sms = new SmsController();
-                    // $sms->numero('0606060606') // A modifier avec le numéro de tel de l'user !!!!!!!!!!
-                    //     ->send(
-                    //         'Vous avez demandé le changement du mot de passe de connexion à votre espace membre de l\'espace Coworking de MOULINS. Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] . '. L\'espace de Coworking By CoWorkInMoulins.'
-                    //     );
+                    $sms = new SmsController();
+                    $sms->numero($datas["phoneNumber"])
+                        ->send(
+                            'Bonjour, vous avez demandé le changement du mot de passe de connexion à votre espace membre de l\'espace Coworking de MOULINS. Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] . '. L\'espace de Coworking By CoWorkInMoulins.'
+                        );
 
                     // Redirection pour se connecter
                     header('location: ' . $this->generateUrl('usersLogin'));
