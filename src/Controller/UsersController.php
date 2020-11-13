@@ -263,17 +263,16 @@ class UsersController extends Controller
                 // Verifie qu'il n'y a pas d'erreur
                 if (!$errors) {
 
+                    $testPin = $token->getPin();
                     // dump($slug);
                     // dump($token);
                     // dump($datas);
                     // dump($token->getPin());
-
-                    $testPin = $token->getPin();
-                    // dump($datas);
+                    // dump($datas["pinmdpchange"]);
                     // dd($testPin);
 
                     // Vérifie si le code PIN saisi est identique à celui de la BDD
-                    if ($testPin != $datas["pinmdchange"]) {
+                    if ($testPin != $datas["pinmdpchange"]) {
                         $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer !
                         return $this->render('user/mdpchange', [
                             "page" => 'Changer le mot de passe',
