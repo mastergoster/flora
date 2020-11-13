@@ -273,13 +273,17 @@ class UsersController extends Controller
 
                     // Vérifie si le code PIN saisi est identique à celui de la BDD
                     if ($testPin != $datas["pinmdpchange"]) {
-                        $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer !
-                        return $this->render('user/mdpchange', [
-                            "page" => 'Changer le mot de passe',
-                            "errors" => $errors
-                            ]);
+                        $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer
+                        $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
+                    // Insertion dans la BBD du nouveau mot de passe
+                    
+
+
+
+
+                    
                     $this->messageFlash()->success("Votre mot de passe à été changé.");
                     $this->messageFlash()->success("Votre pouvez vous connecter.");
                     $this->redirect("usersLogin");
