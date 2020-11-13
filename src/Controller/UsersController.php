@@ -180,28 +180,36 @@ class UsersController extends Controller
                     $this->messageFlash()->error("Vérifiez votre boite mail.");
                     $this->redirect("usersSubscribe");
                 }
-                dd($userTable);
 
-                // Envoi du mail de confirmation
-                $mail = new EmailController();
-                $mail->object(getenv('stieName') . ' - Votre demande de changement de mot de passe')
-                    ->to($datas['mailmdpoublie'])
-                    ->message('oublimdp', compact('datas')) // le contenu du message ne fonctionne pas avec ca et l emailne part pas, il fonctionne si je met "confirmation"
-                    ->send();
+                if ((array) $userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
 
-                // Informe de l'envoi du mail
-                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mailmdpoublie']}.");
-                
-                // Envoi d'un sms d'information
-                $sms = new SmsController();
-                $sms->numero('0606060606') // A modifier avec le numéro de tel de l'user !!!!!!!!!!
-                    ->send(
-                        'Vous avez demandé le changement du mot de passe de connexion à votre espace membre de l\'espace Coworking de MOULINS. Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] . '. L\'espace de Coworking By CoWorkInMoulins.'
-                    );
+                    dump($userTest);
+                    dump($userTable);
 
-                // Redirection pour se connecter
-                header('location: ' . $this->generateUrl('usersLogin'));
-                exit();
+                    dd($datas);
+                    
+
+                    // Envoi du mail de confirmation
+                    $mail = new EmailController();
+                    $mail->object(getenv('stieName') . ' - Votre demande de changement de mot de passe')
+                        ->to($datas['mailmdpoublie'])
+                        ->message('oublimdp', compact('datas')) // le contenu du message ne fonctionne pas avec ca et l emailne part pas, il fonctionne si je met "confirmation"
+                        ->send();
+
+                    // Informe de l'envoi du mail
+                    $this->messageFlash()->success("Verifiez votre boite mail {$datas['mailmdpoublie']}.");
+                    
+                    // Envoi d'un sms d'information
+                    // $sms = new SmsController();
+                    // $sms->numero('0606060606') // A modifier avec le numéro de tel de l'user !!!!!!!!!!
+                    //     ->send(
+                    //         'Vous avez demandé le changement du mot de passe de connexion à votre espace membre de l\'espace Coworking de MOULINS. Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] . '. L\'espace de Coworking By CoWorkInMoulins.'
+                    //     );
+
+                    // Redirection pour se connecter
+                    header('location: ' . $this->generateUrl('usersLogin'));
+                    exit();
+                }
             }
         }
 
