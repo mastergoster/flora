@@ -9,7 +9,7 @@
 			<div class="fields">
 				<div class="field third">
 					<label for="password_new">Nouveau mot de passe</label>
-					<input {% if errors.password_new %} class="invalid-feedback" {% endif %} type="text" name="password_new" id="password_new"/>
+					<input {% if errors.password_new %} class="invalid-feedback" {% endif %} type="password" name="password_new" id="password_new" placeholder="7 caratères minimum"/>
 					{% if errors.password_new %}
 						<div class="invalid-feedback">
 							{% for error in errors.password_new %}
@@ -20,7 +20,7 @@
 				</div>
                 <div class="field third">
 					<label for="password_newVerify">verification du mot de passe</label>
-					<input {% if errors.password_newVerify %} class="invalid-feedback" {% endif %} type="text" name="password_newVerify" id="password_newVerify"/>
+					<input {% if errors.password_newVerify %} class="invalid-feedback" {% endif %} type="password" name="password_newVerify" id="password_newVerify" placeholder="Recopiez votre mot de passe"/>
 					{% if errors.password_newVerify %}
 						<div class="invalid-feedback">
 							{% for error in errors.password_newVerify %}
@@ -30,11 +30,11 @@
 					{% endif %}
 				</div>
 				<div class="field third">
-					<label for="pinmdpoublie">Code PIN</label>
-					<input {% if errors.pinmdpoublie %} class="invalid-feedback" {% endif %} type="password" name="pinmdpoublie" id="pinmdpoublie" placeholder="Votre code PIN personnel"/>
-					{% if errors.pinmdpoublie %}
+					<label for="pinmdpchange">Code PIN</label>
+					<input {% if errors.pinmdpchange %} class="invalid-feedback" {% endif %} type="password" name="pinmdpchange" id="pinmdpchange" placeholder="Votre code PIN personnel"/>
+					{% if errors.pinmdpchange %}
 						<div class="invalid-feedback">
-							{% for error in errors.pinmdpoublie %}
+							{% for error in errors.pinmdpchange %}
 								<li>{{ error }}</li>
 							{% endfor %}
 						</div>

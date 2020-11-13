@@ -254,7 +254,28 @@ class UsersController extends Controller
         }
 
         if ($token && !is_null($slug)) {
-            $this->messageFlash()->error("Veuillez renseigner tous les champs.");
+
+            // Création d'un tableau regroupant les champs requis
+            $form = new FormController();
+            $form->field('password_new', ["require", "verify", "length" => 7]);
+            $form->field('pinmdpchange', ["require"]);
+
+            $errors = $form->hasErrors();
+            if ($errors["post"] != ["no-data"]) {
+                $datas = $form->getDatas();
+                // Verifie qu'il n'y a pas d'erreur
+                if (!$errors) {
+                    $this->messageFlash()->success("Votre mot de passe à été changé.");
+                    $this->messageFlash()->success("Votre pouvez vous connecter.");
+                    $this->redirect("usersLogin");
+                }
+            }
+        }
+
+        $this->messageFlash()->error("Veuillez renseigner tous les champs.");
+
+        if ($errors["post"]) {
+            unset($errors);
         }
 
         // Pour afficher la view en l'état
