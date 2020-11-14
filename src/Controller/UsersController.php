@@ -160,6 +160,11 @@ class UsersController extends Controller
     }
 
 
+    /**
+     * function permettant d'effectuer une demande de changement de mot de passe en cas d'oubli de celui-ci. Un mail est envoyé à l'adresse indiquée si celle-ci existe dans la BDD et si elle a été activée après l'inscription. Ce mail contient un lien, avec le token de l'utilisateur, de la page permttant le changement de mot de passe. Un sms est envoyé à l'utilisateur pour l'informer de la demande de changement de mot de passe.
+     *
+     * @return void
+     */
     public function mdpoublie()
     {
         // Création d'un tableau regroupant les champs requis
@@ -231,6 +236,12 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * function permettant le changement de mot de passe dans la BDD. Elle vérifie que le token est conforme ainsi que le code PIN qui est demandé en plus du nouveau mot de passe et de sa confirmation. La paramètre $slug fait référence au tokenprésent dans l'url.
+     *
+     * @param string $slug
+     * @return void
+     */
     public function mdpchange(string $slug)
     {
         $token = $this->users->find($slug, "token");
