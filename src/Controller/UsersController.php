@@ -244,14 +244,14 @@ class UsersController extends Controller
      */
     public function mdpchange(string $slug)
     {
-        $token = $this->users->find($slug, "token");
+        $user = $this->users->find($slug, "token");
 
-        if (!$token || is_null($slug)) {
+        if (!$user || is_null($slug)) {
             $this->messageFlash()->error("Merci de vous connecter.");
             $this->redirect("usersLogin");
         }
 
-        if ($token && !is_null($slug)) {
+        if ($user && !is_null($slug)) {
 
             // Création d'un tableau regroupant les champs requis
             $form = new FormController();
@@ -264,28 +264,17 @@ class UsersController extends Controller
                 // Verifie qu'il n'y a pas d'erreur
                 if (!$errors) {
 
-                    $testPin = $token->getPin();
-                    // dump($slug);
-                    // dump($token);
-                    // dump($datas);
-                    // dump($token->getPin());
-                    // dump($datas["pinmdpchange"]);
-                    // dd($testPin);
-
                     // Vérifie si le code PIN saisi est identique à celui de la BDD
-                    if ($testPin != $datas["pinmdpchange"]) {
+                    if ($user->getPin() != $datas["pinmdpchange"]) {
                         $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
                         $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
                     // Insertion dans la BBD du nouveau mot de passe
+                    $new_password = password_hash($datas["password_new"], PASSWORD_BCRYPT);
+                    $this->users->update($user->getId(), "id", ["password" => $new_password]);;
                     
-
-
-
-
-                    
-                    $this->messageFlash()->success("Votre mot de passe à été changé. Votre pouvez vous connecter.");
+                    $this->messageFlash()->success("Votre mot de passe a été modifié avec succès. Votre pouvez vous connecter.");
                     $this->redirect("usersLogin");
                 }
             }
