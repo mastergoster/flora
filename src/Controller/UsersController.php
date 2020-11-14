@@ -270,6 +270,12 @@ class UsersController extends Controller
                         $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
+                    // Vérifie si l'utilisatuer à une session en cours même sur un autre poste
+                    if ($this->session()->has('users')) {
+                        $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
+                        $this->redirect("home");
+                    }
+
                     // Insertion dans la BBD du nouveau mot de passe
                     $new_password = password_hash($datas["password_new"], PASSWORD_BCRYPT);
                     $this->users->update($user->getId(), "id", ["password" => $new_password]);;
