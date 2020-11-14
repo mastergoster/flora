@@ -165,7 +165,6 @@ class UsersController extends Controller
         // Création d'un tableau regroupant les champs requis
         $form = new FormController();
         $form->field('mailmdpoublie', ["require", "mail"]);
-        $form->field('pinmdpoublie', ["require"]);
 
         $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
@@ -175,10 +174,11 @@ class UsersController extends Controller
 
                 /** @var UsersTable $this->users */
                 $userTable = $this->users;
+                $message = $this->messageFlash()->success("Un mail vous a été envoyé à l'adresse indiquée si celle-ci est valide et a été activée.");
 
                 // Verifie que l'adresse mail existe
                 if (!$userTable->find($datas["mailmdpoublie"], "email")) {
-                    $this->messageFlash()->error("Mail inexistant"); // Message pour vérification, à changer !
+                    $message;
                     $this->redirect("usersSubscribe");
                 }
 
@@ -187,22 +187,12 @@ class UsersController extends Controller
                     // Récupération de information du compte
                     $datas["phoneNumber"] = $userTest->getPhoneNumber();
                     $datas["activate"] = $userTest->getActivate();
-                    $datas["pin"] = $userTest->getPin();
                     $datas["token"] = $userTest->getToken();
-                    // $datas["verify"] = $userTest->getVerify();
-                    // dump($userTest);
-                    // dd($datas);
 
                     // Vérifie si mail a été activé
                     if (!$datas["activate"]) {
-                        $this->messageFlash()->error("Ce mail n'a pas été activé après inscritpion.");  // Message pour vérification, à changer !
+                        $message;
                         $this->redirect("usersLogin");
-                    }
-
-                    // Vérifie si le code PIN saisi est identique à celui de la BDD
-                    if ($datas["pin"] != $datas["pinmdpoublie"]) {
-                        $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer !
-                        $this->redirect("usersMdpoublie");
                     }
 
                     // Envoi du mail de confirmation
@@ -214,7 +204,7 @@ class UsersController extends Controller
                         ->send();
 
                     // Informe de l'envoi du mail
-                    $this->messageFlash()->success("Verifiez votre boite mail {$datas['mailmdpoublie']}.");
+                    $message;
                     
                     // Envoi d'un sms d'information
                     $sms = new SmsController();
@@ -273,7 +263,7 @@ class UsersController extends Controller
 
                     // Vérifie si le code PIN saisi est identique à celui de la BDD
                     if ($testPin != $datas["pinmdpchange"]) {
-                        $this->messageFlash()->error("Code PIN incorrect.");  // Message pour vérification, à changer
+                        $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
                         $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
@@ -284,14 +274,11 @@ class UsersController extends Controller
 
 
                     
-                    $this->messageFlash()->success("Votre mot de passe à été changé.");
-                    $this->messageFlash()->success("Votre pouvez vous connecter.");
+                    $this->messageFlash()->success("Votre mot de passe à été changé. Votre pouvez vous connecter.");
                     $this->redirect("usersLogin");
                 }
             }
         }
-
-        $this->messageFlash()->error("Veuillez renseigner tous les champs.");
 
         if ($errors["post"]) {
             unset($errors);

@@ -17,17 +17,6 @@
 						</div>
 					{% endif %}
 				</div>
-				<div class="field half">
-					<label for="pinmdpoublie">Code PIN</label>
-					<input {% if errors.pinmdpoublie %} class="invalid-feedback" {% endif %} type="password" name="pinmdpoublie" id="pinmdpoublie" placeholder="Votre code PIN personnel"/>
-					{% if errors.pinmdpoublie %}
-						<div class="invalid-feedback">
-							{% for error in errors.pinmdpoublie %}
-								<li>{{ error }}</li>
-							{% endfor %}
-						</div>
-					{% endif %}
-				</div>
 			</div>
 			<ul class="actions">
 				<li>
