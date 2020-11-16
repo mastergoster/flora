@@ -68,17 +68,16 @@ class SecurityController extends controller
 
     /**
      * function de connexion via le mdp ou le code pin
-     * @param string $mail 
-     * @param string $password 
-     * @param bool $pin 
-     * @return bool 
+     * @param string $mail
+     * @param string $password
+     * @param bool $pin
+     * @return bool
      */
     public function login(string $mail, string $password, $pin = false): bool
     {
         $user = $this->users->find($mail, "email");
         if ($user) {
-            if (
-                \password_verify($password, $user->getPassword()) ||
+            if (\password_verify($password, $user->getPassword()) ||
                 ($pin && $user->getPin() == $password)
             ) {
                 $this->session()->set("users", $user);
@@ -90,7 +89,7 @@ class SecurityController extends controller
 
     /**
      * verification si l'utilisateur est connecté
-     * @return bool 
+     * @return bool
      */
     public function isConnect(): bool
     {
@@ -107,7 +106,8 @@ class SecurityController extends controller
         }
         $user = $this->session()->get('users');
         $passwordh = password_hash($password, PASSWORD_BCRYPT);
-        return $this->users->update($user->getId(), "id", ["password" => $passwordh]);;
+        return $this->users->update($user->getId(), "id", ["password" => $passwordh]);
+        ;
     }
 
     public function userHydrateSession()
