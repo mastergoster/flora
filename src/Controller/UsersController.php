@@ -184,7 +184,7 @@ class UsersController extends Controller
                 // Verifie que l'adresse mail existe
                 if (!$userTable->find($datas["mailmdpoublie"], "email")) {
                     $message;
-                    $this->redirect("usersSubscribe");
+                    $this->redirect("usersLogin");
                 }
 
                 if ($userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
@@ -237,7 +237,7 @@ class UsersController extends Controller
     }
 
     /**
-     * function permettant le changement de mot de passe dans la BDD. Elle vérifie que le token est conforme ainsi que le code PIN qui est demandé en plus du nouveau mot de passe et de sa confirmation. La paramètre $slug fait référence au tokenprésent dans l'url.
+     * function permettant le changement de mot de passe dans la BDD. Elle vérifie que le token est conforme ainsi que le code PIN qui est demandé en plus du nouveau mot de passe et de sa confirmation. La paramètre $slug fait référence au token présent dans l'url.
      *
      * @param string $slug
      * @return void
@@ -273,7 +273,7 @@ class UsersController extends Controller
                     // Vérifie si l'utilisatuer à une session en cours même sur un autre poste
                     if ($this->session()->has('users')) {
                         $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
-                        $this->redirect("home");
+                        $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
                     // Insertion dans la BBD du nouveau mot de passe
