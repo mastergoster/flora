@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Core\Model;
 
 use \PHPUnit\Framework\TestCase;
