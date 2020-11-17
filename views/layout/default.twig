@@ -23,7 +23,6 @@
 		<body
 			class="is-preload">
 
-
 			<!-- Wrapper -->
 			<div id="wrapper" class="fade-in"> {% block intro %}{% endblock %}
 
@@ -55,10 +54,29 @@
 				</nav>
 
 				<!-- Main -->
-				<div id="main">
+				<div id="main" classe"main">
 					{% block content %}
+
+						<div id="scroll_to_top">
+							<a href="#">&uarr; Haut de page</a>
+						</div>
+						
 						<!-- Featured Post -->
+						
 						<article class="post featured">
+							<div class="nav-accueil">
+								<ul>
+									<li>
+										<a href="#horaires">Horaires</a>
+									</li>
+									<li>
+										<a href="#tarifs">Tarifs</a>
+									</li>
+									<li>
+										<a href="#contact">Contacts</a>
+									</li>
+								</ul>
+							</div>
 							<header class="major">
 								<h2>Espace de Cowoking<br>
 									à Moulins
@@ -68,22 +86,21 @@
 							</header>
 							<ul class="actions special">
 								<li>
-									<a href="/inscription" class="button">Inscrivez-vous ici pour nous rejoindre</a>
+									<a href="/inscription" class="button">Inscrivez-vous ici</a>
 								</li>
 							</ul>
 							<img height="500px" src="/images/pic01.jpg" alt=""/>
 						</article>
 						<article class="post featured">
 							<header>
-
-								<h2>
+								<h2 id="tarifs">
 									Les Tarifs
 								</h2>
 							</header>
 							<div class="tarif">
 								<ul>
-									<li class="title">Quand on est de passage</li>
-									<li>
+									<li class="title">Quand on est de passage...</li>
+									<li class="title-marge">
 										<ul>
 											<li class="title">non adhérent</li>
 											<li class="des">l'heure</li>
@@ -91,7 +108,7 @@
 										</ul>
 										<ul>
 											<li class="title">non adhérent</li>
-											<li class="des">la demi journée</li>
+											<li class="des">la demie-journée</li>
 											<li class="prix">12 €</li>
 										</ul>
 										<ul>
@@ -100,8 +117,8 @@
 											<li class="prix">20 €</li>
 										</ul>
 									</li>
-									<li class="title">Quand on veux rester un peu plus</li>
-									<li>
+									<li class="title">Quand on veux rester un peu plus...</li>
+									<li class="title-marge">
 										<ul>
 											<li class="title">adhérent</li>
 											<li class="des">l'heure</li>
@@ -109,7 +126,7 @@
 										</ul>
 										<ul>
 											<li class="title">adhérent</li>
-											<li class="des">la demi journée</li>
+											<li class="des">la demie-journée</li>
 											<li class="prix">6 €</li>
 										</ul>
 										<ul>
@@ -118,8 +135,8 @@
 											<li class="prix">10 €</li>
 										</ul>
 									</li>
-									<li class="title">Quand on nous a adopté</li>
-									<li>
+									<li class="title">Quand on nous a adopté...</li>
+									<li class="title-marge">
 										<ul>
 											<li class="title">FORFAIT</li>
 											<li class="des">25 heures</li>
@@ -136,28 +153,26 @@
 											<li class="prix">100 €</li>
 										</ul>
 									</li>
-									<li class="title">Là, c'est pour que ça devienne votre maison</li>
-									<li>
+									<li class="title">Là, c'est pour que ça devienne votre maison...</li>
+									<li class="title-marge">
 										<ul>
-											<li class="title">Adhesion individuelle</li>
+											<li class="title">Adhésion Individuelle</li>
 											<li class="des"></li>
 											<li class="prix">20 € / an</li>
 										</ul>
 										<ul>
-											<li class="title">Adhesion professionelle</li>
+											<li class="title">Adhésion Professionelle</li>
 											<li class="des"></li>
 											<li class="prix">200 € / an</li>
 										</ul>
 										<ul>
 											<li class="title">Forfait Mois</li>
-											<li class="des">option domiciliation 50€</li>
+											<li class="des">option domiciliation 50 €</li>
 											<li class="prix">100 € / mois</li>
-
 										</ul>
 									</li>
 								</ul>
 							</div>
-
 						</article>
 						<!-- Posts -->
 
@@ -167,6 +182,7 @@
 				<!-- Footer -->
 				<footer id="footer">
 					<section>
+						<h2 id="contact">Nous contacter</h2>
 						<form method="post" id="contactMail" action="{{ path("mailSend") }}">
 							<div class="fields">
 								<div class="field">

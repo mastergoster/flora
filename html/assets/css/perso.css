@@ -1,3 +1,7 @@
+.main {
+    scroll-behavior: smooth !important;
+}
+
 .tarif {
     display: flex;
     flex-direction: column;
@@ -55,6 +59,10 @@
     font-weight: bold;
 }
 
+.title-marge {
+    margin-bottom: 3em !important;
+}
+
 .des {
     font-size: 0.9em;
     opacity: 0.9;
@@ -74,4 +82,57 @@
 .error {
     color: red;
     border-color: red !important;
+}
+
+
+.nav-accueil {
+    display: flex;
+    flex-direction: column;
+    font: arial !important;
+    margin-top: -6em !important;
+}
+
+@media screen and (max-width: 736px) {
+    .nav-accueil {
+        margin-top: -2em !important;
+    }
+}
+
+.nav-accueil ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.nav-accueil ul li {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.nav-accueil ul li a {
+    border-bottom: 0 !important;
+    font-size: 1.2em;
+    margin: 1em !important;
+}
+
+
+
+#footer {
+    z-index: 1;
+}
+
+#scroll_to_top {
+    position: fixed;
+    width: 250px;
+    height: 25px;
+    bottom: 5px;
+    right: -50px;
+    z-index: 100;
+}
+
+#scroll_to_top a {
+    color: black;
+    text-shadow: 1px 1px 2px white;
 }
