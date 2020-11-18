@@ -25,10 +25,12 @@ class AdminCoreController extends Controller
             );
         }
 
+
         $this->md5("composer.json");
         $this->md5("phinx");
         $request = $this->request()->query;
-        $git = explode("\n", `sudo git pull origin prod 2>&1`);
+        putenv("BRANCH=" . \getenv("BRANCH"));
+        $git = explode("\n", `sudo git pull origin $(printenv BRANCH) 2>&1`);
 
 
         if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {

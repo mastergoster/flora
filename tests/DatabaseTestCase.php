@@ -5,11 +5,12 @@ namespace Tests;
 use PDO;
 use Phinx\Config\Config;
 use Phinx\Migration\Manager;
-use PHPUnit\Framework\TestCase;
+use Core\Controller\Database\DatabaseController;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Core\Controller\Database\DatabaseMysqliteController;
 
-class DatabaseTestCase extends TestCase
+class DatabaseTestCase extends DatabaseMysqliteController
 {
 
     public function getPDO()
