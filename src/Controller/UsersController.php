@@ -106,7 +106,7 @@ class UsersController extends Controller
 
                 //crypter le password
                 $datas["password"] = password_hash($datas["password"], PASSWORD_BCRYPT);
-                
+
                 //créer token et pin
                 $datas["token"] =  substr(md5(uniqid()), 0, 10);
                 $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
@@ -127,7 +127,7 @@ class UsersController extends Controller
                 //envoyer le mail de confirmation avec le token
                 $mail = new EmailController();
                 $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $datas["token"];
-                $mail->object('Validez votre inscription sur le site ' . getenv('stieName'))
+                $mail->object('Validez votre inscription sur le site ' . getenv('siteName'))
                     ->to($datas['email'])
                     ->message('confirmation', compact('datas'))
                     ->send();
@@ -184,7 +184,7 @@ class UsersController extends Controller
                 /** @var UsersTable $this->users */
                 $userTable = $this->users;
                 $message = $this->messageFlash()->success("Un mail vous a été envoyé à l'adresse indiquée " .
-                "si celle-ci est valide et a été activée.");
+                    "si celle-ci est valide et a été activée.");
 
                 // Verifie que l'adresse mail existe
                 if (!$userTable->find($datas["mailmdpoublie"], "email")) {
@@ -207,22 +207,22 @@ class UsersController extends Controller
                     // Envoi du mail de confirmation
                     $mail = new EmailController();
                     $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/mdpchange/" . $datas["token"];
-                    $mail->object(getenv('stieName') . ' - Votre demande de changement de mot de passe')
+                    $mail->object(getenv('siteName') . ' - Votre demande de changement de mot de passe')
                         ->to($datas['mailmdpoublie'])
                         ->message('oublimdp', compact('datas'))
                         ->send();
 
                     // Informe de l'envoi du mail
                     $message;
-                    
+
                     // Envoi d'un sms d'information
                     $sms = new SmsController();
                     $sms->numero($datas["phoneNumber"])
                         ->send(
                             'Bonjour, vous avez demandé le changement du mot de passe de connexion ' .
-                            'à votre espace membre de l\'espace Coworking de MOULINS. ' .
-                            'Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] .
-                            '.L\'espace de Coworking By CoWorkInMoulins.'
+                                'à votre espace membre de l\'espace Coworking de MOULINS. ' .
+                                'Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] .
+                                '.L\'espace de Coworking By CoWorkInMoulins.'
                         );
 
                     // Redirection pour se connecter
@@ -286,11 +286,10 @@ class UsersController extends Controller
 
                     // Insertion dans la BBD du nouveau mot de passe
                     $new_password = password_hash($datas["password_new"], PASSWORD_BCRYPT);
-                    $this->users->update($user->getId(), "id", ["password" => $new_password]);
-                    ;
-                    
+                    $this->users->update($user->getId(), "id", ["password" => $new_password]);;
+
                     $this->messageFlash()->success("Votre mot de passe a été modifié avec succès. " .
-                    "Vous pouvez vous connecter.");
+                        "Vous pouvez vous connecter.");
                     $this->redirect("usersLogin");
                 }
             }
@@ -302,8 +301,8 @@ class UsersController extends Controller
 
         // Pour afficher la view en l'état
         return $this->render('user/mdpchange', [
-        "page" => 'Changer le mot de passe',
-        "errors" => $errors
+            "page" => 'Changer le mot de passe',
+            "errors" => $errors
         ]);
     }
 
@@ -527,7 +526,8 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if ($user->getId() == $datasPassword["id"] &&
+                    if (
+                        $user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {

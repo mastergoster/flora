@@ -1,6 +1,6 @@
 <?php
 return [
-    "stieName" => "",
+    "siteName" => "",
     "usernameadmin" => "",
     "passwordadmin" => "",
     "tokenSms" => "",
@@ -10,5 +10,6 @@ return [
     "MAILER_Password" => "",
     "MAILER_Port" => "",
     "ENV_DEV" => true,
-    "DB_Name" => "application"
+    "DB_Name" => "application",
+    "BRANCH" => "master"
 ];
