@@ -349,4 +349,76 @@ class FormControllerTest extends TestCase
         $actual = $form->html();
         $this->assertEquals($expected, $actual);
     }
+
+    public function testConstraintTel07(): void
+    {
+        $_POST = ["tel" => "0700000000"];
+        $form = new FormController();
+        $form->field('tel', ["tel"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(['tel' => "0700000000"], $datas);
+    }
+    public function testConstraintTel06(): void
+    {
+        $_POST = ["tel" => "0600000000"];
+        $form = new FormController();
+        $form->field('tel', ["tel"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(['tel' => "0600000000"], $datas);
+    }
+
+    public function testConstraintTelBadNumber(): void
+    {
+        $_POST = ["tel" => "0000000"];
+        $form = new FormController();
+        $form->field('tel', ["tel"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["tel" => ["le champ tel doit un numero de telephone valide"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintTelFixNumber01(): void
+    {
+        $_POST = ["tel" => "0100000000"];
+        $form = new FormController();
+        $form->field('tel', ["tel"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["tel" => ["le champ tel doit un numero de telephone valide"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+    public function testConstraintTelFixNumber04(): void
+    {
+        $_POST = ["tel" => "0400000000"];
+        $form = new FormController();
+        $form->field('tel', ["tel"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["tel" => ["le champ tel doit un numero de telephone valide"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testAdToDataSafe(): void
+    {
+        $_POST = ["message" => "<script>alert(\"coucou\")</script>"];
+        $form = new FormController();
+        $form->field('message', [], ["safe" => true]);
+        $error = $form->hasErrors();
+        $datas = $form->getDatas();
+        $this->assertEquals(["message" => "<script>alert(\"coucou\")</script>"], $datas);
+    }
+    public function testAdToDataNoSafe(): void
+    {
+        $_POST = ["message" => "<script>alert(\"coucou\")</script>"];
+        $form = new FormController();
+        $form->field('message');
+        $error = $form->hasErrors();
+        $datas = $form->getDatas();
+        $this->assertEquals(["message" => \htmlspecialchars($_POST["message"])], $datas);
+    }
 }

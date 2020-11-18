@@ -102,7 +102,7 @@ class FormController
         }
     }
 
-    private function errorRequire(string $field, bool $value): void
+    private function errorRequire(string $field): void
     {
         $data = $this->postDatas[$field];
 
@@ -142,11 +142,9 @@ class FormController
         }
     }
 
-    private function errorTel(string $field): void
+    private function errorTel(string $field, bool $value): void
     {
-
         $reg = "/^0[6-7]([0-9]{2}){4}$/";
-
         if (preg_match($reg, $this->postDatas[$field])) {
             $this->addToDatas($field);
         } else {
