@@ -1,5 +1,55 @@
-.main {
-    scroll-behavior: smooth !important;
+.em {
+    font-style: italic;
+}
+
+.nav-accueil {
+    display: flex;
+    flex-direction: column;
+    font: arial !important;
+    margin-top: -6em !important;
+}
+
+@media screen and (max-width: 736px) {
+    .nav-accueil {
+        margin-top: -2em !important;
+    }
+}
+
+.nav-accueil ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.nav-accueil ul li {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.nav-accueil ul li a {
+    box-shadow: 0 0 0 0;
+    font-size: 1em;;
+    margin: 1em !important;
+}
+
+.horplan {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+@media screen and (max-width: 1100px) {
+    .horplan {
+        flex-wrap: wrap;;
+    }
+}
+
+.horplan section {
+    margin: 1em;
 }
 
 .tarif {
@@ -83,41 +133,6 @@
     color: red;
     border-color: red !important;
 }
-
-
-.nav-accueil {
-    display: flex;
-    flex-direction: column;
-    font: arial !important;
-    margin-top: -6em !important;
-}
-
-@media screen and (max-width: 736px) {
-    .nav-accueil {
-        margin-top: -2em !important;
-    }
-}
-
-.nav-accueil ul {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: stretch;
-    align-content: stretch;
-}
-
-.nav-accueil ul li {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.nav-accueil ul li a {
-    border-bottom: 0 !important;
-    font-size: 1.2em;
-    margin: 1em !important;
-}
-
-
 
 #footer {
     z-index: 1;
