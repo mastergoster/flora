@@ -12,3 +12,5 @@ composer.lock
 /files
 /html/image
 /covehtml/*
+/covHtml/*
+
