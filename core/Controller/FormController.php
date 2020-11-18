@@ -226,29 +226,21 @@ class FormController
 
     public function html()
     {
-        $html = "<form class=\"form-inline\" method=\"post\">";
+        $htmlTemplate =
+            '<form class="form-inline" method="post">%s' .
+            '<button type="submit" class="btn btn-primary mb-2">' .
+            '<span data-feather="check-square"></span></button></form>';
 
-        foreach ($this->fields as $field => $csonstraints) {
-            $error = "";
-            $errorDiv = "";
-            $html .= "<div class=\"form-group mb-2\">";
-            if (\key_exists($field, $this->errors) && !\key_exists('post', $this->errors)) {
-                $error = " is-invalid";
-            }
-            if ($this->datas[$field]) {
-                $value = " value=\"" . $this->datas[$field] . '"';
-            } else {
-                $value = "";
-            }
-            $html .= "<input type=\"text\" name=\"{$field}\" class=\"form-control{$error}\"" .
-                " id=\"staticEmail2\" {$value} placeholder=\"{$field}\">";
-            $html .= "</div>";
+        $htmlField =
+            '<div class="form-group mb-2"><input type="%1$s" name="%2$s" ' .
+            'class="form-control%3$s" id="%2$s"%4$s placeholder="%2$s"></div>';
+
+        foreach ($this->fields as $field => $constraints) {
+            $error = (\key_exists($field, $this->errors) && !\key_exists('post', $this->errors)) ? " is-invalid" : "";
+            $value = ($this->datas[$field] && $field != "password") ? " value=\"{$this->datas[$field]}\"" : "";
+            $type = ($field == "password" || $field == "mail") ? $field :  "text";
+            $html[] =  \sprintf($htmlField, $type, $field, $error, $value);
         }
-
-        $html .= "<button type=\"submit\" class=\"btn btn-primary mb-2\">
-            <span data-feather=\"check-square\"></span>
-        </button>
-    </form>";
-        return $html;
+        return \sprintf($htmlTemplate, join("", $html));
     }
 }

@@ -7,6 +7,7 @@ use App\App;
 use Tests\DatabaseTestCase;
 use \PHPUnit\Framework\TestCase;
 use Core\Controller\Database\DatabaseMysqliteController;
+use PDOStatement;
 use stdClass;
 
 class DatabaseMysqliteControllerTest extends TestCase
@@ -35,7 +36,8 @@ class DatabaseMysqliteControllerTest extends TestCase
         $result = $pdo->query('SELECT * FROM user')->fetchAll();
         $this->assertEquals([], $result);
 
-        $bdd->query("INSERT INTO user  (nom) VALUES ('julien')");
+        $actual = $bdd->query("INSERT INTO user  (nom) VALUES ('julien')");
+        $this->assertInstanceOf(PDOStatement::class, $actual);
 
         $user = new stdClass;
         $user->nom = 'julien';
@@ -43,6 +45,15 @@ class DatabaseMysqliteControllerTest extends TestCase
         $result = $pdo->query('SELECT * FROM user')->fetchAll();
         $this->assertEquals([$user], $result);
     }
+
+    public function testLastInsertId()
+    {
+        $bdd = new DatabaseMysqliteController('test');
+        $bdd->query("INSERT INTO user  (id, nom) VALUES ('2', 'julien')");
+        $result = $bdd->lastInsertId();
+        $this->assertEquals('2', $result);
+    }
+
 
 
 

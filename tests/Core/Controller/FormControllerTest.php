@@ -145,4 +145,208 @@ class FormControllerTest extends TestCase
 
         $form->HasErrors();
     }
+
+    public function testHtmlOneField(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"text\" name=\"text\" class=\"form-control\" id=\"text\" placeholder=\"text\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+
+        $form = new FormController();
+        $form->field('text');
+        $actual = $form->html();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHtmlPasswordOneField(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"password\" name=\"password\" class=\"form-control\" id=\"password\"" .
+            " placeholder=\"password\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+
+        $form = new FormController();
+        $form->field('password');
+        $actual = $form->html();
+
+        $this->assertEquals($expected, $actual);
+    }
+    public function testHtmlMessageOneField(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"text\" name=\"message\" class=\"form-control\" id=\"message\" placeholder=\"message\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+
+        $form = new FormController();
+        $form->field('message');
+        $actual = $form->html();
+
+        $this->assertEquals($expected, $actual);
+    }
+    public function testHtmlMailOneField(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"mail\" name=\"mail\" class=\"form-control\" id=\"mail\" placeholder=\"mail\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+
+        $form = new FormController();
+        $form->field('mail');
+        $actual = $form->html();
+
+        $this->assertEquals($expected, $actual);
+    }
+    public function testHtmlMailAndPassword(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"mail\" name=\"mail\" class=\"form-control\" id=\"mail\" placeholder=\"mail\">" .
+            "</div>" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"password\" name=\"password\" class=\"form-control\" id=\"password\"" .
+            " placeholder=\"password\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+
+        $form = new FormController();
+        $form->field('mail');
+        $form->field('password');
+        $actual = $form->html();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHtmlMailAndPasswordVerifyOrder(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"password\" name=\"password\" class=\"form-control\" id=\"password\"" .
+            " placeholder=\"password\">" .
+            "</div>" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"mail\" name=\"mail\" class=\"form-control\" id=\"mail\" placeholder=\"mail\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+        $form = new FormController();
+        $form->field('password');
+        $form->field('mail');
+        $actual = $form->html();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHtmlMailErrorNoPost(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"mail\" name=\"mail\" class=\"form-control\" id=\"mail\" placeholder=\"mail\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+        $_POST = [];
+        $form = new FormController();
+        $form->field('mail', ['require']);
+        $error = $form->hasErrors();
+        $this->assertArrayHasKey("post", $error);
+        $this->assertArrayHasKey("mail", $error);
+        $actual = $form->html();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHtmlMailError(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"mail\" name=\"mail\" class=\"form-control is-invalid\" id=\"mail\"" .
+            " placeholder=\"mail\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+        $_POST = ["machin" => "test"];
+        $form = new FormController();
+        $form->field('mail', ['require']);
+        $error = $form->hasErrors();
+        $actual = $form->html();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHtmlMailPost(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"mail\" name=\"mail\" class=\"form-control\" id=\"mail\"" .
+            " value=\"test@test.fr\" placeholder=\"mail\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+        $_POST = ["mail" => "test@test.fr"];
+        $form = new FormController();
+        $form->field('mail');
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $actual = $form->html();
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testHtmlPasswordPostNoDisplayData(): void
+    {
+        $expected = "<form class=\"form-inline\" method=\"post\">" .
+            "<div class=\"form-group mb-2\">" .
+            "<input type=\"password\" name=\"password\" class=\"form-control\"" .
+            " id=\"password\" placeholder=\"password\">" .
+            "</div>" .
+            "<button type=\"submit\" class=\"btn btn-primary mb-2\">" .
+            "<span data-feather=\"check-square\">" .
+            "</span>" .
+            "</button>" .
+            "</form>";
+        $_POST = ["password" => "monmotdepasse"];
+        $form = new FormController();
+        $form->field('password');
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $actual = $form->html();
+        $this->assertEquals($expected, $actual);
+    }
 }

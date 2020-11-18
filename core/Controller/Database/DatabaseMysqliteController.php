@@ -4,6 +4,7 @@ namespace Core\Controller\Database;
 
 use \PDO;
 use \App\App;
+use stdClass;
 
 class DatabaseMysqliteController extends DatabaseController
 {
