@@ -33,7 +33,7 @@ class EmailController extends controller
             $mail->Password     = $this->getConfig('MAILER_Password');
             $mail->SMTPSecure   = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port         = $this->getConfig('MAILER_Port');
-            $sender = [$this->getConfig('MAILER_Username'), $this->getConfig('stieName')];
+            $sender = [$this->getConfig('MAILER_Username'), $this->getConfig('siteName')];
         }
         $mail->setFrom($sender[0], $sender[1]);
         $this->mail = $mail;
