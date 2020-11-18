@@ -1,5 +1,8 @@
 .em {
     font-style: italic;
+    font-size: 0.8em !important;
+    border-bottom: 0;
+    margin-left: 2em;
 }
 
 .nav-accueil {
@@ -30,7 +33,7 @@
 
 .nav-accueil ul li a {
     box-shadow: 0 0 0 0;
-    font-size: 1em;;
+    font-size: 1em;
     margin: 1em !important;
 }
 
