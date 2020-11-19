@@ -286,7 +286,7 @@ class UsersController extends Controller
 
                     // Insertion dans la BBD du nouveau mot de passe
                     $new_password = password_hash($datas["password_new"], PASSWORD_BCRYPT);
-                    $this->users->update($user->getId(), "id", ["password" => $new_password]);;
+                    $this->users->update($user->getId(), "id", ["password" => $new_password]);
 
                     $this->messageFlash()->success("Votre mot de passe a été modifié avec succès. " .
                         "Vous pouvez vous connecter.");
@@ -526,8 +526,7 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if (
-                        $user->getId() == $datasPassword["id"] &&
+                    if ($user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {

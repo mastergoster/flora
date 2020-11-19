@@ -2,10 +2,8 @@
 
 {% block style %}{% endblock %}
 
-
 {% block content %}
 	<section>
-
 		<span class="image fit"><img src="{{event.cover}}" alt="{{event.title}}"></span>
 		<h2>{{event.title}}</h2>
 		<span class="date">{{ item.dateAt | date("l j F Y \à H:i", "Europe/Paris")}}</span>
@@ -35,13 +33,9 @@
 						n'est pas mon adresse email</a>
 				</li>
 			</ul>
-
 		{% endif %}
-
-
 	</section>
 
 {% endblock %}
-
 
 {% block script %}{% endblock %}
