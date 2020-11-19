@@ -152,16 +152,10 @@
 
 #scroll_to_top {
     position: fixed;
-    width: 250px;
-    height: 25px;
-    bottom: 5px;
-    right: -50px;
+    bottom: -10px;
+    right: -20px;
     z-index: 100;
-}
-
-#scroll_to_top a {
-    color: black;
-    text-shadow: 1px 1px 2px white;
+    
 }
 
 .poil {
