@@ -66,13 +66,17 @@
 					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="passwordVerify" id="passwordVerify"/>
 				</div>
 			</div>
-			<ul class="actions">
-				<li><input type="submit" value="S'inscrire"/></li>
+			<ul class="actions btn-center">
+				<li>
+					<input type="submit" value="S'inscrire"/>
+				</li>
 			</ul>
-			<div class="align-center">
-				<a href="/login" class="button">Se connecter à mon espace membre</a>
-			</div>
 		</form>
+			<ul class="actions btn-center">
+				<li>
+					<a href="/login" class="button">Se connecter à mon espace membre</a>
+				</li>
+			</ul>
 	</section>
 
 {% endblock %}

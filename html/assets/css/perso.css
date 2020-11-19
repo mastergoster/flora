@@ -169,3 +169,11 @@
     justify-items: center !important;
     margin-left: 1em;
 }
+
+.btn-center {
+    justify-content: center;
+}
+
+.btn-align {
+    margin-top: 1.95em;
+}
