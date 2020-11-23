@@ -105,6 +105,7 @@ class UsersController extends Controller
                 }
 
                 //crypter le password
+                $password_private = $datas["password"];
                 $datas["password"] = password_hash($datas["password"], PASSWORD_BCRYPT);
 
                 //créer token et pin
@@ -122,7 +123,7 @@ class UsersController extends Controller
                 }
 
                 //informer que l'enregistrement c'est bien passé
-                $this->messageFlash()->success('Enregistrement réussi');
+                $this->messageFlash()->success('Votre inscription a été validée.');
 
                 //envoyer le mail de confirmation avec le token
                 $mail = new EmailController();
@@ -141,12 +142,18 @@ class UsersController extends Controller
                     );
 
                 //informer le client qu'il va devoir valider son adresse mail
-                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mail']} ;)");
-                $this->messageFlash()->success("Nous vous avons envoyé un sms sur le numéro {$datas['tel']}");
+                $this->messageFlash()->success("Nous vous avons envoyé un sms sur le numéro " .
+                "{$datas['phone_number']} et un mail à l'adresse {$datas['email']}.");
 
-                //redirection pour se connecter
-                header('location: ' . $this->generateUrl('usersLogin'));
-                exit();
+                // Login automatique après inscription valide
+                $this->security()->login($datas["email"], $password_private);
+                if ($this->session()->has("redirect")) {
+                    $url = $this->session()->get("redirect");
+                    $this->session()->remove("redirect");
+                    $this->redirect($url);
+                    exit();
+                }
+                $this->redirect("userProfile");
             }
         }
 
@@ -226,8 +233,7 @@ class UsersController extends Controller
                         );
 
                     // Redirection pour se connecter
-                    header('location: ' . $this->generateUrl('usersLogin'));
-                    exit();
+                    $this->redirect("usersLogin");
                 }
             }
         }
@@ -394,27 +400,24 @@ class UsersController extends Controller
     public function validate(string $verify)
     {
         $token = $this->users->findAll($verify, "token");
-
         // Vérifie si le token n'existe pas ou que $verify n'est pas nul
         if (!$token || is_null($verify)) {
             $this->redirect("home");
         }
-
         // Si le mail a déjà été activé, renvoi sur la page d'accueil (le mail d'activation n'est plus utilisable)
-        if ($token['0']->getActivate()&& !is_null($verify)) {
+        if ($token['0']->getActivate() && !is_null($verify)) {
             $this->messageFlash()->error("Cette adresse mail a déjà été validée.");
             $this->redirect("home");
         }
-        
         // Passe le $verify dans la session['validate'] qui sera utilisé pour la 1ère connexion
-        if ($token && !is_null($verify)) {
+        if ($token && !$token['0']->getActivate() && !is_null($verify)) {
             $this->session()->set("validate", $verify);
         }
         if ($this->session()->has("users")) {
-            $this->redirect("userProfile");
             $this->messageFlash()->success("Votre adresse mail a été validée");
+            $this->redirect("userProfile");
         }
-        $this->messageFlash()->success("Votre adresse mail a été validée, vous pouvez vous connecter à votre espace membre.");
+        $this->messageFlash()->error("Merci de vous connecter à votre espace membre pour valider votre adresse mail.");
         $this->redirect("usersLogin");
     }
 
