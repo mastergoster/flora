@@ -104,7 +104,7 @@ class FormController
 
     private function errorRequire(string $field): void
     {
-        $data = $this->postDatas[$field];
+        $data = isset($this->postDatas[$field])? $this->postDatas[$field] : "";
 
         if (isset($data) && (!empty($data) || $data === "0")) {
             $this->addToDatas($field);
@@ -235,7 +235,7 @@ class FormController
 
         foreach ($this->fields as $field => $constraints) {
             $error = (\key_exists($field, $this->errors) && !\key_exists('post', $this->errors)) ? " is-invalid" : "";
-            $value = ($this->datas[$field] && $field != "password") ? " value=\"{$this->datas[$field]}\"" : "";
+            $value = (isset($this->datas[$field]) && $field != "password") ? " value=\"{$this->datas[$field]}\"" : "";
             $type = ($field == "password" || $field == "mail") ? $field :  "text";
             $html[] =  \sprintf($htmlField, $type, $field, $error, $value);
         }
