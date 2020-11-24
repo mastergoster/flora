@@ -42,8 +42,7 @@ class HController
     public static function textToDate(string $text)
     {
         // Vérifie si les heures sont présentes, sinon les rajoutes
-        if (strlen($text) == 10)
-        {
+        if (strlen($text) == 10) {
             $text = $text . " 00:00:00";
         }
 
@@ -51,8 +50,7 @@ class HController
             $text = str_replace("/", "-", $text);
 
         // Vérifie si le format est EU, si oui, recompose en format US
-        if (strpos($text, "-") == 2)
-        {
+        if (strpos($text, "-") == 2) {
             $text_Hour = explode(" ", $text);
             $text_Hour[0] = implode("-", array_reverse(explode("-", $text_Hour[0])));
             $text = implode(" ", $text_Hour);
