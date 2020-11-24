@@ -18,23 +18,35 @@ class HController
             if ($Time < 60) {
                 $minutes = 0;
             } else {
-                $minutes = round($Time / 60);
+                // $minutes = round($Time / 60);
+                $minutes = floor($Time / 60);
             }
 
             $secondes = floor($Time % 60);
         } else {
-            $heures = round($Time / 3600);
-            $secondes = round($Time % 3600);
-            $minutes = floor($secondes / 60);
+            // $heures = round($Time / 3600);
+            // $secondes = round($Time % 3600);
+            // $minutes = floor($secondes / 60);
+
+            $heures = floor($Time / 3600); // Calcule le nombre d'heure complète dans $Time
+            $minutes = floor(($Time - ($heures * 3600)) / 60); // Calcule le nombre de minutes complète dans $Time après soustraction des heures complètes
+            $secondes = $Time - ($heures * 3600) - ($minutes * 60); // Calcule le nombre de secondes complète dans $Time après soustraction des heures et minutes complètes
         }
 
-        $secondes2 = round($secondes % 60);
-        if ($secondes2 > 0) {
+        // $secondes2 = round($secondes % 60);
+        if ($secondes > 0) {
             $minutes += 1;
         }
+
+        if ($minutes >= 60) {
+            $heures += 1;
+            $minutes = $minutes - 60;
+        }
+
         if ($neg) {
             $heures = -$heures;
-            $minutes = $minutes;
+            // $minutes = $minutes;
+            $minutes = -$minutes;
         }
         return ["h" => (int)$heures, "m" => (int)$minutes];
     }

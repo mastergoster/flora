@@ -16,7 +16,11 @@ class DatabaseMysqliteControllerTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        unlink(\App\App::rootfolder() . "/db/test.sqlite");
+        // unlink(\App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "/test.sqlite");
+
+        if (!unlink(\App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "/test.sqlite")) {
+            dd("unlink False");
+        };
     }
 
 
