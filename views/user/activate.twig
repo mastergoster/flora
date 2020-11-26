@@ -6,9 +6,10 @@
 		<p class="align-center">Lors de votre inscription, vous avez recu un mail à l'adresse
 			"{{ user.email }}".</p>
 		<p class="align-center">Merci de suivre le lien indiqué dans celui-ci afin de confirmer votre adresse mail et pouvoir vous connecter à votre espace membre.</p>
-		<a href="/user/logout" class="button">Changer de compte</a>
-
+		
 		{# Ajouter un bouton pour regénérer un nouveau mail identique à celui envoyé lors de la souscription #}
+
+		<a href="/activate?disconnected" class="button">Changer de compte</a>
 
 	</section>
 

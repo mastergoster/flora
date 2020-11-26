@@ -439,13 +439,19 @@ class UsersController extends Controller
 
     public function activatePage()
     {
+        if ($this->request()->query->has("disconnected")) {
+            $this->security()->logout();
+            $this->redirect("usersLogin");
+        }
+        
         if (!$this->session()->has("users")) {
             $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
         if ($user->getActivate()) {
-            $this->redirect("userProfile");
+            $this->redirect("usersLogin");
         }
+
         return $this->render(
             "user/activate",
             [
