@@ -14,7 +14,6 @@
 .em {
     font-style: italic;
     font-size: 0.8em !important;
-    border-bottom: 0;
     text-transform: initial;
     font-weight: normal;
 }
@@ -62,6 +61,23 @@
 
 .horplan section {
     margin: 1em;
+}
+
+.planOverlay {
+    background: rgba(0, 0, 0, 0.5);
+    position:relative; 
+    width:100%; /* width de l'iframe */
+    height:350px; /* height de l'iframe */
+    top:350px;  /* height de l'iframe */
+    margin-top:-350px;  /* height de l'iframe */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.planOverlay p {
+    color: white !important;
 }
 
 .tarif {
@@ -150,18 +166,17 @@
     z-index: 1;
 }
 
+#footer a, p, h2, h3, label,form, input, textarea, li, ul {
+    color: black !important;
+    border-color: black !important;
+    box-shadow: black !important;
+}
+
 #scroll_to_top {
     position: fixed;
     bottom: -10px;
     right: -20px;
     z-index: 100;
-    
-}
-
-.poil {
-    justify-content: center !important;
-    justify-items: center !important;
-    margin-left: 1em;
 }
 
 .btn-center {
@@ -170,4 +185,31 @@
 
 .btn-align {
     margin-top: 1.95em;
+}
+
+#copyright {
+    background-color:#f5f5f5;
+    margin-bottom: 0;
+    padding: 2rem;
+    padding-bottom: 1rem;
+    z-index: 1;
+}
+
+#copyright section {
+    margin-bottom: 1rem;
+}
+
+.CG p {
+    margin-bottom: 1rem;
+}
+
+.CG a {
+    text-transform: capitalize;
+    color: #717981 !important;
+}
+
+@media screen and (max-width: 480px) {
+    #copyright {
+        width: 100%;
+    }
 }
