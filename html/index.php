@@ -70,7 +70,7 @@ $app->getRouter($basePath)
     ->match('/user/edit', 'users#edit', 'userEdit')
     ->get('/user/invoces/[i:id]', 'users#invoce', 'userInvoce')
     ->get('/activate', 'users#activatePage', 'activatePage')
-    ->get('/contact', 'Shop#contact', 'contact')
+    // ->get('/contact', 'Shop#contact', 'contact')
     //POSTS URLS
 
     ->post('/mails', 'Users#mail', 'mailSend')
