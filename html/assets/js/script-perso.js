@@ -8,7 +8,6 @@ plan.addEventListener("mouseout", () => {overlay.style.display = "flex";});
 // Masquer le bouton "retour en haut"
 let toUp = document.getElementById("scroll_to_top");
 
-
 document.addEventListener('scroll',() => {
 	if(window.pageYOffset > 1150) {
 		toUp.classList.add("hidden");

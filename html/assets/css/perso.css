@@ -166,11 +166,29 @@
     z-index: 1;
 }
 
-#footer a, p, h2, h3, label,form, input, textarea, li, ul {
+#footer a, p, h2, h3, label, input, textarea {
     color: black !important;
     border-color: black !important;
     box-shadow: black !important;
 }
+
+#footer input[type="submit"] {
+    color: black !important;
+    box-shadow: 0 0 0 2px black !important;
+}
+
+#footer input[type="submit"]:hover {
+    box-shadow: 0 0 0 2px #18bfef !important;
+}
+
+#footer .icon::before {
+    box-shadow: 0 0 0 2px black !important;
+}
+
+#footer .icon:hover::before {
+    box-shadow: 0 0 0 2px #18bfef !important;
+}
+
 
 #scroll_to_top {
     position: fixed;
