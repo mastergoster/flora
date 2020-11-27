@@ -189,11 +189,10 @@
     box-shadow: 0 0 0 2px #18bfef !important;
 }
 
-
 #scroll_to_top {
     position: fixed;
-    bottom: -120px;
-    right: -20px;
+    bottom: -200px;
+    right: -25px;
     z-index: 100;
     transition: bottom 0.3s;
     transition-delay: 0.3s;
