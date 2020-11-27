@@ -31,8 +31,8 @@
 							<td>{{ item.idUsers }}</td>
 							<td>{{ item.idRoles }}</td>
 							<td>{{ item.createdAt | date("d/m/Y") }}</td>
-							<td class="form-inline">
-								<form class="form-inline" method="post" onsubmit="return confirm('Êtes vous sur de vouloir supprimer {{ item.title }}? \n \n La demarche est définitive et ne peut être inversée.')">
+							<td class="form-inline justify-content-center">
+								<form class="form-inline" method="post" onsubmit="return confirm('Êtes vous sur de vouloir supprimer le message de {{ item.name }} ? \n \n La démarche est définitive et ne peut être inversée.')">
 									<div class="form-group">
 										<input name="id" type="hidden" class="form-control" id="id" value="{{ item.id }}">
 									</div>

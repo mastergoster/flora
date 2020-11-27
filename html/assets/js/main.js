@@ -263,7 +263,7 @@ function returnHtml(array) {
 	let error;
 	if (array.error == false) {
 		document.getElementById("contactMail").reset();
-		toastr["success"]("Votre message a bien été envoyé");
+		toastr["success"]("Votre message a bien été envoyé.");
 		return
 	}
 	delete array.error

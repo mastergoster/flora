@@ -229,7 +229,7 @@ class UsersController extends Controller
                             'Bonjour, vous avez demandé le changement du mot de passe de connexion ' .
                                 'à votre espace membre de l\'espace Coworking de MOULINS. ' .
                                 'Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] .
-                                '.L\'espace de Coworking By CoWorkInMoulins.'
+                                '. L\'espace de Coworking By CoWorkInMoulins.'
                         );
 
                     // Redirection pour se connecter
@@ -414,7 +414,7 @@ class UsersController extends Controller
             $this->session()->set("validate", $verify);
         }
         if ($this->session()->has("users")) {
-            $this->messageFlash()->success("Votre adresse mail a été validée");
+            $this->messageFlash()->success("Votre adresse mail a été validée.");
             $this->redirect("userProfile");
         }
         $this->messageFlash()->error("Merci de vous connecter à votre espace membre pour valider votre adresse mail.");
@@ -447,7 +447,25 @@ class UsersController extends Controller
         if (!$this->session()->has("users")) {
             $this->redirect("usersLogin");
         }
+
         $user = $this->session()->get("users");
+
+        if ($this->request()->query->has("newMail")) {
+
+            $userMail = $user->getEmail();
+            $userToken = $user->getToken();
+
+            // Envoi le mail d'activation avec le token
+            $mail = new EmailController();
+            $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $userToken;
+            $mail->object('Validez votre inscription sur le site ' . getenv('siteName'))
+                ->to($userMail)
+                ->message('confirmation', compact('datas'))
+                ->send();
+            $this->messageFlash()->success("Un nouveau mail d'activation vous a été envoyé.");
+            $this->redirect("usersLogin");
+        }
+
         if ($user->getActivate()) {
             $this->redirect("usersLogin");
         }
