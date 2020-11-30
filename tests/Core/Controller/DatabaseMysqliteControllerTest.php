@@ -16,7 +16,13 @@ class DatabaseMysqliteControllerTest extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        unlink(\App\App::rootfolder() . "/db/test.sqlite");
+        $FileName = \App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "test.sqlite";
+        chmod($FileName, 0777);
+        unlink($FileName);
+
+        // if (!unlink(\App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "/test.sqlite")) {
+        //     dd("unlink False");
+        // };
     }
 
 
@@ -24,7 +30,7 @@ class DatabaseMysqliteControllerTest extends TestCase
     {
         $bdd = new DatabaseMysqliteController('test');
         $bdd->getPDO();
-        $this->assertFileExists(\App\App::rootfolder() . "/db/test.sqlite");
+        $this->assertFileExists(\App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "test.sqlite");
     }
 
     public function testQueryInsert()
@@ -49,7 +55,7 @@ class DatabaseMysqliteControllerTest extends TestCase
     public function testLastInsertId()
     {
         $bdd = new DatabaseMysqliteController('test');
-        $bdd->query("INSERT INTO user  (id, nom) VALUES ('2', 'julien')");
+        $bdd->query("INSERT INTO user (id, nom) VALUES ('2', 'julien')");
         $result = $bdd->lastInsertId();
         $this->assertEquals('2', $result);
     }
