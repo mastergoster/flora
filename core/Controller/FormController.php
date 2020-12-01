@@ -109,7 +109,7 @@ class FormController
         if (isset($data) && (!empty($data) || $data === "0")) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "le champ {$field} ne peut etre vide");
+            $this->newError("$field", "Le champ {$field} ne peut être vide.");
         }
     }
 
@@ -121,7 +121,7 @@ class FormController
         ) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "les champs {$field} doivent correspondre");
+            $this->newError("$field", "Les champs {$field} doivent correspondre.");
         }
     }
 
@@ -130,7 +130,7 @@ class FormController
         if (strlen($this->postDatas[$field]) >= $value) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "le champ {$field} doit avoir au minimum {$value} caractères");
+            $this->newError("$field", "Le champ {$field} doit avoir, au minimum, {$value} caractères.");
         }
     }
     private function errorExactLength(string $field, int $value): void
@@ -138,7 +138,7 @@ class FormController
         if (strlen($this->postDatas[$field]) == $value) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "le champ {$field} doit avoir au minimum {$value} caractères");
+            $this->newError("$field", "Le champ {$field} doit avoir, au minimum, {$value} caractères.");
         }
     }
 
@@ -148,7 +148,7 @@ class FormController
         if (preg_match($reg, $this->postDatas[$field])) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "le champ {$field} doit un numero de telephone valide");
+            $this->newError("$field", "Le champ {$field} doit être un numéro de téléphone valide.");
         }
     }
 
@@ -158,7 +158,7 @@ class FormController
         if (filter_var($this->datas[$field], FILTER_VALIDATE_EMAIL)) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "le champ {$field} doit un email valide");
+            $this->newError("$field", "Le champ {$field} doit être un email valide.");
         }
     }
     private function errorBoolean(string $field): void
@@ -180,7 +180,7 @@ class FormController
         if ($match[0] !== null) {
             $this->addToDatas($field, str_replace(".", ",", $match[0]));
         } else {
-            $this->newError("$field", "le champ {$field} doit un nombre");
+            $this->newError("$field", "Le champ {$field} doit être un nombre.");
         }
     }
 
@@ -193,7 +193,7 @@ class FormController
         if ($match[0] !== null) {
             $this->addToDatas($field, $match[0]);
         } else {
-            $this->newError("$field", "le champ {$field} doit être une date au foramt 2020/11/20 12:30:00");
+            $this->newError("$field", "Le champ {$field} doit être une date au foramt 2020/11/20 12:30:00");
         }
     }
 
