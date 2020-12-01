@@ -30,9 +30,6 @@ abstract class Controller
     protected function renderPdf(string $view, array $variables = []): Response
     {
         $response = new Response();
-        $response->header->set("Content-type", "application/pdf");
-        $response->header->set("Content-Disposition", "inline");
-        $response->header->set("filename", $variables["title"] ?: "pdf");
         $folder  = $this->getApp()->rootfolder() . "/files/$view/";
         $name = ($variables["title"] ?: "pdf") . ".pdf";
 
@@ -52,15 +49,16 @@ abstract class Controller
 
             $mpdf->Output($folder . $name, \Mpdf\Output\Destination::FILE);
         }
-        $response->header->set("Content-Description", "File Transfer");
-        $response->header->set("Content-Type", "application/octet-stream");
-        $response->header->set("Content-Disposition", "attachment");
-        $response->header->set("filename", basename($folder . $name));
-        $response->header->set("Expires", 0);
-        $response->header->set("Cache-Control", "must-revalidate");
-        $response->header->set("Pragma", "public");
-        $response->header->set("Content-Length", filesize($folder . $name));
-        return $response->setContent(readfile($folder . $name));
+        $response->headers->set("Content-Description", "File Transfer");
+        $response->headers->set("Content-Type", "application/octet-stream");
+        $response->headers->set("Content-Disposition", "attachment; filename=\"" . basename($folder . $name) . '"');
+        $response->headers->set("Expires", 0);
+        $response->headers->set("Cache-Control", "must-revalidate");
+        $response->headers->set("Pragma", "public");
+        $response->headers->set("Content-Length", filesize($folder . $name));
+        \ob_start();
+        readfile($folder . $name);
+        return $response->setContent(\ob_get_clean());
     }
 
     private function getTwig()
@@ -134,7 +132,10 @@ abstract class Controller
         } else {
             $url = $this->generateUrl($path, $params);
         }
-        return new Response('', 200, ["'Location" => $url]);
+        $response = new Response('', 303);
+        $response->headers->set("Location", $url);
+        //dd($response);
+        return $response;
     }
 
     public function security()
