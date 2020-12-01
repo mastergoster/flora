@@ -67,6 +67,7 @@ $app->getRouter($basePath)
     ->get('/user/logout', 'users#logout', 'userLogout')
     ->get('/user/profile', 'users#profile', 'userProfile')
     ->get('/user/invoces', 'users#invoces', 'userInvoces')
+    ->get('/user/messages', 'users#userMessages', 'userMessages') // Nouveau
     ->match('/user/edit', 'users#edit', 'userEdit')
     ->get('/user/invoces/[i:id]', 'users#invoce', 'userInvoce')
     ->get('/activate', 'users#activatePage', 'activatePage')

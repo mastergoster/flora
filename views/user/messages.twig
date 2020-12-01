@@ -1,0 +1,79 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Messages
+{% endblock %}
+{% block titlePage %}Messages
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="col-md-12">
+
+						<form method="post" id="contactMail" action="#">
+							<div class="fields">
+								<div class="field">
+									<label for="id_users">ID Destinataire</label>
+									<input type="text" name="id_users" id="id_users"/>
+								</div>
+								<div class="field">
+									<label for="message">Message</label>
+									<textarea name="message" id="message" rows="3"></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input class="button" type="submit" value="Envoyer"/></li>
+							</ul>
+						</form>
+
+		<div class="card">
+			<div class="card-header card-header-primary dflex row justify-content-between">
+				<div>
+					<h4 class="card-title ">Liste des messages</h4>
+					<p class="card-category">
+						Voici la liste de vos messages
+					</p>
+				</div>
+				<a href="/user/message" class="dflex row mx-2">
+					<h4 class="card-title ">Ecrire un message <i class="material-icons">send</i></h4>
+				</a>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead class="text-primary">
+							<tr>
+								<th>Date d'envoi</th>
+								<th>Expéditeur</th>
+								<th>Message</th>
+								<th>Email</th>
+								<th>idUsers</th>
+								<th>idRoles</th>
+								<th>action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in items %}
+								<tr>
+									<td>{{ item.createdAt | date("d/m/Y à H:i:s") }}</td>
+									<td>{{ item.name }}</td>
+									<td class="col-6">{{ item.message }}</td>
+									<td>{{ item.email }}</td>
+									<td>{{ item.idUsers }}</td>
+									<td>{{ item.idRoles }}</td>
+									<td class="form-inline justify-content-center">
+										<form class="form-inline" method="post" onsubmit="return confirm('Êtes vous sur de vouloir supprimer le message de {{ item.name }} ? \n \n La démarche est définitive et ne peut être inversée.')">
+											<div class="form-group">
+												<input name="id" type="hidden" class="form-control" id="id" value="{{ item.id }}">
+											</div>
+											<button type="submit" class="btn btn-danger">
+												<span data-feather="trash-2"></span>
+											</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -12,6 +12,7 @@ use Core\Controller\EmailController;
 use App\Model\Entity\RecapConsoEntity;
 use Core\Controller\SecurityController;
 use Core\Controller\Helpers\TableauController;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 class UsersController extends Controller
 {
@@ -486,7 +487,10 @@ class UsersController extends Controller
         $form->field("message", ["require"]);
         $errors =  $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
+            
             $datas = $form->getDatas();
+            // $datas['id_roles'] = 00;
+            $datas['id_users'] = 18;
             if (!$errors) {
                 $this->messages->create($datas);
                 $errors["error"] = false;
@@ -570,12 +574,12 @@ class UsersController extends Controller
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
-                            $this->messageFlash()->success("Le mot de passe a bien été changé");
+                            $this->messageFlash()->success("Le mot de passe a bien été changé.");
                         } else {
-                            $this->messageFlash()->error("erreur inatendu lol");
+                            $this->messageFlash()->error("Erreur inattendu lol");
                         }
                     } else {
-                        $this->messageFlash()->error("mot de passe invalide");
+                        $this->messageFlash()->error("Mot de passe invalide.");
                     }
                 }
             }
@@ -589,5 +593,49 @@ class UsersController extends Controller
             $this->messageFlash()->error($error[0]);
         }
         return $this->render("user/edit", ["user" => $user, "errors" => $errors, "errorsP" => $errorsPassword]);
+    }
+
+    /**
+     * Function : qui permet d'afficher les messages émis en interne
+     * Affiche soit les message qui sont destiné à l'user en session (via l'id du user connecté)
+     * soit les messages qui sont destinés au groupe (rôle) auquel le user connecté appartient
+     * ainsi qu'au groupe de level inférieur
+     *
+     * @return void
+     */
+    public function userMessages()
+    {
+        $user = $this->session()->get("users");
+        $messages = $this->messages->messagesByIdUserAndIdRole($user->level, $user->getId());
+        return $this->render(
+            "user/messages",
+            [
+                "items" => $messages,
+            ]
+        );
+    }
+
+    public function userMessage()
+    {
+        $form = new FormController();
+        $form->field("id_users"); // faire condition pour les require
+        // $form->field("id_roles"); // faire condition pour les require
+
+        $form->field("message", ["require"]);
+        $errors =  $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            
+            $datas = $form->getDatas();
+            $datas['name'] = "Terminator";
+            $datas['email'] = "t@800.com";
+            
+            if (!$errors) {
+                $this->messages->create($datas);
+                $errors["error"] = false;
+            } else {
+                $errors["error"] = true;
+            }
+        }
+        return $this->jsonResponse($errors);
     }
 }
