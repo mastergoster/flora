@@ -622,6 +622,9 @@ class UsersController extends Controller
         // $form->field("id_roles"); // faire condition pour les require
 
         $form->field("message", ["require"]);
+
+        dd($form);
+
         $errors =  $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             

@@ -5,35 +5,55 @@
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block content %}
-	<div class="col-md-12">
 
-						<form method="post" id="contactMail" action="#">
-							<div class="fields">
-								<div class="field">
-									<label for="id_users">ID Destinataire</label>
-									<input type="text" name="id_users" id="id_users"/>
-								</div>
-								<div class="field">
-									<label for="message">Message</label>
-									<textarea name="message" id="message" rows="3"></textarea>
+		<div id="newMessageUser" class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-primary dflex row justify-content-between">
+					<div>
+						<h4 class="card-title">Nouveau message</h4>
+						<p class="card-category">Pour envoyer un message à un coworker</p>
+					</div>
+					<button id="newMsgDown" class="btn btn-info pull-right"><i class="material-icons">clear</i> Annuler</button>
+				</div>
+				<div class="card-body">
+					<form method="post" action="">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Destinataire</label>
+									<input type="text" name="first_name" class="form-control">
 								</div>
 							</div>
-							<ul class="actions">
-								<li><input class="button" type="submit" value="Envoyer"/></li>
-							</ul>
-						</form>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group bmd-form-group {% if errors['desc'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">
+										Message</label>
+									<textarea class="form-control" name="desc" rows="5">{{ user.desc }}</textarea>
+									{% if errors['first_name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">Envoyer mon message</button>
+						<div class="clearfix"></div>
+					</form>
+				</div>
+			</div>
+		</div>
 
+	<div class="col-md-12">
 		<div class="card">
 			<div class="card-header card-header-primary dflex row justify-content-between">
 				<div>
 					<h4 class="card-title ">Liste des messages</h4>
 					<p class="card-category">
-						Voici la liste de vos messages
+						Voici la liste de tes messages
 					</p>
 				</div>
-				<a href="/user/message" class="dflex row mx-2">
-					<h4 class="card-title ">Ecrire un message <i class="material-icons">send</i></h4>
-				</a>
+				<button id="newMsgUp" class="btn btn-info pull-right">Nouveau message <i class="material-icons">send</i></button>
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
@@ -76,4 +96,7 @@
 			</div>
 		</div>
 	</div>
+
+				<!-- Scripts -->
+				<script src="/assets/js/script-perso.js"></script>
 {% endblock %}
