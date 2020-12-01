@@ -23,7 +23,6 @@
 		<body
 			class="is-preload">
 
-
 			<!-- Wrapper -->
 			<div id="wrapper" class="fade-in"> {% block intro %}{% endblock %}
 
@@ -41,7 +40,7 @@
 						<li {{ linkactive("events") }} {% if event %} {{ linkactive("events") }} {% endif %}>
 							<a href="/events">Evenements</a>
 						</li>
-						<li {{ linkactive("usersLogin") }} {{ linkactive("usersSubscribe") }} {{ linkactive("activatePage") }}>
+						<li {{ linkactive("usersLogin") }} {{ linkactive("usersSubscribe") }} {{ linkactive("usersMdpoublie") }} {{ linkactive("activatePage") }} {{ linkactive("usersMdpchange") }}>
 							<a href="/login">Espace Membre</a>
 						</li>
 					</ul>
@@ -55,35 +54,85 @@
 				</nav>
 
 				<!-- Main -->
-				<div id="main">
+				<div id="main" classe"main">
 					{% block content %}
+
+						<div id="scroll_to_top">
+							<a href="#wrapper" class="button icon solid solo fa-arrow-up scrolly">Continue</a>
+						</div>
+						
 						<!-- Featured Post -->
+						
 						<article class="post featured">
+							
 							<header class="major">
 								<h2>Espace de Cowoking<br>
 									à Moulins
 								</h2>
-								<p>l'espace de coworking se situe au 1 place Maréchal de lattre de Tassigny<br>
-									à côté de la salle des fêtes en plein centre de moulins.</p>
+								<nav class="nav-accueil">
+									<ul>
+										<li>
+											<a href="/inscription" class="button scrolly">S'inscrire</a>
+										</li>
+										<li>
+											<a href="#horaires" class="button scrolly">Horaires &amp; Accès</a>
+										</li>
+										<li>
+											<a href="#tarifs" class="button scrolly">Tarifs</a>
+										</li>
+										<li>
+											<a href="#footer" class="button scrolly">Contacts</a>
+										</li>
+									</ul>
+								</nav>
+								<p>L'espace de coworking se situe au 1 place Maréchal de Lattre de Tassigny<br>
+									à côté de la salle des fêtes en plein centre de Moulins.</p>
 							</header>
-							<ul class="actions special">
-								<li>
-									<a href="/inscription" class="button">Venez-vous inscrire</a>
-								</li>
-							</ul>
-							<img height="500px" src="/images/pic01.jpg" alt=""/>
+							<img height="500px" src="/images/pic01.jpg" alt="Photo de l'intérieur des locaux avec les bureaux en premier plan et l'entrée et l'espace détente en arrière plan"/>
 						</article>
-						<article class="post featured">
+						
+						<section id="horaires" class="posts">
+							<article>
+								<header>
+									<h2>Horaires</h2>
+								</header>
+								<p class="title">L'espace Coworking de Moulins vous accueille du lundi au vendredi de 9h à 12h et de 14h à 17h
+								</p>
+								<br>
+								<header>
+									<h2 id="horaires">Stationnement</h2>
+								</header>
+								<p><span class="title">Parking Achille Roche</span><span class="align-center"> (gratuit)</span><br>
+									<a href="http://www.ville-moulins.fr/ma-ville/vie-quotidienne/stationnement.html" class="em" title="Lien vers le site de la ville de Moulins">&rarr; En savoir plus sur le stationnement à Moulins</a>
+								<p>
+								<p><span class="title">Parking Tassigny</span><span class="align-center"> (payant)<br>
+									<a href="http://www.ville-moulins.fr/ma-ville/vie-quotidienne/stationnement/stationnement-payant.html" class="em" title="Lien vers le site de la ville de Moulins">&rarr; En savoir plus sur les tarifs du stationnement</a>
+								</p>
+							</article>
+							<article>
+								<header>
+									<h2 id="plan">Plan d'accès</h2>
+								</header>
+								<p class="align-center">1 place Maréchal de Lattre de Tassigny<br>
+									<a href="https://www.openstreetmap.org/directions?from=&to=46.56202%2C3.32980#map=19/46.56202/3.32980" class="em" title="Lien vers le site d'openstreetmap.org">Etablir mon trajet pour venir au Coworking</a>
+								</p>
+								<div>
+									<div id="planOverlay" class="planOverlay" onClick="style.display='none'"><p class="align-center">Cliquez sur la carte pour zoomer</p></div>
+									<object id="mapOpen" title="La carte d'openstreetmap avec la position du coworking" scrolling="no" width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" border="1" data="https://www.openstreetmap.org/export/embed.html?bbox=3.328683078289032%2C46.56135744293931%2C3.330936133861542%2C46.5626723603294&amp;layer=mapnik&amp;marker=46.562013983516%2C3.329809606075287" style="border: 1px solid black"></object><br/><a href="https://www.openstreetmap.org/?mlat=46.56201&amp;mlon=3.32981#map=19/46.56201/3.32981" class="em" title="Lien vers le site d'openstreetmap.org">Agrandir la carte</a>
+								</div>
+							</article>
+						</section>
+						
+						<article id="tarifs" class="post featured">
 							<header>
-
 								<h2>
 									Les Tarifs
 								</h2>
 							</header>
 							<div class="tarif">
 								<ul>
-									<li class="title">Quand on est de passage</li>
-									<li>
+									<li class="title">Quand on est de passage...</li>
+									<li class="title-marge">
 										<ul>
 											<li class="title">non adhérent</li>
 											<li class="des">l'heure</li>
@@ -91,7 +140,7 @@
 										</ul>
 										<ul>
 											<li class="title">non adhérent</li>
-											<li class="des">la demi journée</li>
+											<li class="des">la demie-journée</li>
 											<li class="prix">12 €</li>
 										</ul>
 										<ul>
@@ -100,8 +149,8 @@
 											<li class="prix">20 €</li>
 										</ul>
 									</li>
-									<li class="title">Quand on veux rester un peu plus</li>
-									<li>
+									<li class="title">Quand on veux rester un peu plus...</li>
+									<li class="title-marge">
 										<ul>
 											<li class="title">adhérent</li>
 											<li class="des">l'heure</li>
@@ -109,7 +158,7 @@
 										</ul>
 										<ul>
 											<li class="title">adhérent</li>
-											<li class="des">la demi journée</li>
+											<li class="des">la demie-journée</li>
 											<li class="prix">6 €</li>
 										</ul>
 										<ul>
@@ -118,8 +167,8 @@
 											<li class="prix">10 €</li>
 										</ul>
 									</li>
-									<li class="title">Quand on nous a adopté</li>
-									<li>
+									<li class="title">Quand on nous a adopté...</li>
+									<li class="title-marge">
 										<ul>
 											<li class="title">FORFAIT</li>
 											<li class="des">25 heures</li>
@@ -136,28 +185,26 @@
 											<li class="prix">100 €</li>
 										</ul>
 									</li>
-									<li class="title">Là c'est pour que ca devienne votre maison</li>
-									<li>
+									<li class="title">Là, c'est pour que ça devienne votre maison...</li>
+									<li class="title-marge">
 										<ul>
-											<li class="title">Adhesion individuelle</li>
+											<li class="title">Adhésion Individuelle</li>
 											<li class="des"></li>
 											<li class="prix">20 € / an</li>
 										</ul>
 										<ul>
-											<li class="title">Adhesion professionelle</li>
+											<li class="title">Adhésion Professionelle</li>
 											<li class="des"></li>
 											<li class="prix">200 € / an</li>
 										</ul>
 										<ul>
 											<li class="title">Forfait Mois</li>
-											<li class="des">option domiciliation 50€</li>
+											<li class="des">option domiciliation 50 €</li>
 											<li class="prix">100 € / mois</li>
-
 										</ul>
 									</li>
 								</ul>
 							</div>
-
 						</article>
 						<!-- Posts -->
 
@@ -167,6 +214,7 @@
 				<!-- Footer -->
 				<footer id="footer">
 					<section>
+						<h2>Nous contacter</h2>
 						<form method="post" id="contactMail" action="{{ path("mailSend") }}">
 							<div class="fields">
 								<div class="field">
@@ -183,15 +231,16 @@
 								</div>
 							</div>
 							<ul class="actions">
-								<li><input type="submit" value="Envoyer"/></li>
+								<li><input class="button" type="submit" value="Envoyer"/></li>
 							</ul>
 						</form>
 					</section>
 					<section class="split contact">
 						<section class="alt">
 							<h3>adresse</h3>
-							<p>1 place Maréchal de Lattre de Tassigny<br/>
-								03000 Moulins</p>
+							<p>
+								<a href="https://www.openstreetmap.org/directions?from=&to=46.56202%2C3.32983#map=19/46.56202/3.32983" title="Lien vers le site d'openstreetmap.org">1 place Maréchal de Lattre de Tassigny<br>03000 Moulins</a>
+							</p>
 						</section>
 						<section>
 							<h3>telephone</h3>
@@ -202,7 +251,7 @@
 						<section>
 							<h3>Email</h3>
 							<p>
-								<a href="mailto:Contact@coworkinmoulins.fr">Contact@coworkinmoulins.fr</a>
+								<a href="mailto:Contact@coworkinmoulins.fr" title="Lien qui ouvre la messagerie par défaut pour envoyer un mail">Contact@coworkinmoulins.fr</a>
 							</p>
 						</section>
 						<section>
@@ -219,16 +268,26 @@
 				</footer>
 
 				<!-- Copyright -->
+				
 				<div id="copyright">
-					<ul>
-						<li>By julien in
-							{{debugTime}}
-							ms</li>
-						<li>Design:
-							<a href="https://html5up.net">HTML5 UP</a>
-						</li>
-					</ul>
+					<section>
+						<ul>
+							<li>By julien in {{debugTime}} ms</li>
+							<li>Design :
+								<a href="https://html5up.net">HTML5 UP</a>
+							</li>
+						</ul>
+					</section>
+					<section class="CG">
+						<p class="align-center">
+							<a href="#" title="Lien vers la page des conditions générales">Conditions générales</a>
+						</p>
+						<p class="align-center">
+							<a href="#" title="Lien vers la page des mentions légales">Mentions légales</a>
+						</p>
+					</section>
 				</div>
+				
 			</div><!-- Scripts --><script src="/assets/js/jquery.min.js"></script>
 			<script src="/assets/js/jquery.scrollex.min.js"></script>
 			<script src="/assets/js/jquery.scrolly.min.js"></script>
@@ -236,6 +295,7 @@
 			<script src="/assets/js/breakpoints.min.js"></script>
 			<script src="/assets/js/util.js"></script>
 			<script src="/assets/js/main.js"></script>
+			<script src="/assets/js/script-perso.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 			<script>
 				toastr.options = {

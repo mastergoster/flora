@@ -10,7 +10,6 @@ use App\Model\Table\InvocesLinesTable;
 use App\Model\Entity\InvocesLinesEntity;
 use Core\Controller\Helpers\TableauController;
 
-
 class AdminInvocesController extends Controller
 {
     public function __construct()

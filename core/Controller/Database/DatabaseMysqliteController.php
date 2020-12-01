@@ -4,6 +4,7 @@ namespace Core\Controller\Database;
 
 use \PDO;
 use \App\App;
+use stdClass;
 
 class DatabaseMysqliteController extends DatabaseController
 {
@@ -41,8 +42,7 @@ class DatabaseMysqliteController extends DatabaseController
     public function query(string $statement, ?string $class_name = null, bool $one = false)
     {
         $req = $this->getPDO()->query($statement);
-        if (
-            strpos($statement, 'UPDATE') === 0 ||
+        if (strpos($statement, 'UPDATE') === 0 ||
             strpos($statement, 'INSERT') === 0 ||
             strpos($statement, 'DELETE') === 0
         ) {
@@ -66,8 +66,7 @@ class DatabaseMysqliteController extends DatabaseController
     {
         $req = $this->getPDO()->prepare($statement);
         $res = $req->execute($attributes);
-        if (
-            strpos($statement, 'UPDATE') === 0 ||
+        if (strpos($statement, 'UPDATE') === 0 ||
             strpos($statement, 'INSERT') === 0 ||
             strpos($statement, 'DELETE') === 0
         ) {

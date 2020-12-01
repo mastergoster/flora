@@ -2,7 +2,7 @@
 
 $basePath = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 
-require_once $basePath . 'vendor/autoload.php';
+require_once $basePath . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 $app = App\App::getInstance();
 $app->setStartTime();
 $app::load();
@@ -39,8 +39,10 @@ $app->getRouter($basePath)
 
 
     ->match('/inscription', 'Users#subscribe', 'usersSubscribe')
-
     ->get('/login', 'Users#login', 'usersLogin')
+    ->match('/mdpoublie', 'Users#mdpoublie', 'usersMdpoublie')
+    ->match('/mdpchange/[*:slug]', 'Users#mdpchange', 'usersMdpchange')
+
 
     ->get('/admin', 'Admin#panel', 'adminPanel')
     ->match('/admin/users/[i:id]/modifheure', 'Admin#modifHeure', 'adminUserModifHeure')
@@ -68,7 +70,7 @@ $app->getRouter($basePath)
     ->match('/user/edit', 'users#edit', 'userEdit')
     ->get('/user/invoces/[i:id]', 'users#invoce', 'userInvoce')
     ->get('/activate', 'users#activatePage', 'activatePage')
-    ->get('/contact', 'Shop#contact', 'contact')
+    // ->get('/contact', 'Shop#contact', 'contact')
     //POSTS URLS
 
     ->post('/mails', 'Users#mail', 'mailSend')
