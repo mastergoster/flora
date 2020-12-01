@@ -11,7 +11,7 @@ class AdminCoreController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            return $this->redirect('userProfile');
         }
         chdir("/var/www");
     }

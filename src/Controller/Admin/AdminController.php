@@ -13,7 +13,7 @@ class AdminController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            return $this->redirect('userProfile');
         }
         $this->loadModel('users');
         $this->loadModel('hours');
@@ -200,19 +200,4 @@ class AdminController extends Controller
             ]
         );
     }
-
-    
-    /**
-     * Undocumented function
-     *
-     * @param integer $id
-     * @return void
-     */
-    // public function messageDelete(int $id)
-    // {
-    //     $message = $this->messages->find($id, "id");
-    //     dd($message);
-
-    //     $this->redirect("adminMessages");
-    // }
 }

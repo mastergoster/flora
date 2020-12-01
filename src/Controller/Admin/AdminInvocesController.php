@@ -15,7 +15,7 @@ class AdminInvocesController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            return $this->redirect('userProfile');
         }
         $this->loadModel('invoces');
         $this->loadModel('users');
@@ -101,7 +101,7 @@ class AdminInvocesController extends Controller
         }
         $invoces = $this->invoces->find($id);
         if ($invoces->getActivate()) {
-            $this->redirect("adminInvocePdf", ["id" => $id]);
+            return $this->redirect("adminInvocePdf", ["id" => $id]);
         }
         $users = $this->users->find($invoces->getIdUsers());
         $invocesLines = $this->invocesLines->findAll($id, 'id_invoces');
@@ -133,7 +133,7 @@ class AdminInvocesController extends Controller
             $this->invoces->updateByClass($invoces);
         }
         $this->messageFlash()->success("la facture est activé");
-        $this->redirect('adminInvoces');
+        return $this->redirect('adminInvoces');
     }
 
     public function actualise($id)
@@ -145,7 +145,7 @@ class AdminInvocesController extends Controller
                 unlink($file);
             }
         }
-        $this->redirect('adminInvoces');
+        return $this->redirect('adminInvoces');
     }
 
     public function invocePdf($id)

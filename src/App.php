@@ -51,7 +51,6 @@ class App
 
         date_default_timezone_set('Europe/Paris');
         $app->response = new Response();
-
         $config = $app->rootfolder();
         if (file_exists($config . "/.env")) {
             $dotenv = \Dotenv\Dotenv::createImmutable($config, "/.env");

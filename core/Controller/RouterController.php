@@ -3,6 +3,7 @@
 namespace Core\Controller;
 
 use mysql_xdevapi\Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 class RouterController
 {
@@ -59,6 +60,11 @@ class RouterController
             $controller = "App\\Controller\\" . $admin . ucfirst($controller) . "Controller";
         }
 
-        echo (new $controller())->$method(...array_values($match['params']));
+        $response = (new $controller())->$method(...array_values($match['params']));
+        if ($response instanceof Response) {
+            $response->send();
+        } else {
+            //echo $response;
+        }
     }
 }

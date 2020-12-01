@@ -11,7 +11,7 @@ class AdminEventsController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            return $this->redirect('userProfile');
         }
         $this->loadModel("events");
         $this->loadModel("bookingEvents");
@@ -69,7 +69,7 @@ class AdminEventsController extends Controller
                 } else {
                     if ($this->events->create($datas)) {
                         $this->messageFlash()->success("l'évènement a bien été mis à jour");
-                        $this->redirect('adminEventSingle', ["id" => $this->events->lastInsertId()]);
+                        return $this->redirect('adminEventSingle', ["id" => $this->events->lastInsertId()]);
                     } else {
                         $this->messageFlash()->error("erreur de mise à jour");
                     }
