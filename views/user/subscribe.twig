@@ -52,7 +52,7 @@
 				</div>
 				<div class="field half">
 					<label for="password">Mot de passe</label>
-					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="password" id="password"/>
+					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="password" id="password" placeholder="7 caratères minimum"/>
 					{% if errors.password %}
 						<ul class="invalid-feedback">
 							{% for error in errors.password %}
@@ -66,13 +66,17 @@
 					<input {% if errors.password %} class="invalid-feedback" {% endif %} type="password" name="passwordVerify" id="passwordVerify"/>
 				</div>
 			</div>
-			<ul class="actions">
-				<li><input type="submit" value="S'inscrire"/></li>
+			<ul class="actions btn-center">
+				<li>
+					<input type="submit" value="Valider mon inscription"/>
+				</li>
 			</ul>
-			<div class="align-center">
-				<a href="/login">connexion</a>
-			</div>
 		</form>
+			<ul class="actions btn-center">
+				<li>
+					<a href="/login" class="button">Annuler</a>
+				</li>
+			</ul>
 	</section>
 
 {% endblock %}

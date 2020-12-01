@@ -21,7 +21,7 @@ class EmailController extends controller
 
         $mail = new PHPMailer();
         $mail->isSMTP();
-        if ($this->getConfig('ENV_DEV')) {
+        if ($this->getConfig('ENV_DEV') || $this->getConfig('MAILER_Host') == "mailcatcher") {
             //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->Host         = $this->getConfig('MAILER_Host');
             $mail->Port         = $this->getConfig('MAILER_Port');
@@ -33,7 +33,7 @@ class EmailController extends controller
             $mail->Password     = $this->getConfig('MAILER_Password');
             $mail->SMTPSecure   = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port         = $this->getConfig('MAILER_Port');
-            $sender = [$this->getConfig('MAILER_Username'), $this->getConfig('stieName')];
+            $sender = [$this->getConfig('MAILER_Username'), $this->getConfig('siteName')];
         }
         $mail->setFrom($sender[0], $sender[1]);
         $this->mail = $mail;

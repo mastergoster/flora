@@ -3,11 +3,19 @@
 {% block content %}
 	<section class="align-center">
 		<h2>Activez votre compte</h2>
-		<p class="align-center">Vous avez recu un mail a l'adresse
-			{{ user.email }}</p>
-		<p class="align-center">Merci de suivre le lien qui est dans celui-ci</p>
-		<a href="/user/logout" class="button">Changer de compte</a>
-
+		<p class="align-center">Lors de votre inscription, vous avez recu un mail à l'adresse
+			"{{ user.email }}".</p>
+		<p class="align-center">Merci de suivre le lien indiqué dans celui-ci afin de confirmer votre adresse mail et pouvoir vous connecter à votre espace membre.</p>
+		<ul class="actions btn-center">
+			<li>
+				<a href="/activate?newMail" class="button">Renvoyer le mail</a>
+			</li>
+		</ul>
+		<ul class="actions btn-center">
+			<li>
+				<a href="/activate?disconnected" class="button">Changer de compte</a>
+			</li>
+		</ul>
 	</section>
 
 {% endblock %}

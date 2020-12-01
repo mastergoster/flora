@@ -53,10 +53,9 @@ class UsersController extends Controller
                     }
                     $this->redirect("userProfile");
                 }
-                $this->messageFlash()->error("mdp ou user invalide");
+                $this->messageFlash()->error("Mot de passe ou utilisateur invalide");
             }
         }
-
 
         //supprime le mdp pour le renvoie a la vue
         unset($datas["password"]);
@@ -78,7 +77,6 @@ class UsersController extends Controller
 
     public function subscribe()
     {
-
         //Création d'un tableau regroupant les champs requis
         $form = new \Core\Controller\FormController();
         $form->field('email', ["require", "mail"]);
@@ -87,17 +85,16 @@ class UsersController extends Controller
         $form->field('first_name', ["require"]);
         $form->field('phone_number', ["require", "tel"]);
 
-
-        $errors =  $form->hasErrors();
+        $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
-            //verifie qu'il n'y ai pas d'erreurs
+            //verifie qu'il n'y a pas d'erreur
             if (!$errors) {
 
                 /** @var UsersTable $this->users */
                 $userTable = $this->users;
 
-                //verifier que l'adresse mail n'existe pas
+                //verifier que l'adresse mail et/ou que le numéro de téléphone n'existe(nt) pas
                 if ($userTable->find($datas["email"], "email")) {
                     $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
                     $this->redirect("usersLogin");
@@ -107,46 +104,59 @@ class UsersController extends Controller
                     $this->redirect("usersLogin");
                 }
 
-                //crypter password
+                //crypter le password
+                $password_private = $datas["password"];
                 $datas["password"] = password_hash($datas["password"], PASSWORD_BCRYPT);
-                //cree token
 
+                //créer token et pin
                 $datas["token"] =  substr(md5(uniqid()), 0, 10);
                 $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
+
                 //persiter user en bdd
                 if (!$userTable->create($datas)) {
-                    //formater erreure comme il faut
+                    //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
                 if (!$this->rolesLog->create(["id_roles" => 2, "id_users" => $userTable->lastInsertId()])) {
-                    //formater erreure comme il faut
+                    //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
+
                 //informer que l'enregistrement c'est bien passé
-                $this->messageFlash()->success('Enregistrement reussi');
-                //evoyer mail de confirmation avec le token
+                $this->messageFlash()->success('Votre inscription a été validée.');
+
+                //envoyer le mail de confirmation avec le token
                 $mail = new EmailController();
                 $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $datas["token"];
-                $mail->object('valiez votre inscription sur le site ' . getenv('stieName'))
+                $mail->object('Validez votre inscription sur le site ' . getenv('siteName'))
                     ->to($datas['email'])
                     ->message('confirmation', compact('datas'))
                     ->send();
-                // send sms
+
+                //envoyer le sms
                 $sms = new SmsController();
                 $sms->numero($datas['phone_number'])
                     ->send(
-                        'pour valier votre code pin : ' .  $datas["pin"]
-                            . ' merci de vous connecter via la borne tactile'
+                        'Pour valider votre code pin : ' .  $datas["pin"]
+                            . ', merci de vous connecter via la borne tactile.'
                     );
-                //informer le client qu'il var devoir valier son adresse mail
-                $this->messageFlash()->success("Verifiez votre boite mail {$datas['mail']} ;)");
-                $this->messageFlash()->success("Nous vous avons envoyer un sms sur le numéro {$datas['tel']}");
-                //redirection pour se connecter
 
-                header('location: ' . $this->generateUrl('usersLogin'));
-                exit();
+                //informer le client qu'il va devoir valider son adresse mail
+                $this->messageFlash()->success("Nous vous avons envoyé un sms sur le numéro " .
+                "{$datas['phone_number']} et un mail à l'adresse {$datas['email']}.");
+
+                // Login automatique après inscription valide
+                $this->security()->login($datas["email"], $password_private);
+                if ($this->session()->has("redirect")) {
+                    $url = $this->session()->get("redirect");
+                    $this->session()->remove("redirect");
+                    $this->redirect($url);
+                    exit();
+                }
+                $this->redirect("userProfile");
             }
         }
+
         //supprime le mdp pour le renvoie a la vue
         unset($datas["password"]);
 
@@ -157,6 +167,150 @@ class UsersController extends Controller
     }
 
 
+    /**
+     * function permettant d'effectuer une demande de changement de mot de passe en cas d'oubli de celui-ci.
+     * Un mail est envoyé à l'adresse indiquée si celle-ci existe dans la BDD
+     * et si elle a été activée après l'inscription.
+     * Ce mail contient un lien, avec le token de l'utilisateur, de la page permttant le changement de mot de passe.
+     * Un sms est envoyé à l'utilisateur pour l'informer de la demande de changement de mot de passe.
+     *
+     * @return void
+     */
+    public function mdpoublie()
+    {
+        // Création d'un tableau regroupant les champs requis
+        $form = new FormController();
+        $form->field('mailmdpoublie', ["require", "mail"]);
+
+        $errors = $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+            // Verifie qu'il n'y a pas d'erreur
+            if (!$errors) {
+
+                /** @var UsersTable $this->users */
+                $userTable = $this->users;
+                $message = $this->messageFlash()->success("Un mail vous a été envoyé à l'adresse indiquée " .
+                    "si celle-ci est valide et a été activée.");
+
+                // Verifie que l'adresse mail existe
+                if (!$userTable->find($datas["mailmdpoublie"], "email")) {
+                    $message;
+                    $this->redirect("usersLogin");
+                }
+
+                if ($userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
+                    // Récupération de information du compte
+                    $datas["phoneNumber"] = $userTest->getPhoneNumber();
+                    $datas["activate"] = $userTest->getActivate();
+                    $datas["token"] = $userTest->getToken();
+
+                    // Vérifie si mail a été activé
+                    if (!$datas["activate"]) {
+                        $message;
+                        $this->redirect("usersLogin");
+                    }
+
+                    // Envoi du mail de confirmation
+                    $mail = new EmailController();
+                    $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/mdpchange/" . $datas["token"];
+                    $mail->object(getenv('siteName') . ' - Votre demande de changement de mot de passe')
+                        ->to($datas['mailmdpoublie'])
+                        ->message('oublimdp', compact('datas'))
+                        ->send();
+
+                    // Informe de l'envoi du mail
+                    $message;
+
+                    // Envoi d'un sms d'information
+                    $sms = new SmsController();
+                    $sms->numero($datas["phoneNumber"])
+                        ->send(
+                            'Bonjour, vous avez demandé le changement du mot de passe de connexion ' .
+                                'à votre espace membre de l\'espace Coworking de MOULINS. ' .
+                                'Un mail vous a été envoyé à l\'adresse : ' .  $datas['mailmdpoublie'] .
+                                '. L\'espace de Coworking By CoWorkInMoulins.'
+                        );
+
+                    // Redirection pour se connecter
+                    $this->redirect("usersLogin");
+                }
+            }
+        }
+
+        if ($errors["post"]) {
+            unset($errors);
+        }
+
+        // Pour afficher la view en l'état
+        return $this->render('user/mdpoublie', [
+            "page" => 'MDPOublie',
+            "errors" => $errors
+        ]);
+    }
+
+    /**
+     * function permettant le changement de mot de passe dans la BDD.
+     * Elle vérifie que le token est conforme ainsi que le code PIN qui est demandé en plus
+     * du nouveau mot de passe et de sa confirmation.
+     * La paramètre $slug fait référence au token présent dans l'url.
+     *
+     * @param string $slug
+     * @return void
+     */
+    public function mdpchange(string $slug)
+    {
+        $user = $this->users->find($slug, "token");
+
+        if (!$user || is_null($slug)) {
+            $this->messageFlash()->error("Merci de vous connecter.");
+            $this->redirect("usersLogin");
+        }
+
+        if ($user && !is_null($slug)) {
+            // Création d'un tableau regroupant les champs requis
+            $form = new FormController();
+            $form->field('password_new', ["require", "verify", "length" => 7]);
+            $form->field('pinmdpchange', ["require"]);
+
+            $errors = $form->hasErrors();
+            if ($errors["post"] != ["no-data"]) {
+                $datas = $form->getDatas();
+                // Verifie qu'il n'y a pas d'erreur
+                if (!$errors) {
+                    // Vérifie si le code PIN saisi est identique à celui de la BDD
+                    if ($user->getPin() != $datas["pinmdpchange"]) {
+                        $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
+                        $this->redirect("usersMdpchange", ['slug' => $slug]);
+                    }
+
+                    // Vérifie si l'utilisatuer à une session en cours même sur un autre poste
+                    if ($this->session()->has('users')) {
+                        $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
+                        $this->redirect("usersMdpchange", ['slug' => $slug]);
+                    }
+
+                    // Insertion dans la BBD du nouveau mot de passe
+                    $new_password = password_hash($datas["password_new"], PASSWORD_BCRYPT);
+                    $this->users->update($user->getId(), "id", ["password" => $new_password]);
+
+                    $this->messageFlash()->success("Votre mot de passe a été modifié avec succès. " .
+                        "Vous pouvez vous connecter.");
+                    $this->redirect("usersLogin");
+                }
+            }
+        }
+
+        if ($errors["post"]) {
+            unset($errors);
+        }
+
+        // Pour afficher la view en l'état
+        return $this->render('user/mdpchange', [
+            "page" => 'Changer le mot de passe',
+            "errors" => $errors
+        ]);
+    }
 
 
     public function profile($message = null)
@@ -246,14 +400,24 @@ class UsersController extends Controller
     public function validate(string $verify)
     {
         $token = $this->users->findAll($verify, "token");
-
-        if ($token && !is_null($verify)) {
+        // Vérifie si le token n'existe pas ou que $verify n'est pas nul
+        if (!$token || is_null($verify)) {
+            $this->redirect("home");
+        }
+        // Si le mail a déjà été activé, renvoi sur la page d'accueil (le mail d'activation n'est plus utilisable)
+        if ($token['0']->getActivate() && !is_null($verify)) {
+            $this->messageFlash()->error("Cette adresse mail a déjà été validée.");
+            $this->redirect("home");
+        }
+        // Passe le $verify dans la session['validate'] qui sera utilisé pour la 1ère connexion
+        if ($token && !$token['0']->getActivate() && !is_null($verify)) {
             $this->session()->set("validate", $verify);
         }
         if ($this->session()->has("users")) {
+            $this->messageFlash()->success("Votre adresse mail a été validée.");
             $this->redirect("userProfile");
         }
-        $this->messageFlash()->error("Merci de vous connecter");
+        $this->messageFlash()->error("Merci de vous connecter à votre espace membre pour valider votre adresse mail.");
         $this->redirect("usersLogin");
     }
 
@@ -275,13 +439,37 @@ class UsersController extends Controller
 
     public function activatePage()
     {
+        if ($this->request()->query->has("disconnected")) {
+            $this->security()->logout();
+            $this->redirect("usersLogin");
+        }
+        
         if (!$this->session()->has("users")) {
             $this->redirect("usersLogin");
         }
+
         $user = $this->session()->get("users");
-        if ($user->getActivate()) {
-            $this->redirect("userProfile");
+
+        if ($this->request()->query->has("newMail")) {
+
+            $userMail = $user->getEmail();
+            $userToken = $user->getToken();
+
+            // Envoi le mail d'activation avec le token
+            $mail = new EmailController();
+            $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $userToken;
+            $mail->object('Validez votre inscription sur le site ' . getenv('siteName'))
+                ->to($userMail)
+                ->message('confirmation', compact('datas'))
+                ->send();
+            $this->messageFlash()->success("Un nouveau mail d'activation vous a été envoyé.");
+            $this->redirect("usersLogin");
         }
+
+        if ($user->getActivate()) {
+            $this->redirect("usersLogin");
+        }
+
         return $this->render(
             "user/activate",
             [

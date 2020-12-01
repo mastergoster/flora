@@ -66,6 +66,13 @@ class SecurityController extends controller
         $this->session()->remove('users');
     }
 
+    /**
+     * function de connexion via le mdp ou le code pin
+     * @param string $mail
+     * @param string $password
+     * @param bool $pin
+     * @return bool
+     */
     public function login(string $mail, string $password, $pin = false): bool
     {
         $user = $this->users->find($mail, "email");
@@ -81,6 +88,10 @@ class SecurityController extends controller
         return false;
     }
 
+    /**
+     * verification si l'utilisateur est connecté
+     * @return bool
+     */
     public function isConnect(): bool
     {
         if ($this->session()->has('users')) {

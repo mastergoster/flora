@@ -1,0 +1,36 @@
+{% extends 'layout/default.twig' %}
+
+{% block content %}
+	<section>
+		<h2>Mot de passe oublié ?</h2>
+		<p>Indiquez l'adresse mail utilisée pour votre compte membre de l'espace Coworking de Moulins</p>
+		<form method="post" action="#">
+			<div class="fields">
+				<div class="field half">
+					<label for="mailmdpoublie">Email</label>
+					<input {% if errors.mailmdpoublie %} class="invalid-feedback" {% endif %} type="text" name="mailmdpoublie" id="mailmdpoublie"/>
+					{% if errors.mailmdpoublie %}
+						<div class="invalid-feedback">
+							{% for error in errors.mailmdpoublie %}
+								<li>{{ error }}</li>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+				<div class="field half">
+					<ul class="actions btn-align">
+						<li>
+							<input type="submit" value="Envoyer le mail"/>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</form>
+			<ul class="actions btn-center">
+				<li>
+					<a href="/login" class="button">Annuler</a>
+				</li>
+			</ul>
+	</section>
+
+{% endblock %}
