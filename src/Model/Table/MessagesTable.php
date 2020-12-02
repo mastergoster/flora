@@ -10,12 +10,11 @@ class MessagesTable extends Table
     {
         return $this->query(
             "SELECT m.*, r.level
-                FROM messages as m 
-                LEFT JOIN roles as r ON m.id_roles = r.id 
-                WHERE m.id_users = ? OR r.level <= ?
-                ORDER BY created_at DESC", 
-                [$id_users, $level_user]
-                );
+            FROM messages as m 
+            LEFT JOIN roles as r ON m.id_roles = r.id 
+            WHERE m.id_users = ? OR r.level <= ?
+            ORDER BY created_at DESC", 
+            [$id_users, $level_user]
+        );
     }
 }
-
