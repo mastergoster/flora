@@ -9,6 +9,7 @@ use Core\Controller\FormController;
 use App\Model\Table\InvocesLinesTable;
 use App\Model\Entity\InvocesLinesEntity;
 use Core\Controller\Helpers\TableauController;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminInvocesController extends Controller
 {
@@ -24,7 +25,7 @@ class AdminInvocesController extends Controller
         $this->loadModel('comptaLines');
     }
 
-    public function all()
+    public function all(): Response
     {
         $invocesServices = new InvocesServices;
         $formInvoce = new FormController();
@@ -75,7 +76,7 @@ class AdminInvocesController extends Controller
         );
     }
 
-    public function single($id)
+    public function single($id): Response
     {
 
         $formInvoce = new FormController();
@@ -124,7 +125,7 @@ class AdminInvocesController extends Controller
         );
     }
 
-    public function validate($id)
+    public function validate($id): Response
     {
         $invoces = $this->invoces->find($id);
         if ($invoces) {
@@ -136,7 +137,7 @@ class AdminInvocesController extends Controller
         return $this->redirect('adminInvoces');
     }
 
-    public function actualise($id)
+    public function actualise($id): Response
     {
         $invoces = $this->invoces->find($id);
         if ($invoces->getActivate() == 1) {
@@ -148,7 +149,7 @@ class AdminInvocesController extends Controller
         return $this->redirect('adminInvoces');
     }
 
-    public function invocePdf($id)
+    public function invocePdf($id): Response
     {
         $invoces = $this->invoces->find($id);
         $user = $this->users->find($invoces->getIdUsers());
@@ -156,7 +157,7 @@ class AdminInvocesController extends Controller
         return $this->renderPdf("user/invoce", ["invoce" => $invoces, "user" => $user, "title" => $invoces->getRef()]);
     }
 
-    public function products()
+    public function products(): Response
     {
         $form = new FormController();
         $form->field("ref", ["require"]);

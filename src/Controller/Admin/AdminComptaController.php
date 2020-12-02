@@ -2,10 +2,10 @@
 
 namespace App\Controller\Admin;
 
-use App\Model\Entity\RecapConsoEntity;
 use \Core\Controller\Controller;
 use Core\Controller\FormController;
 use Core\Controller\Helpers\TableauController;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminComptaController extends Controller
 {
@@ -21,7 +21,7 @@ class AdminComptaController extends Controller
     }
 
 
-    public function index()
+    public function index(): Response
     {
 
         $items = $this->comptaLines->all(true, "date_at");
@@ -47,7 +47,7 @@ class AdminComptaController extends Controller
         );
     }
 
-    public function ligne()
+    public function ligne(): Response
     {
 
         $items = $this->comptaLines->all("desc");
@@ -59,7 +59,7 @@ class AdminComptaController extends Controller
         );
     }
 
-    public function add()
+    public function add(): Response
     {
         $form = new FormController();
         $form->field("desc", ["require"]);
@@ -79,7 +79,7 @@ class AdminComptaController extends Controller
         return $this->jsonResponse($datas);
     }
 
-    public function ndf()
+    public function ndf(): Response
     {
         $form = new FormController();
         $form->field("desc", ["require"]);

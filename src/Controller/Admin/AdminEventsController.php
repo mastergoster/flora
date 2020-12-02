@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use \Core\Controller\Controller;
 use Core\Controller\FormController;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminEventsController extends Controller
 {
@@ -17,7 +18,7 @@ class AdminEventsController extends Controller
         $this->loadModel("bookingEvents");
     }
 
-    public function events()
+    public function events(): Response
     {
         $eventsbooking = $this->bookingEvents->all();
         $eventsbyid = [];
@@ -46,7 +47,7 @@ class AdminEventsController extends Controller
         );
     }
 
-    public function event(?int $id = null)
+    public function event(?int $id = null): Response
     {
         $form = new FormController();
         $form->field("title", ["require"]);
