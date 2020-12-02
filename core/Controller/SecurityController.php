@@ -73,8 +73,7 @@ class SecurityController extends controller
     {
         $user = $this->users->find($mail, "email");
         if ($user) {
-            if (
-                \password_verify($password, $user->getPassword()) ||
+            if (\password_verify($password, $user->getPassword()) ||
                 ($pin && $user->getPin() == $password)
             ) {
                 $this->session()->set("users", $user);
