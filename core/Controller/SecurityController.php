@@ -1,15 +1,11 @@
 <?php
 
-
 namespace Core\Controller;
-
-use App\Model\Entity\UsersEntity;
 
 class SecurityController extends controller
 {
     public function __construct()
     {
-
         $this->loadModel("users");
         $this->loadModel("roles");
         $this->loadModel("rolesLog");
@@ -107,7 +103,7 @@ class SecurityController extends controller
         }
         $user = $this->session()->get('users');
         $passwordh = password_hash($password, PASSWORD_BCRYPT);
-        return $this->users->update($user->getId(), "id", ["password" => $passwordh]);;
+        return $this->users->update($user->getId(), "id", ["password" => $passwordh]);
     }
 
     public function userHydrateSession()
