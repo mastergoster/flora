@@ -18,10 +18,20 @@
 				<div class="card-body">
 					<form method="post" action="">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-3">
 								<div class="form-group bmd-form-group">
-									<label class="bmd-label-floating">Destinataire</label>
-									<input type="text" name="first_name" class="form-control">
+									<label for="destinataire" class="">Destinataire :</label>
+									<select class="form-control" name="destinataire" id="destinataire">
+										<option value="">-- Choisir le destinataire --</option>
+										<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
+										<option value="dog">Administateurs</option>
+										<option value="cat">Membres Actifs</option>
+										<option value="hamster">Adérents</option>
+										<option value="parrot">Tous les CoWorkers</option>
+										<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
+										<option value="spider">Juju DUG</option>
+										<option value="goldfish">Phiphi POF</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -29,7 +39,7 @@
 							<div class="col-md-12">
 								<div class="form-group bmd-form-group {% if errors['desc'] %} has-danger{% endif %}">
 									<label class="bmd-label-floating">
-										Message</label>
+										Message :</label>
 									<textarea class="form-control" name="desc" rows="5">{{ user.desc }}</textarea>
 									{% if errors['first_name'] %}
 										<span class="material-icons form-control-feedback">clear</span>
@@ -60,10 +70,9 @@
 					<table class="table table-hover">
 						<thead class="text-primary">
 							<tr>
-								<th>Date d'envoi</th>
-								<th>Expéditeur</th>
-								<th>Message</th>
-								<th>Email</th>
+								<th>Le :</th>
+								<th>De :</th>
+								<th>Message :</th>
 								<th>idUsers</th>
 								<th>idRoles</th>
 								<th>action</th>
@@ -73,9 +82,8 @@
 							{% for item in items %}
 								<tr>
 									<td>{{ item.createdAt | date("d/m/Y à H:i:s") }}</td>
-									<td>{{ item.name }}</td>
+									<td>{{ item.name }} ({{ item.email }})</td>
 									<td class="col-6">{{ item.message }}</td>
-									<td>{{ item.email }}</td>
 									<td>{{ item.idUsers }}</td>
 									<td>{{ item.idRoles }}</td>
 									<td class="form-inline justify-content-center">

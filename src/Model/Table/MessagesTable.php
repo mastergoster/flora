@@ -6,11 +6,16 @@ use Core\Model\Table;
 
 class MessagesTable extends Table
 {
-    
-    public function messagesByIdUserAndIdRole($id_roles, $id_users)
+    public function messagesByIdUserAndIdRole(int $id_users, int $level_user)
     {
-        return $this->query("SELECT * FROM {$this->table} WHERE id_roles <= ? OR id_users = ? ORDER BY created_at DESC", [$id_roles, $id_users]);
+        return $this->query(
+            "SELECT m.*, r.level
+                FROM messages as m 
+                LEFT JOIN roles as r ON m.id_roles = r.id 
+                WHERE m.id_users = ? OR r.level <= ?
+                ORDER BY created_at DESC", 
+                [$id_users, $level_user]
+                );
     }
-
-
 }
+

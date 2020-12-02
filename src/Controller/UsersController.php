@@ -489,8 +489,7 @@ class UsersController extends Controller
         if ($errors["post"] != ["no-data"]) {
             
             $datas = $form->getDatas();
-            // $datas['id_roles'] = 00;
-            $datas['id_users'] = 18;
+            $datas['id_roles'] = 4; // 4 = Administrateur
             if (!$errors) {
                 $this->messages->create($datas);
                 $errors["error"] = false;
@@ -532,12 +531,10 @@ class UsersController extends Controller
 
     public function edit()
     {
-
         if (!$this->session()->has("users")) {
             $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
-
 
         $formUpdate = new FormController();
         $formUpdate->field("first_name", ["require"]);
@@ -597,7 +594,7 @@ class UsersController extends Controller
 
     /**
      * Function : qui permet d'afficher les messages émis en interne
-     * Affiche soit les message qui sont destiné à l'user en session (via l'id du user connecté)
+     * Affiche soit les messages qui sont destinés à l'user en session (via l'id du user connecté)
      * soit les messages qui sont destinés au groupe (rôle) auquel le user connecté appartient
      * ainsi qu'au groupe de level inférieur
      *
@@ -606,7 +603,8 @@ class UsersController extends Controller
     public function userMessages()
     {
         $user = $this->session()->get("users");
-        $messages = $this->messages->messagesByIdUserAndIdRole($user->level, $user->getId());
+
+        $messages = $this->messages->messagesByIdUserAndIdRole($user->getId(), $user->level);
         return $this->render(
             "user/messages",
             [
@@ -630,7 +628,7 @@ class UsersController extends Controller
             
             $datas = $form->getDatas();
             $datas['name'] = "Terminator";
-            $datas['email'] = "t@800.com";
+            $datas['email'] = "t@800.skynet";
             
             if (!$errors) {
                 $this->messages->create($datas);
