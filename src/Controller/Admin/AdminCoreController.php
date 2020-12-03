@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use \Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminCoreController extends Controller
 {
@@ -11,12 +12,12 @@ class AdminCoreController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            return $this->redirect('userProfile');
         }
         chdir("/var/www");
     }
 
-    public function update()
+    public function update(): Response
     {
         if (\getenv("ENV_DEV")) {
             return $this->render(
@@ -56,7 +57,7 @@ class AdminCoreController extends Controller
     }
 
 
-    private function md5Hash(string $folder, string $item)
+    private function md5Hash(string $folder, string $item): void
     {
         if (is_dir($item)) {
             $this->md5Folder($folder, $item);
@@ -65,7 +66,7 @@ class AdminCoreController extends Controller
         }
     }
 
-    private function md5Folder(string $folder, string $item)
+    private function md5Folder(string $folder, string $item): void
     {
         foreach (scandir($item) as $value) {
             if ($value[0] != ".") {
@@ -74,7 +75,7 @@ class AdminCoreController extends Controller
         }
     }
 
-    private function md5(string $folder, bool $verify = false)
+    private function md5(string $folder, bool $verify = false): bool
     {
         if (!$verify) {
             return $this->md5Hash($folder, $folder);

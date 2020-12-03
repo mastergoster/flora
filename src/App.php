@@ -51,15 +51,14 @@ class App
 
         date_default_timezone_set('Europe/Paris');
         $app->response = new Response();
-
-        $config = self::getInstance()->rootfolder();
+        $config = $app->rootfolder();
         if (file_exists($config . "/.env")) {
             $dotenv = \Dotenv\Dotenv::createImmutable($config, "/.env");
             $dotenv->load();
             $install = false;
         }
         if (file_exists($config . "/config.php")) {
-            foreach (self::getInstance()->getConfig() as $key => $value) {
+            foreach ($app->getConfig() as $key => $value) {
                 if (!\array_key_exists($key, $_ENV)) {
                     putenv("$key=$value");
                 }

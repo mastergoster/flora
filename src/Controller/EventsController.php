@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use \Core\Controller\Controller;
-use Core\Controller\FormController;
+use \Core\Controller\FormController;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventsController extends Controller
 {
@@ -15,7 +16,7 @@ class EventsController extends Controller
         $this->loadModel("users");
     }
 
-    public function index()
+    public function index(): Response
     {
         $events = $this->events->allfutur(true, "date_at");
 
@@ -25,7 +26,7 @@ class EventsController extends Controller
         );
     }
 
-    public function booking($id, $slug, $email = "")
+    public function booking($id, $slug, $email = ""): Response
     {
         $form = new FormController();
         $form->field("email", ["require"]);
@@ -45,10 +46,10 @@ class EventsController extends Controller
         $event = $this->events->find($id);
 
         if (!$event) {
-            $this->redirect("events");
+            return $this->redirect("events");
         }
         if ($event->getSlug() != $slug) {
-            $this->redirect(
+            return $this->redirect(
                 "eventsBooking",
                 [
                     "id" => $id,
@@ -73,7 +74,7 @@ class EventsController extends Controller
                     "email" => $email
                 ]));
                 $this->messageFlash()->error("merci de vous connecter");
-                $this->redirect('usersLogin');
+                return $this->redirect('usersLogin');
             }
         } elseif (!empty($email) && !$booking) {
             $this->bookingEvents->create(["id_events" => $id, "email" => $email]);

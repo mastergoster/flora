@@ -5,6 +5,7 @@ namespace Core\Controller;
 use Core\Extension\Twig\LinkExtension;
 use Core\Controller\SecurityController;
 use Core\Extension\Twig\FlashExtension;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class Controller
 {
@@ -17,24 +18,22 @@ abstract class Controller
 
     private $security;
 
-    protected function render(string $view, array $variables = [])
+    protected function render(string $view, array $variables = []): Response
     {
-
         $variables["debugTime"] = $this->getApp()->getDebugTime();
-        return $this->getTwig()->render(
+        return  $this->getApp()->response->setContent($this->getTwig()->render(
             $view . '.twig',
             $variables
-        );
+        ));
     }
 
-    protected function renderPdf(string $view, array $variables = [])
+    protected function renderPdf(string $view, array $variables = []): Response
     {
-        header("Content-type:application/pdf");
-        header("Content-Disposition:inline;filename=" . $variables["title"] ?: "pdf");
+        $response = new Response();
         $folder  = $this->getApp()->rootfolder() . "/files/$view/";
         $name = ($variables["title"] ?: "pdf") . ".pdf";
 
-        if (!file_exists($folder . $name) || $rerender == true) {
+        if (!file_exists($folder . $name)) {
             $mpdf = new \Mpdf\Mpdf();
             $mpdf->SetTitle($variables["title"] ?: "pdf");
             $mpdf->WriteHTML($this->render($view, $variables));
@@ -50,15 +49,16 @@ abstract class Controller
 
             $mpdf->Output($folder . $name, \Mpdf\Output\Destination::FILE);
         }
-
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . basename($folder . $name) . '"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($folder . $name));
+        $response->headers->set("Content-Description", "File Transfer");
+        $response->headers->set("Content-Type", "application/octet-stream");
+        $response->headers->set("Content-Disposition", "attachment; filename=\"" . basename($folder . $name) . '"');
+        $response->headers->set("Expires", 0);
+        $response->headers->set("Cache-Control", "must-revalidate");
+        $response->headers->set("Pragma", "public");
+        $response->headers->set("Content-Length", filesize($folder . $name));
+        \ob_start();
         readfile($folder . $name);
+        return $response->setContent(\ob_get_clean());
     }
 
     private function getTwig()
@@ -103,19 +103,20 @@ abstract class Controller
         return $this->messageFlash;
     }
 
-    protected function jsonResponse403($message = "refusé")
+    protected function jsonResponse403(string $message = "refusé"): Response
     {
-        header('HTTP/1.0 403 Forbidden');
-        header('Content-Type: application/json');
-        echo json_encode(["permission" => $message]);
-        exit();
+        $response = $this->jsonResponse(["permission" => $message]);
+        return $response->setStatusCode(403);
     }
 
-    protected function jsonResponse($data)
+    protected function jsonResponse($data): Response
     {
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit();
+        $response = new Response;
+        $response->setContent(
+            json_encode($data)
+        );
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     protected function getConfig($variable)
@@ -131,8 +132,10 @@ abstract class Controller
         } else {
             $url = $this->generateUrl($path, $params);
         }
-        header('Location: ' . $url);
-        exit();
+        $response = new Response('', 303);
+        $response->headers->set("Location", $url);
+        //dd($response);
+        return $response;
     }
 
     public function security()
