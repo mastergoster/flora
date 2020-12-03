@@ -467,6 +467,12 @@ class UsersController extends Controller
             
             $datas = $form->getDatas();
             $datas['id_roles'] = 4; // 4 = Administrateur
+
+            // Verifie que l'adresse mail existe, si oui alors message d'erreur
+            if ($this->users->find($datas["email"], "email")) {
+                $errors["email"] = ["Merci d'envoyer vos messages via votre messagerie interne."];
+            }
+
             if (!$errors) {
                 $this->messages->create($datas);
                 $errors["error"] = false;
