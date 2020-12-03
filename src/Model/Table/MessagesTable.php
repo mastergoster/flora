@@ -6,7 +6,7 @@ use Core\Model\Table;
 
 class MessagesTable extends Table
 {
-    public function messagesByIdUserAndIdRole(int $id_users, int $level_user)
+    public function messagesByIdUserAndLevelUser(int $id_users, int $level_user)
     {
         return $this->query(
             "SELECT m.*, r.level

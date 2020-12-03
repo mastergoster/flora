@@ -24,13 +24,13 @@
 									<select class="form-control" name="destinataire" id="destinataire">
 										<option value="">-- Choisir le destinataire --</option>
 										<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
-										<option value="dog">Administateurs</option>
-										<option value="cat">Membres Actifs</option>
-										<option value="hamster">Adérents</option>
-										<option value="parrot">Tous les CoWorkers</option>
+										{% for role in roles %}
+										<option value="{{ role.id }}">{{ role.name }}</option>
+										{% endfor %}
 										<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
-										<option value="spider">Juju DUG</option>
-										<option value="goldfish">Phiphi POF</option>
+										{% for dest in dests %}
+										<option value="{{ user.id }}">{{ user.id }}</option>
+										{% endfor %}
 									</select>
 								</div>
 							</div>

@@ -602,13 +602,21 @@ class UsersController extends Controller
      */
     public function userMessages()
     {
+        // Récupère les messages selon l'id user ou le level de l'user
         $user = $this->session()->get("users");
+        $messages = $this->messages->messagesByIdUserAndLevelUser($user->getId(), $user->level);
 
-        $messages = $this->messages->messagesByIdUserAndIdRole($user->getId(), $user->level);
+        // Récupère l'id de tous les rôles et le nom associé
+        
+
+
+        // Affiche la vue
         return $this->render(
             "user/messages",
             [
                 "items" => $messages,
+                "roles" => $roles,
+                "errors" => $errors,
             ]
         );
     }
