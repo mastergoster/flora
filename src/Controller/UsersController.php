@@ -458,26 +458,24 @@ class UsersController extends Controller
 
     public function mail(): Response
     {
+        $paramUnique = TableauController::tableObjectToString("email", $this->users->all());
+        
         $form = new FormController();
         $form->field("name", ["require"]);
-        $form->field("email", ["require", "mail"]);
+        $form->field("email", ["require", "mail", "unique" => $paramUnique]);
         $form->field("message", ["require"]);
-        $errors =  $form->hasErrors();
+        $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
-            
             $datas = $form->getDatas();
             $datas['id_roles'] = 4; // 4 = Administrateur
-
-            // Verifie que l'adresse mail existe, si oui alors message d'erreur
-            if ($this->users->find($datas["email"], "email")) {
-                $errors["email"] = ["Merci d'envoyer vos messages via votre messagerie interne."];
-            }
-
             if (!$errors) {
                 $this->messages->create($datas);
                 $errors["error"] = false;
             } else {
                 $errors["error"] = true;
+                if (isset($errors['email'])) {
+                    $errors['email'] = ["Merci d'envoyer vos messages via votre messagerie interne."];
+                }
             }
         }
         return $this->jsonResponse($errors);
@@ -591,8 +589,10 @@ class UsersController extends Controller
         $messages = $this->messages->messagesByIdUserAndLevelUser($user->getId(), $user->level);
 
         // Récupère l'id de tous les rôles et le nom associé
-        
+        $roles = $this->roles->all();
+        $dests = $this->users->all();
 
+        dd($dests);
 
         // Affiche la vue
         return $this->render(
@@ -600,6 +600,7 @@ class UsersController extends Controller
             [
                 "items" => $messages,
                 "roles" => $roles,
+                "dests" => $dests,
                 "errors" => $errors,
             ]
         );
