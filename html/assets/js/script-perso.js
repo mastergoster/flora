@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	let newMsg = document.getElementById("newMessageUser");
 	let newMsgUp = document.getElementById("newMsgUp");
 	let newMsgDown = document.getElementById("newMsgDown");
-	newMsg.style.display = "none";
 
 	if (newMsg != null) {
 		newMsgUp.addEventListener('click',() => {
+			newMsg.classList.remove("d-none")
 			newMsg.style.display = "block";
 			newMsgUp.style.display = "none"
 		});

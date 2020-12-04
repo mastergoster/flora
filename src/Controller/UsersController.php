@@ -584,24 +584,66 @@ class UsersController extends Controller
      */
     public function userMessages()
     {
+        $display = "d-none";
+        
         // Récupère les messages selon l'id user ou le level de l'user
         $user = $this->session()->get("users");
         $messages = $this->messages->messagesByIdUserAndLevelUser($user->getId(), $user->level);
 
-        // Récupère l'id de tous les rôles et le nom associé
+        // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
         $roles = $this->roles->all();
         $dests = $this->users->all();
 
-        dd($dests);
+        foreach ($roles as $value) {
+            $value->value = "r-" . $value->getId();
+        }
+
+        // Envoi du message par l'user à un destinataire
+    
+        $form = new FormController();
+        $form->field("destinataire", ["require"]);
+        $form->field("message", ["require"]);
+        
+        $errors = $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+
+            if (strpos($datas['destinataire'], "r-") === 0)
+            {
+                $datas['id_roles'] = str_replace("r-", "", $datas['destinataire']);
+                unset($datas['destinataire']);
+            } else {
+                $datas['id_users'] = $datas['destinataire'];
+                unset($datas['destinataire']);
+            }
+
+            $datas['name'] = $this->session()->get("users")->getFirstName() . " " . $this->session()->get("users")->getLastName();;
+            $datas['email'] = $this->session()->get("users")->getEmail();
+
+            if (!$errors) {
+                $this->messages->create($datas);
+                $this->messageFlash()->success("Votre message a bien été envoyé.");
+                unset($datas);
+                return $this->redirect("userMessages");
+            } else {
+                $this->messageFlash()->error("Envoi impossible : Vous devez choisir un destinataire et écrire un message.");
+                $display = "";
+            }
+        }
+
+        if ($errors["post"]) {
+            unset($errors);
+        }
 
         // Affiche la vue
         return $this->render(
             "user/messages",
             [
-                "items" => $messages,
                 "roles" => $roles,
                 "dests" => $dests,
                 "errors" => $errors,
+                "items" => $messages,
+                "display" => $display,
             ]
         );
     }
