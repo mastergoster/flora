@@ -154,16 +154,15 @@ class FormController
 
     private function errorMail(string $field): void
     {
-
         if (filter_var($this->datas[$field], FILTER_VALIDATE_EMAIL)) {
             $this->addToDatas($field);
         } else {
             $this->newError("$field", "Le champ {$field} doit être un email valide.");
         }
     }
+
     private function errorBoolean(string $field): void
     {
-
         if ($this->postDatas[$field]) {
             $this->addToDatas($field, '1');
         } else {
@@ -193,7 +192,16 @@ class FormController
         if ($match[0] !== null) {
             $this->addToDatas($field, $match[0]);
         } else {
-            $this->newError("$field", "Le champ {$field} doit être une date au foramt 2020/11/20 12:30:00");
+            $this->newError("$field", "Le champ {$field} doit être une date au format 2020/11/20 12:30:00");
+        }
+    }
+
+    private function errorUnique(string $field, array $value): void
+    {
+        if (!in_array($this->postDatas[$field], $value)) {
+            $this->addToDatas($field);
+        } else {
+            $this->newError("$field", "La valeur indiquée dans \"{$field}\" n'est pas valide.");
         }
     }
 
