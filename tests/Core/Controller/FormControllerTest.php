@@ -7,7 +7,6 @@ use \Core\Controller\FormController;
 
 class FormControllerTest extends TestCase
 {
-
     public function testNewWithPost(): void
     {
         $_POST = [
@@ -125,9 +124,9 @@ class FormControllerTest extends TestCase
 
         $this->assertEquals(
             [
-                'mail' => ['les champs mail doivent correspondre'],
-                'password' => ['le champ password doit avoir au minimum 4 caractères'],
-                'name' => ['le champ name ne peut etre vide']
+                'mail' => ['Les champs mail doivent correspondre.'],
+                'password' => ['Le champ password doit avoir, au minimum, 4 caractères.'],
+                'name' => ['Le champ name ne peut être vide.']
             ],
             $errors
         );
@@ -184,6 +183,7 @@ class FormControllerTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
     public function testHtmlMessageOneField(): void
     {
         $expected = "<form class=\"form-inline\" method=\"post\">" .
@@ -202,6 +202,7 @@ class FormControllerTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
     public function testHtmlMailOneField(): void
     {
         $expected = "<form class=\"form-inline\" method=\"post\">" .
@@ -220,6 +221,7 @@ class FormControllerTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
     public function testHtmlMailAndPassword(): void
     {
         $expected = "<form class=\"form-inline\" method=\"post\">" .
@@ -377,7 +379,7 @@ class FormControllerTest extends TestCase
         $form = new FormController();
         $form->field('tel', ["tel"]);
         $error = $form->hasErrors();
-        $this->assertEquals(["tel" => ["le champ tel doit un numero de telephone valide"]], $error);
+        $this->assertEquals(["tel" => ["Le champ tel doit être un numéro de téléphone valide."]], $error);
         $datas = $form->getDatas();
         $this->assertEquals([], $datas);
     }
@@ -388,7 +390,7 @@ class FormControllerTest extends TestCase
         $form = new FormController();
         $form->field('tel', ["tel"]);
         $error = $form->hasErrors();
-        $this->assertEquals(["tel" => ["le champ tel doit un numero de telephone valide"]], $error);
+        $this->assertEquals(["tel" => ["Le champ tel doit être un numéro de téléphone valide."]], $error);
         $datas = $form->getDatas();
         $this->assertEquals([], $datas);
     }
@@ -398,7 +400,7 @@ class FormControllerTest extends TestCase
         $form = new FormController();
         $form->field('tel', ["tel"]);
         $error = $form->hasErrors();
-        $this->assertEquals(["tel" => ["le champ tel doit un numero de telephone valide"]], $error);
+        $this->assertEquals(["tel" => ["Le champ tel doit être un numéro de téléphone valide."]], $error);
         $datas = $form->getDatas();
         $this->assertEquals([], $datas);
     }
@@ -412,6 +414,7 @@ class FormControllerTest extends TestCase
         $datas = $form->getDatas();
         $this->assertEquals(["message" => "<script>alert(\"coucou\")</script>"], $datas);
     }
+    
     public function testAdToDataNoSafe(): void
     {
         $_POST = ["message" => "<script>alert(\"coucou\")</script>"];
@@ -420,5 +423,75 @@ class FormControllerTest extends TestCase
         $error = $form->hasErrors();
         $datas = $form->getDatas();
         $this->assertEquals(["message" => \htmlspecialchars($_POST["message"])], $datas);
+    }
+
+    // Tests sur "errorUnique"
+    public function testErrorUniqueMailNouveauDatas(): void
+    {
+        $bddDatas = ["test@test.test"];
+        $_POST = ["mail" => "julien@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $datas = $form->getDatas();
+        $this->assertEquals(["mail" => "julien@test.test"], $datas);
+    }
+
+    public function testErrorUniqueMailNouveauErrors(): void
+    {
+        $bddDatas = ["test@test.test"];
+        $_POST = ["mail" => "julien@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $errors = $form->hasErrors();
+        $this->assertEquals([], $errors);
+    }
+
+    public function testErrorUniqueMailMultiNouveauDatas(): void
+    {
+        $bddDatas = ["poil@poil.fr", "julien@test.fr", "test@test.test"];
+        $_POST = ["mail" => "julien@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $datas = $form->getDatas();
+        $this->assertEquals(["mail" => "julien@test.test"], $datas);
+    }
+
+    public function testErrorUniqueNoMailBDDDatas(): void
+    {
+        $bddDatas = [];
+        $_POST = ["mail" => "julien@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $datas = $form->getDatas();
+        $this->assertEquals(["mail" => "julien@test.test"], $datas);
+    }
+
+    public function testErrorUniqueMailExistantBDDDatas(): void
+    {
+        $bddDatas = ["test@test.test"];
+        $_POST = ["mail" => "test@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+    public function testErrorUniqueMailExistantBDDErrors(): void
+    {
+        $bddDatas = ["test@test.test"];
+        $_POST = ["mail" => "test@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $errors = $form->hasErrors();
+        $this->assertEquals(["mail" => ["Merci d'envoyer vos messages via votre messagerie interne."]], $errors);
+    }
+
+    public function testErrorUniqueMailMultiExistantBDDErrors(): void
+    {
+        $bddDatas = ["poil@poil.fr", "test@test.test"];
+        $_POST = ["mail" => "test@test.test"];
+        $form = new FormController();
+        $form->field("mail", ["unique" => $bddDatas]);
+        $errors = $form->hasErrors();
+        $this->assertEquals(["mail" => ["Merci d'envoyer vos messages via votre messagerie interne."]], $errors);
     }
 }
