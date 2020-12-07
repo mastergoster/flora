@@ -6,55 +6,63 @@
 {% block nav %}{% endblock %}
 {% block content %}
 
-		<div id="newMessageUser" class="col-md-12 {{ display }}">
+		<div id="newMessageUser" class="{{ display }}">
 			<div class="card">
 				<div class="card-header card-header-primary dflex row justify-content-between">
 					<div>
 						<h4 class="card-title">Nouveau message</h4>
 						<p class="card-category">Pour envoyer un message à un coworker</p>
 					</div>
-					<button id="newMsgDown" class="btn btn-info pull-right"><i class="material-icons">clear</i> Annuler</button>
+					<button id="newMsgDown" type="reset" class="btn btn-info pull-right"><i class="material-icons">clear</i> Annuler</button>
 				</div>
 				<div class="card-body">
 					<form method="post" action="#">
 						<div class="row">
-							<div class="col-md-3">
-								<div class="form-group bmd-form-group">
-									<label for="destinataire" class="">Destinataire :</label>
-									<select class="form-control" name="destinataire" id="destinataire">
-										<option value="">-- Choisir le destinataire --</option>
-										<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
-										{% for role in roles %}
-										<option value="{{ role.value }}">{{ role.name | capitalize }}</option>
-										{% endfor %}
-										<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
-										{% for dest in dests %}
-										<option value="{{ dest.id }}">{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
-										{% endfor %}
-									</select>
+							<div class="col-12 col-md-6">
+								<div class="form-group bmd-form-group {% if errors['destinataire'] %} has-danger{% endif %}">
+									{% if replyDest %}
+										<input name="destinataire" id="destinataire" type="hidden" class="form-control" value="{{ replyDest.id }}">
+										<label for="destName" class="bmd-label-floating">Destinataire :</label>
+										<input id="destName" disabled="" class="form-control" value="{{ replyDest.lastName | upper }} {{ replyDest.firstName | capitalize }}">
+									{% else %}
+										<label for="destinataire" class="bmd-label">Destinataire :</label>
+										<select class="form-control" name="destinataire" id="destinataire">
+											<option value="">-- Choisir le destinataire --</option>
+											<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
+											{% for role in roles %}
+											<option value="{{ role.value }}">{{ role.name | capitalize }}</option>
+											{% endfor %}
+											<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
+											{% for dest in dests %}
+											<option value="{{ dest.id }}">{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
+											{% endfor %}
+										</select>
+										{% if errors['destinataire'] %}
+											<span class="material-icons form-control-feedback">clear</span>
+										{% endif %}
+									{% endif %}
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group bmd-form-group {% if errors['message'] %} has-danger{% endif %}">
-									<label class="bmd-label-floating">
-										Message :</label>
-									<textarea class="form-control" name="message" rows="5"></textarea>
+									<label class="bmd-label-floating">Message :</label>
+									<textarea id="destMessage" class="form-control" name="message" rows="5"></textarea>
 									{% if errors['message'] %}
 										<span class="material-icons form-control-feedback">clear</span>
 									{% endif %}
 								</div>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-primary pull-right">Envoyer mon message</button>
+						<button type="submit" class="btn btn-primary pull-right">Envoyer mon message <i class="material-icons">send</i></button>
 						<div class="clearfix"></div>
 					</form>
 				</div>
 			</div>
 		</div>
 
-	<div class="col-md-12">
+	<div class="">
 		<div class="card">
 			<div class="card-header card-header-primary dflex row justify-content-between">
 				<div>
@@ -73,9 +81,7 @@
 								<th>Le :</th>
 								<th>De :</th>
 								<th>Message :</th>
-								<th>idUsers</th>
-								<th>idRoles</th>
-								<th>action</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -84,17 +90,8 @@
 									<td>{{ item.createdAt | date("d/m/Y à H:i:s") }}</td>
 									<td>{{ item.name }} ({{ item.email }})</td>
 									<td class="col-6">{{ item.message }}</td>
-									<td>{{ item.idUsers }}</td>
-									<td>{{ item.idRoles }}</td>
-									<td class="form-inline justify-content-center">
-										<form class="form-inline" method="post" onsubmit="return confirm('Êtes vous sur de vouloir supprimer le message de {{ item.name }} ? \n \n La démarche est définitive et ne peut être inversée.')">
-											<div class="form-group">
-												<input name="id" type="hidden" class="form-control" id="id" value="{{ item.id }}">
-											</div>
-											<button type="submit" class="btn btn-danger">
-												<span data-feather="trash-2"></span>
-											</button>
-										</form>
+									<td class="justify-content-end">
+										<button id="replyMsgUp" class="btn btn-primary pull-right" title="Répondre"><i class="material-icons">reply</i></button>
 									</td>
 								</tr>
 							{% endfor %}

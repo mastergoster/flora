@@ -584,6 +584,10 @@ class UsersController extends Controller
      */
     public function userMessages()
     {
+        // if (($_POST['replyEmail'])) {
+        //     $replyDest = $this->users->find($_POST['replyEmail'], 'Email');
+        // }
+
         $display = "d-none";
         
         // Récupère les messages selon l'id user ou le level de l'user
@@ -644,6 +648,7 @@ class UsersController extends Controller
                 "errors" => $errors,
                 "items" => $messages,
                 "display" => $display,
+                "replyDest" => $replyDest,
             ]
         );
     }

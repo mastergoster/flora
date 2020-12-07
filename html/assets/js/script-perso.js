@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let newMsg = document.getElementById("newMessageUser");
 	let newMsgUp = document.getElementById("newMsgUp");
 	let newMsgDown = document.getElementById("newMsgDown");
+	let replyMsg = document.getElementById("replyMsgUp");
 
 	if (newMsg != null) {
 		newMsgUp.addEventListener('click',() => {
@@ -38,8 +39,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	if (newMsg != null) {
 		newMsgDown.addEventListener('click',() => {
+			// document.getElementById('destName').value="";
+			// document.getElementById('destNessage').value="";
+			// document.getElementById('destinataire').value="";
 			newMsg.style.display = "none";
 			newMsgUp.style.display = "inline-block"
+		});
+	};
+
+	if (newMsg != null && replyMsg != null) {
+		replyMsg.addEventListener('click',() => {
+			newMsg.classList.remove("d-none")
+			newMsg.style.display = "block";
+			newMsgUp.style.display = "none"
 		});
 	};
 });
