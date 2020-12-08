@@ -29,11 +29,17 @@ document.addEventListener('DOMContentLoaded', function () {
 	let newMsgDown = document.getElementById("newMsgDown");
 	let replysMsg = document.getElementsByClassName("replyMsgUp");
 	let pageUp = document.getElementsByClassName("main-panel");
-	let destinataire = document.getElementById("destinataire");
+	// let replyIdDest = document.getElementById("replyIdDest");
+	// let replyNameDest = document.getElementById("replyNameDest");
+	let newDestinataire = document.getElementById("newDestinataire");
 
 
 	if (newMsg != null) {
 		newMsgUp.addEventListener('click',() => {
+			// replyIdDest.value = ""
+			// replyNameDest.value = ""
+			// replyIdDest.disabled = "disabled"
+			// replyNameDest.typey = "hidden"
 			newMsg.classList.remove("d-none")
 			newMsg.style.display = "block";
 			newMsgUp.style.display = "none"
@@ -44,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		newMsgDown.addEventListener('click',() => {
 			newMsg.style.display = "none";
 			newMsgUp.style.display = "inline-block"
+			replyIdDest.value = ""
+			replyNameDest.value = this.dataset.lastnameExpeditor.toUpperCase() + " " + this.dataset.firstnameExpeditor
 		});
 	};
 
@@ -51,7 +59,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		
 		Array.from(replysMsg).forEach(element => {
 			element.addEventListener('click', function() {
-				// console.log(this.title)
+				// replyIdDest.value = this.dataset.idExpeditor
+				console.log(this.dataset.idExpeditor)
+				// replyNameDest.value = this.dataset.lastnameExpeditor.toUpperCase() + " " + this.dataset.firstnameExpeditor
 				newMsg.classList.remove("d-none")
 				newMsg.style.display = "block"
 				newMsgUp.style.display = "none"

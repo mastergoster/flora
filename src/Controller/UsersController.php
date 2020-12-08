@@ -592,8 +592,7 @@ class UsersController extends Controller
         foreach ($messages as $value) {
             $mailExp = $value->getEmail();
             if ($this->users->find($mailExp, 'email')) {
-                $idExp = $this->users->find($mailExp, 'email')->getId();
-                $value->idExp = $idExp;
+                $value->idExp = $this->users->find($mailExp, 'email')->getId();
             }
             else {
                 $value->idExp = "none";
@@ -658,30 +657,4 @@ class UsersController extends Controller
         );
     }
 
-    public function userMessage()
-    {
-        $form = new FormController();
-        $form->field("id_users"); // faire condition pour les require
-        // $form->field("id_roles"); // faire condition pour les require
-
-        $form->field("message", ["require"]);
-
-        dd($form);
-
-        $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
-            
-            $datas = $form->getDatas();
-            $datas['name'] = "Terminator";
-            $datas['email'] = "t@800.skynet";
-            
-            if (!$errors) {
-                $this->messages->create($datas);
-                $errors["error"] = false;
-            } else {
-                $errors["error"] = true;
-            }
-        }
-        return $this->jsonResponse($errors);
-    }
 }
