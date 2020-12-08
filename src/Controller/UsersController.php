@@ -584,15 +584,21 @@ class UsersController extends Controller
      */
     public function userMessages()
     {
-        // if (($_POST['replyEmail'])) {
-        //     $replyDest = $this->users->find($_POST['replyEmail'], 'Email');
-        // }
-
         $display = "d-none";
         
         // Récupère les messages selon l'id user ou le level de l'user
         $user = $this->session()->get("users");
         $messages = $this->messages->messagesByIdUserAndLevelUser($user->getId(), $user->level);
+        foreach ($messages as $value) {
+            $mailExp = $value->getEmail();
+            if ($this->users->find($mailExp, 'email')) {
+                $idExp = $this->users->find($mailExp, 'email')->getId();
+                $value->idExp = $idExp;
+            }
+            else {
+                $value->idExp = "none";
+            }
+        }        
 
         // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
         $roles = $this->roles->all();
@@ -648,7 +654,6 @@ class UsersController extends Controller
                 "errors" => $errors,
                 "items" => $messages,
                 "display" => $display,
-                "replyDest" => $replyDest,
             ]
         );
     }

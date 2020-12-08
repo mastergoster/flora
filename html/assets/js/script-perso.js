@@ -27,7 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	let newMsg = document.getElementById("newMessageUser");
 	let newMsgUp = document.getElementById("newMsgUp");
 	let newMsgDown = document.getElementById("newMsgDown");
-	let replyMsg = document.getElementById("replyMsgUp");
+	let replysMsg = document.getElementsByClassName("replyMsgUp");
+	let pageUp = document.getElementsByClassName("main-panel");
+	let destinataire = document.getElementById("destinataire");
+
 
 	if (newMsg != null) {
 		newMsgUp.addEventListener('click',() => {
@@ -39,19 +42,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	if (newMsg != null) {
 		newMsgDown.addEventListener('click',() => {
-			// document.getElementById('destName').value="";
-			// document.getElementById('destNessage').value="";
-			// document.getElementById('destinataire').value="";
 			newMsg.style.display = "none";
 			newMsgUp.style.display = "inline-block"
 		});
 	};
 
-	if (newMsg != null && replyMsg != null) {
-		replyMsg.addEventListener('click',() => {
-			newMsg.classList.remove("d-none")
-			newMsg.style.display = "block";
-			newMsgUp.style.display = "none"
+	if (newMsg != null && replysMsg != null) {
+		
+		Array.from(replysMsg).forEach(element => {
+			element.addEventListener('click', function() {
+				// console.log(this.title)
+				newMsg.classList.remove("d-none")
+				newMsg.style.display = "block"
+				newMsgUp.style.display = "none"
+				pageUp[0].scroll(0,0)
+			});
 		});
+
 	};
 });

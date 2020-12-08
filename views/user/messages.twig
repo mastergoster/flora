@@ -19,27 +19,21 @@
 					<form method="post" action="#">
 						<div class="row">
 							<div class="col-12 col-md-6">
-								<div class="form-group bmd-form-group {% if errors['destinataire'] %} has-danger{% endif %}">
-									{% if replyDest %}
-										<input name="destinataire" id="destinataire" type="hidden" class="form-control" value="{{ replyDest.id }}">
-										<label for="destName" class="bmd-label-floating">Destinataire :</label>
-										<input id="destName" disabled="" class="form-control" value="{{ replyDest.lastName | upper }} {{ replyDest.firstName | capitalize }}">
-									{% else %}
-										<label for="destinataire" class="bmd-label">Destinataire :</label>
-										<select class="form-control" name="destinataire" id="destinataire">
-											<option value="">-- Choisir le destinataire --</option>
-											<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
-											{% for role in roles %}
-											<option value="{{ role.value }}">{{ role.name | capitalize }}</option>
-											{% endfor %}
-											<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
-											{% for dest in dests %}
-											<option value="{{ dest.id }}">{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
-											{% endfor %}
-										</select>
-										{% if errors['destinataire'] %}
-											<span class="material-icons form-control-feedback">clear</span>
-										{% endif %}
+								<div class="form-group bmd-form-group">
+									<label for="destinataire" class="bmd-label">Destinataire :</label>
+									<select class="form-control" name="destinataire" id="destinataire">
+										<option value="">-- Choisir le destinataire --</option>
+										<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
+										{% for role in roles %}
+										<option value="{{ role.value }}">{{ role.name | capitalize }}</option>
+										{% endfor %}
+										<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
+										{% for dest in dests %}
+										<option value="{{ dest.id }}">{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
+										{% endfor %}
+									</select>
+									{% if errors['destinataire'] %}
+										<span class="material-icons form-control-feedback">clear</span>
 									{% endif %}
 								</div>
 							</div>
@@ -88,11 +82,18 @@
 							{% for item in items %}
 								<tr>
 									<td>{{ item.createdAt | date("d/m/Y à H:i:s") }}</td>
-									<td>{{ item.name }} ({{ item.email }})</td>
+									<td>{{ item.name }} ({{ item.email }}) {{item.idExp}}</td>
 									<td class="col-6">{{ item.message }}</td>
-									<td class="justify-content-end">
-										<button id="replyMsgUp" class="btn btn-primary pull-right" title="Répondre"><i class="material-icons">reply</i></button>
+									{% if item.idExp != "none" %}
+									<td class="justify-content-end align-center">
+										<button class="btn btn-primary pull-right replyMsgUp" title="Répondre par la messagerie" data-id><i class="material-icons">reply</i></button>
 									</td>
+									{% endif %}
+									{% if item.idExp == "none" %}
+									<td class="justify-content-end align-center">
+										<a href="mailto:{{ item.email }}" class="btn btn-info pull-right" title="Répondre par un email" onClick="mailTo()"><i class="material-icons">alternate_email</i></a>
+									</td>
+									{% endif %}
 								</tr>
 							{% endfor %}
 						</tbody>
