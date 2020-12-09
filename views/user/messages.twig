@@ -18,24 +18,21 @@
 				<div class="card-body">
 					<form method="post" action="#">
 						<div class="row">
-							<div class="col-12 col-md-6">
+							<div class="col-12 col-md-6 col-lg-3">
 								<div class="form-group bmd-form-group">
 									<label for="destinataire" class="bmd-label">Destinataire :</label>
-									{# <input id="replyIdDest" name="destinataire" value="" class="form-control" type="hidden" display="none">
-									<input id="replyNameDest" value="" class="form-control" disabled="disabled"> #}
-									<select id="newDestinataire" name="destinataire" class="form-control" >
+									<select id="newDestinataire" name="destinataire" class="form-control">
 										<option value="">-- Choisir le destinataire --</option>
-										<option disabled="disabled" class="btn btn-primary">Groupe de destinataire</option>
+										<optgroup class="btn btn-primary" label="Groupe de destinataire">
 										{% for role in roles %}
-											<option value="{{ role.value }}">{{ role.name | capitalize }}</option>
+											<option class="btn btn-secondary" value="{{ role.value }}">{{ role.name | upper }}</option>
 										{% endfor %}
-											<option disabled="disabled" class="btn btn-primary">Destinataire unique</option>
+										</optgroup>
+										<optgroup class="btn btn-primary" label="Destinataire unique">
 										{% for dest in dests %}
-											<option value="{{ dest.id }}">{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
-											{% if dest.id == "36" %}
-											<option value="{{ dest.id }}" selected>{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
-										{% endif %}
+											<option class="btn btn-secondary" value="{{ dest.id }}">{{ dest.lastName | upper }} {{ dest.firstName | capitalize }}</option>
 										{% endfor %}
+										</optgroup>
 									</select>
 									{% if errors['destinataire'] %}
 										<span class="material-icons form-control-feedback">clear</span>
@@ -79,7 +76,6 @@
 							<tr>
 								<th>Reçu le :</th>
 								<th>De :</th>
-								<th>role/user</th>
 								<th>Message :</th>
 								<th>Répondre :</th>
 							</tr>
@@ -89,7 +85,6 @@
 								<tr>
 									<td>{{ item.createdAt | date("d/m/Y à H:i:s") }}</td>
 									<td>{{ item.name }} ({{ item.email }})</td>
-									<td>{{ item.idRoles }} / {{ item.idUsers }}</td>
 									<td class="col-6">{{ item.message }}</td>
 									{% if item.idExp != "none" %}
 									<td class="justify-content-end align-center">

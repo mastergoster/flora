@@ -601,10 +601,15 @@ class UsersController extends Controller
 
         // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
         $roles = $this->roles->all();
+
         $dests = $this->users->all();
 
         foreach ($roles as $value) {
             $value->value = "r-" . $value->getId();
+
+            if ($value->getName() == "aucun") {
+                $value->setName("Tout le monde");
+            }
         }
 
         // Envoi du message par l'user à un destinataire
@@ -630,7 +635,10 @@ class UsersController extends Controller
             $datas['email'] = $this->session()->get("users")->getEmail();
 
             if (!$errors) {
-                $this->messages->create($datas);
+                for ($i=0; $i < 7000 ; $i++) { 
+                    $this->messages->create($datas);
+                }
+                
                 $this->messageFlash()->success("Votre message a bien été envoyé.");
                 unset($datas);
                 return $this->redirect("userMessages");
