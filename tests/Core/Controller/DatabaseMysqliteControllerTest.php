@@ -19,10 +19,6 @@ class DatabaseMysqliteControllerTest extends TestCase
         $FileName = \App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "test.sqlite";
         chmod($FileName, 0777);
         unlink($FileName);
-
-        // if (!unlink(\App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "/test.sqlite")) {
-        //     dd("unlink False");
-        // };
     }
 
 
@@ -30,7 +26,8 @@ class DatabaseMysqliteControllerTest extends TestCase
     {
         $bdd = new DatabaseMysqliteController('test');
         $bdd->getPDO();
-        $this->assertFileExists(\App\App::rootfolder() . DIRECTORY_SEPARATOR . "db" . DIRECTORY_SEPARATOR . "test.sqlite");
+        $this->assertFileExists(\App\App::rootfolder() . DIRECTORY_SEPARATOR .
+        "db" . DIRECTORY_SEPARATOR . "test.sqlite");
     }
 
     public function testQueryInsert()

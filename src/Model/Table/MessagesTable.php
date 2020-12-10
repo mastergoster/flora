@@ -13,7 +13,7 @@ class MessagesTable extends Table
             FROM messages as m 
             LEFT JOIN roles as r ON m.id_roles = r.id 
             WHERE m.id_users = ? OR r.level <= ?
-            ORDER BY created_at DESC", 
+            ORDER BY created_at DESC",
             [$id_users, $level_user]
         );
     }

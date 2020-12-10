@@ -23,10 +23,12 @@ class HController
 
             $secondes = floor($Time % 60);
         } else {
-
-            $heures = floor($Time / 3600); // Calcule le nombre d'heure complète dans $Time
-            $minutes = floor(($Time - ($heures * 3600)) / 60); // Calcule le nombre de minutes complète dans $Time après soustraction des heures complètes
-            $secondes = $Time - ($heures * 3600) - ($minutes * 60); // Calcule le nombre de secondes complète dans $Time après soustraction des heures et minutes complètes
+            // Calcule le nombre d'heure complète dans $Time
+            $heures = floor($Time / 3600);
+            // Calcule le nombre de minutes complète dans $Time après soustraction des heures complètes
+            $minutes = floor(($Time - ($heures * 3600)) / 60);
+            // Calcule le nombre de secondes complète dans $Time après soustraction des heures et minutes complètes
+            $secondes = $Time - ($heures * 3600) - ($minutes * 60);
         }
 
         if ($secondes > 0) {

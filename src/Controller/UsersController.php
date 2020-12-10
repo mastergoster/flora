@@ -429,7 +429,6 @@ class UsersController extends Controller
         $user = $this->session()->get("users");
 
         if ($this->request()->query->has("newMail")) {
-
             $userMail = $user->getEmail();
             $userToken = $user->getToken();
 
@@ -548,8 +547,7 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if (
-                        $user->getId() == $datasPassword["id"] &&
+                    if ($user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
@@ -593,16 +591,15 @@ class UsersController extends Controller
             $mailExp = $value->getEmail();
             if ($this->users->find($mailExp, 'email')) {
                 $value->idExp = $this->users->find($mailExp, 'email')->getId();
-            }
-            else {
+            } else {
                 $value->idExp = "none";
             }
-        }        
+        }
 
         // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
         $roles = $this->roles->all();
 
-        $dests = $this->users->all();
+        $dests = $this->users->all(true, "first_name");
 
         foreach ($roles as $value) {
             $value->value = "r-" . $value->getId();
@@ -622,8 +619,7 @@ class UsersController extends Controller
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
 
-            if (strpos($datas['destinataire'], "r-") === 0)
-            {
+            if (strpos($datas['destinataire'], "r-") === 0) {
                 $datas['id_roles'] = str_replace("r-", "", $datas['destinataire']);
                 unset($datas['destinataire']);
             } else {
@@ -631,11 +627,13 @@ class UsersController extends Controller
                 unset($datas['destinataire']);
             }
 
-            $datas['name'] = $this->session()->get("users")->getFirstName() . " " . $this->session()->get("users")->getLastName();;
+            $datas['name'] = $this->session()->get("users")->getFirstName() .
+            " " . $this->session()->get("users")->getLastName();
+            ;
             $datas['email'] = $this->session()->get("users")->getEmail();
 
             if (!$errors) {
-                for ($i=0; $i < 7000 ; $i++) { 
+                for ($i=0; $i < 7000; $i++) {
                     $this->messages->create($datas);
                 }
                 
@@ -643,7 +641,8 @@ class UsersController extends Controller
                 unset($datas);
                 return $this->redirect("userMessages");
             } else {
-                $this->messageFlash()->error("Envoi impossible : Vous devez choisir un destinataire et écrire un message.");
+                $this->messageFlash()->error("Envoi impossible : " .
+                "Vous devez choisir un destinataire et écrire un message.");
                 $display = "";
             }
         }
@@ -664,5 +663,4 @@ class UsersController extends Controller
             ]
         );
     }
-
 }
