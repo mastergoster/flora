@@ -2,6 +2,7 @@
 
 namespace Core\Controller;
 
+use App\App;
 use Core\Extension\Twig\LinkExtension;
 use Core\Controller\SecurityController;
 use Core\Extension\Twig\FlashExtension;
@@ -77,7 +78,7 @@ abstract class Controller
         return $this->twig;
     }
 
-    protected function getApp()
+    protected function getApp(): \App\App
     {
         if (is_null($this->app)) {
             $this->app = \App\App::getInstance();
@@ -141,7 +142,7 @@ abstract class Controller
     public function security()
     {
         if (is_null($this->security)) {
-            $this->security = new SecurityController();
+            $this->security = new SecurityController($this->getApp()->getDb(), $this->session());
         }
         return $this->security;
     }
