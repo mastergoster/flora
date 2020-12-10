@@ -25,7 +25,9 @@
 										<option value="">-- Choisir le destinataire --</option>
 										<optgroup class="btn btn-primary" label="Groupe de destinataire">
 										{% for role in roles %}
-											<option class="btn btn-secondary" value="{{ role.value }}">{{ role.name | upper }}</option>
+											{% if role.name != "aucun" %}
+												<option class="btn btn-secondary" value="{{ role.value }}">{{ role.name | upper }}</option>
+											{% endif %}
 										{% endfor %}
 										</optgroup>
 										<optgroup class="btn btn-primary" label="Destinataire unique">
