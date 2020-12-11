@@ -23,12 +23,11 @@ class HController
 
             $secondes = floor($Time % 60);
         } else {
-            // Calcule le nombre d'heure complète dans $Time
-            $heures = floor($Time / 3600);
-            // Calcule le nombre de minutes complète dans $Time après soustraction des heures complètes
+            $heures = floor($Time / 3600); // Calcule le nombre d'heure complète dans $Time
             $minutes = floor(($Time - ($heures * 3600)) / 60);
-            // Calcule le nombre de secondes complète dans $Time après soustraction des heures et minutes complètes
+            // Calcule le nombre de minutes complète dans $Time après soustraction des heures complètes
             $secondes = $Time - ($heures * 3600) - ($minutes * 60);
+            // Calcule le nombre de secondes complète dans $Time après soustraction des heures et minutes complètes
         }
 
         if ($secondes > 0) {
@@ -54,7 +53,7 @@ class HController
         }
 
         // Vérifie s'il y a des "/", si oui, les changes en "-"
-            $text = str_replace("/", "-", $text);
+        $text = str_replace("/", "-", $text);
 
         // Vérifie si le format est EU, si oui, recompose en format US
         if (strpos($text, "-") == 2) {
@@ -62,7 +61,7 @@ class HController
             $text_Hour[0] = implode("-", array_reverse(explode("-", $text_Hour[0])));
             $text = implode(" ", $text_Hour);
         }
-        
+
         return \DateTime::createFromFormat('Y-m-d H:i:s', $text);
     }
 }

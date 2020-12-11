@@ -37,7 +37,9 @@ class App
         $app = self::getInstance();
         $app->request = Request::createFromGlobals();
         $app->request->setSession(new Session());
-        $app->request->getSession()->start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            //$app->request->getSession()->start();
+        }
         $app->request->hasPreviousSession();
         $session = $_SESSION ?: [];
         //retrocomptatibility

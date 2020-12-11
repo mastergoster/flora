@@ -311,8 +311,12 @@ class UsersController extends Controller
 
     public function profile($message = null): Response
     {
-        if (!$this->security()->accessRole('adherants')) {
-            return $this->redirect('/403');
+        if (!$this->security()->accessRole(20)) {
+            if (!$this->security()->isActivate()) {
+                return $this->redirect('activatePage');
+            } else {
+                return $this->redirect('/403');
+            }
         }
         $user = $this->session()->get("users");
         $forfaitsLog = new RecapConsoEntity($user->getId());
