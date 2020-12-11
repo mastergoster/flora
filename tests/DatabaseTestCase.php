@@ -13,6 +13,8 @@ use Core\Controller\Database\DatabaseMysqliteController;
 class DatabaseTestCase extends DatabaseMysqliteController
 {
 
+    private $pdo;
+    
     public function getPDO()
     {
         if (is_null($this->pdo)) {
@@ -36,8 +38,8 @@ class DatabaseTestCase extends DatabaseMysqliteController
 
         $configArray = [
             'paths' => [
-                'migrations' => dirname(__DIR__) . '/phinx/migrations',
-                'seeds' => __DIR__ . '/seedsTest'
+                'migrations' => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'phinx' . DIRECTORY_SEPARATOR . 'migrations',
+                'seeds' => __DIR__ . DIRECTORY_SEPARATOR . 'seedsTest'
             ],
             'environments' => [
                 'default_migration_table' => 'phinxlog',
