@@ -9,6 +9,8 @@ use Core\Controller\Database\DatabaseMysqlController;
 
 class DatabaseMysqlControllerTestInterface extends DatabaseMysqlController
 {
+    private $pdo;
+
     public function getPDO()
     {
         if (is_null($this->pdo)) {
