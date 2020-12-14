@@ -13,43 +13,60 @@ use Core\Controller\Database\DatabaseMysqliteController;
 class DatabaseTestCase extends DatabaseMysqliteController
 {
 
+    private $pdo;
+    
     public function getPDO()
     {
-        return new PDO(
-            'sqlite::memory:',
-            null,
-            null,
-            [
-                PDO::ATTR_PERSISTENT => false,
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
-            ]
-        );
+        if (is_null($this->pdo)) {
+            $this->pdo = new PDO(
+                'sqlite::memory:',
+                null,
+                null,
+                [
+                    PDO::ATTR_PERSISTENT => false,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+                ]
+            );
+        }
+
+        return $this->pdo;
     }
 
-    public function getManager(PDO $pdo)
+    public function getManager()
     {
-        $configArray = require('phinx.php');
-        $configArray['environments']['test'] = [
-            'adapter'    => 'sqlite',
-            'connection' => $pdo
+
+        $configArray = [
+            'paths' => [
+                'migrations' => dirname(__DIR__) . DIRECTORY_SEPARATOR . 'phinx' . DIRECTORY_SEPARATOR . 'migrations',
+                'seeds' => __DIR__ . DIRECTORY_SEPARATOR . 'seedsTest'
+            ],
+            'environments' => [
+                'default_migration_table' => 'phinxlog',
+                'default_environment' => 'test',
+                'test' => [
+                    'adapter'    => 'sqlite',
+                    'connection' => $this->getPDO()
+                ]
+            ]
         ];
         $config = new Config($configArray);
         return new Manager($config, new StringInput(' '), new NullOutput());
     }
 
-    public function migrateDatabase(PDO $pdo)
+    public function migrateDatabase()
     {
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
-        $this->getManager($pdo)->migrate('test');
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+
+        $this->getPDO()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
+        $this->getManager()->migrate('test');
+        $this->getPDO()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     }
 
-    public function seedDatabase(PDO $pdo)
+    public function seedDatabase()
     {
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
-        $this->getManager($pdo)->migrate('test');
-        $this->getManager($pdo)->seed('test');
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        $this->getPDO()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
+        $this->getManager()->migrate('test');
+        $this->getManager()->seed('test');
+        $this->getPDO()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     }
 }

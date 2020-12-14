@@ -4,6 +4,7 @@ namespace Tests\Core\Controller;
 
 use \PHPUnit\Framework\TestCase;
 use \Core\Controller\FormController;
+use Tests\UserTestEntity;
 
 class FormControllerTest extends TestCase
 {
@@ -403,6 +404,185 @@ class FormControllerTest extends TestCase
         $this->assertEquals(["tel" => ["Le champ tel doit être un numéro de téléphone valide."]], $error);
         $datas = $form->getDatas();
         $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintExactLength9(): void
+    {
+        $_POST = ["tel" => "040000000"];
+        $form = new FormController();
+        $form->field('tel', ["ExactLength" => 10]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["tel" => ["le champ tel doit avoir 10 caractères"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintExactLength11(): void
+    {
+        $_POST = ["tel" => "04000000000"];
+        $form = new FormController();
+        $form->field('tel', ["ExactLength" => 10]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["tel" => ["le champ tel doit avoir 10 caractères"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintExactLength10(): void
+    {
+        $_POST = ["tel" => "0400000000"];
+        $form = new FormController();
+        $form->field('tel', ["ExactLength" => 10]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(['tel' => "0400000000"], $datas);
+    }
+
+    public function testConstraintBadMail(): void
+    {
+        $_POST = ["mail" => "master@bad"];
+        $form = new FormController();
+        $form->field('mail', ["mail"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["mail" => ["le champ mail doit un email valide"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+    public function testConstraintGoodMail(): void
+    {
+        $_POST = ["email" => "good@mail.com"];
+        $form = new FormController();
+        $form->field("email", ["mail"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(["email" => "good@mail.com"], $datas);
+    }
+
+    public function testConstraintBoolean1(): void
+    {
+        $_POST = ["boolean" => "1"];
+        $form = new FormController();
+        $form->field("boolean", ["boolean"]);
+        $errorb = $form->hasErrors();
+        $this->assertEquals([], $errorb);
+        $datas = $form->getDatas();
+        $this->assertEquals(["boolean" => 1], $datas);
+    }
+
+    public function testConstraintBoolean0(): void
+    {
+        $_POST = ["boolean" => "0"];
+        $form = new FormController();
+        $form->field("boolean", ["boolean"]);
+        $errorb = $form->hasErrors();
+        $this->assertEquals([], $errorb);
+        $datas = $form->getDatas();
+        $this->assertEquals(["boolean" => 0], $datas);
+    }
+
+    public function testConstraintBooleanNo(): void
+    {
+        $_POST = ["name"];
+        $form2 = new FormController();
+        $form2->field("boolean", ["boolean"]);
+        $errorb = $form2->hasErrors();
+        $this->assertEquals([], $errorb);
+        $datas = $form2->getDatas();
+        $this->assertEquals(["boolean" => 0], $datas);
+    }
+
+    public function testConstraintNumberValid(): void
+    {
+        $_POST = ["chiffre" => "1200"];
+        $form = new FormController();
+        $form->field("chiffre", ["int"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(["chiffre" => "1200"], $datas);
+    }
+
+    public function testConstraintNumberValidPoint(): void
+    {
+        $_POST = ["chiffre" => "12.00"];
+        $form = new FormController();
+        $form->field("chiffre", ["int"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(["chiffre" => "12,00"], $datas);
+    }
+
+    public function testConstraintNumberValidVirgule(): void
+    {
+        $_POST = ["chiffre" => "12,00"];
+        $form = new FormController();
+        $form->field("chiffre", ["int"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(["chiffre" => "12,00"], $datas);
+    }
+
+    public function testConstraintNumberInValid(): void
+    {
+        $_POST = ["chiffre" => "julien"];
+        $form = new FormController();
+        $form->field("chiffre", ["int"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["chiffre" => ["le champ chiffre doit un nombre"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintDateInValid(): void
+    {
+        $_POST = ["date" => "julien"];
+        $form = new FormController();
+        $form->field("date", ["date"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["date" => ["le champ date doit être une date au foramt 2020-11-20 12:30:00"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintDateValid(): void
+    {
+        $_POST = ["date" => "2020-11-20 12:30:00"];
+        $form = new FormController();
+        $form->field("date", ["date"]);
+        $error = $form->hasErrors();
+        $this->assertEquals([], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals(["date" => "2020-11-20 12:30:00"], $datas);
+    }
+
+    public function testDoubleConstraintValidAndInvalid(): void
+    {
+        $_POST = ["mail" => "badEmail.fr"];
+        $form = new FormController();
+        $form->field("mail", ["require", "mail"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["mail" => ["le champ mail doit un email valide"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
+    public function testHydrate(): void
+    {
+        $_POST = ["date" => ""];
+        $form = new FormController();
+        $form->field("id");
+        $form->field("name");
+        $user = new UserTestEntity;
+        $user->setId(1);
+        $user->setname("julien");
+        $error = $form->hasErrors();
+        $form->hydrate($user);
+        $datas = $form->getDatas();
+        $this->assertEquals(["id" => 1, "name" => "julien"], $datas);
     }
 
     public function testAdToDataSafe(): void

@@ -1,11 +1,12 @@
 <?php
 
-
 namespace Core\Extension\Twig;
 
-use Core\Controller\FlashController;
-use Twig\Extension\AbstractExtension;
+use App\App;
 use Twig\TwigFunction;
+use Core\Controller\FlashController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Twig\Extension\AbstractExtension;
 
 class FlashExtension extends AbstractExtension
 {
@@ -15,9 +16,9 @@ class FlashExtension extends AbstractExtension
      */
     private $flashService;
 
-    public function __construct()
+    public function __construct(SessionInterface $session)
     {
-        $this->flashService = new FlashController();
+        $this->flashService = new FlashController($session);
     }
 
     public function getFunctions(): array

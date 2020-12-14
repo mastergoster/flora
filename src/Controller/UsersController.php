@@ -311,8 +311,12 @@ class UsersController extends Controller
 
     public function profile($message = null): Response
     {
-        if (!$this->security()->accessRole('adherants')) {
-            return $this->redirect('/403');
+        if (!$this->security()->accessRole(20)) {
+            if (!$this->security()->isActivate()) {
+                return $this->redirect('activatePage');
+            } else {
+                return $this->redirect('/403');
+            }
         }
         $user = $this->session()->get("users");
         $forfaitsLog = new RecapConsoEntity($user->getId());
@@ -429,7 +433,6 @@ class UsersController extends Controller
         $user = $this->session()->get("users");
 
         if ($this->request()->query->has("newMail")) {
-
             $userMail = $user->getEmail();
             $userToken = $user->getToken();
 
@@ -548,8 +551,7 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if (
-                        $user->getId() == $datasPassword["id"] &&
+                    if ($user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {

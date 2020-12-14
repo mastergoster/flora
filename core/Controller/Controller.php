@@ -2,6 +2,7 @@
 
 namespace Core\Controller;
 
+use App\App;
 use Core\Extension\Twig\LinkExtension;
 use Core\Controller\SecurityController;
 use Core\Extension\Twig\FlashExtension;
@@ -71,13 +72,13 @@ abstract class Controller
             }
             $this->twig->addGlobal('session', $this->session()->all());
             $this->twig->addGlobal('constant', get_defined_constants());
-            $this->twig->addExtension(new FlashExtension());
+            $this->twig->addExtension(new FlashExtension(App::getInstance()->request->getSession()));
             $this->twig->addExtension(new LinkExtension());
         }
         return $this->twig;
     }
 
-    protected function getApp()
+    protected function getApp(): \App\App
     {
         if (is_null($this->app)) {
             $this->app = \App\App::getInstance();
@@ -98,7 +99,7 @@ abstract class Controller
     protected function messageFlash()
     {
         if (is_null($this->messageFlash)) {
-            $this->messageFlash = new FlashController();
+            $this->messageFlash = new FlashController(App::getInstance()->request->getSession());
         }
         return $this->messageFlash;
     }
@@ -141,7 +142,7 @@ abstract class Controller
     public function security()
     {
         if (is_null($this->security)) {
-            $this->security = new SecurityController();
+            $this->security = new SecurityController($this->getApp()->getDb(), $this->session());
         }
         return $this->security;
     }
