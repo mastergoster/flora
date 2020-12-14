@@ -68,9 +68,9 @@ class FormController
     {
         if (is_null($data)) {
             if (\array_key_exists("safe", $this->params[$key])) {
-                $data = $this->postDatas[$key];
+                $data = isset($this->postDatas[$key]) ? $this->postDatas[$key] : "";
             } else {
-                $data = htmlspecialchars($this->postDatas[$key]);
+                $data = isset($this->postDatas[$key]) ? htmlspecialchars($this->postDatas[$key]) : "";
             }
         }
         $this->datas[$key] = $data;
@@ -164,7 +164,7 @@ class FormController
 
     private function errorBoolean(string $field): void
     {
-        if ($this->postDatas[$field]) {
+        if (isset($this->postDatas[$field]) && $this->postDatas[$field]) {
             $this->addToDatas($field, '1');
         } else {
             $this->addToDatas($field, '0');
@@ -176,7 +176,7 @@ class FormController
         $data = $this->postDatas[$field];
         $reg = "/^[0-9]*[\.\,]?[0-9]*$/";
         preg_match($reg, $data, $match);
-        if ($match[0] !== null) {
+        if (isset($match[0]) && $match[0] !== null) {
             $this->addToDatas($field, str_replace(".", ",", $match[0]));
         } else {
             $this->newError("$field", "Le champ {$field} doit être un nombre.");
@@ -189,7 +189,7 @@ class FormController
         $reg = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$/";
         preg_match($reg, $data, $match);
 
-        if ($match[0] !== null) {
+        if (isset($match[0]) && $match[0] !== null) {
             $this->addToDatas($field, $match[0]);
         } else {
             $this->newError("$field", "Le champ {$field} doit être une date au format 2020-11-20 12:30:00");

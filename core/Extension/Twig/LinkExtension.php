@@ -3,16 +3,18 @@
 
 namespace Core\Extension\Twig;
 
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Core\Controller\RouterController;
+use Twig\Extension\AbstractExtension;
 
 class LinkExtension extends AbstractExtension
 {
 
+    private $router;
 
-    public function __construct()
+    public function __construct(RouterController $router)
     {
-        $this->router = \App\App::getInstance()->getRouter();
+        $this->router = $router;
     }
 
     public function getFunctions(): array
