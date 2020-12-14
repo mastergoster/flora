@@ -662,7 +662,7 @@ class FormControllerTest extends TestCase
         $form = new FormController();
         $form->field("mail", ["unique" => $bddDatas]);
         $errors = $form->hasErrors();
-        $this->assertEquals(["mail" => ["Merci d'envoyer vos messages via votre messagerie interne."]], $errors);
+        $this->assertEquals(["mail" => ['La valeur indiquée dans "mail" n\'est pas valide.']], $errors);
     }
 
     public function testErrorUniqueMailMultiExistantBDDErrors(): void
@@ -672,6 +672,6 @@ class FormControllerTest extends TestCase
         $form = new FormController();
         $form->field("mail", ["unique" => $bddDatas]);
         $errors = $form->hasErrors();
-        $this->assertEquals(["mail" => ["Merci d'envoyer vos messages via votre messagerie interne."]], $errors);
+        $this->assertEquals(["mail" => ['La valeur indiquée dans "mail" n\'est pas valide.']], $errors);
     }
 }
