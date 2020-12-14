@@ -78,7 +78,8 @@ class AdminCoreController extends Controller
     private function md5(string $folder, bool $verify = false): bool
     {
         if (!$verify) {
-            return $this->md5Hash($folder, $folder);
+            $this->md5Hash($folder, $folder);
+            return true;
         }
         $this->md5Hash("verify_" . $folder, $folder);
         return array_diff_assoc($this->md5Hash["verify_" . $folder], $this->md5Hash[$folder]) ? false : true;
