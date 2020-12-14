@@ -73,7 +73,7 @@ abstract class Controller
             $this->twig->addGlobal('session', $this->session()->all());
             $this->twig->addGlobal('constant', get_defined_constants());
             $this->twig->addExtension(new FlashExtension(App::getInstance()->request->getSession()));
-            $this->twig->addExtension(new LinkExtension());
+            $this->twig->addExtension(new LinkExtension(App::getInstance()->getRouter()));
         }
         return $this->twig;
     }

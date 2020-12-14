@@ -98,7 +98,7 @@ class App
         }
     }
 
-    public function getRouter($basePath = "/var/www"): RouterController
+    public function getRouter($basePath = "/var/www/"): RouterController
     {
         if (is_null($this->router)) {
             $this->router = new RouterController($basePath . 'views');
