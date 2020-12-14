@@ -56,8 +56,8 @@ class EmailController extends controller
     {
 
         $this->mail->isHTML(true);
-        $this->mail->Body = $this->render("email/" . $template . ".html", $data);
-        $this->mail->AltBody = $this->render("email/" . $template . ".txt", $data);
+        $this->mail->Body = ($this->render("email/" . $template . ".html", $data))->getContent();
+        $this->mail->AltBody = ($this->render("email/" . $template . ".txt", $data))->getContent();
         return $this;
     }
 
