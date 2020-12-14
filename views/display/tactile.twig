@@ -16,7 +16,7 @@
 			<div class="container">
 				{% for user in users %}
 					<label class="option_item clicouille">
-						<input type="radio" name="user_email" class="checkbox" value="{{ user.email }}" required>
+						<input type="radio" name="user_email" class="checkbox" value="{{ user.email }}" required onClick="displayTactile()">
 						<div class="option_inner instagram">
 							<div class="tickmark"></div>
 							<div class="icon">

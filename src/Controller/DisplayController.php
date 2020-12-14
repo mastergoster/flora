@@ -47,12 +47,11 @@ class DisplayController extends Controller
             return $this->jsonResponse403();
         }
 
-        $user = $this->session()->get("users");
+        $user = $this->users->find($_POST['user_email'], 'email');
 
         if (!$user->getVerify()) {
             $this->users->update($user->getId(), 'id', ["verify" => true]);
         }
-        $this->session()->remove("users");
         return $this->jsonResponse($this->hours->create(["id_users" => $user->getId()]));
     }
 }

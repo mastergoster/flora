@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    function displayTactile() {
+        document.getElementById("iFrameTV").style.display = "none"
+        document.getElementsByClassName("inputCode").style.display = "flex"
+        };
+
     function pavetactile(e) {
         this.style.backgroundColor = "#18bfef";
         var touche = this

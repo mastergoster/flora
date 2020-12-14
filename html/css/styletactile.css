@@ -51,7 +51,7 @@ body {
     background-image: url("../images/bg.jpg");
     background-position: top;
     background-repeat: no-repeat;
-    display: none;
+    display: flex;
 }
 
 #inputcode {
@@ -111,18 +111,18 @@ body {
     background-color: #2ecc71;
 }
 
-
 #iFrameTV {
-    display: flex;
-    /* height: 100%;
-    width: 50%; */
-    height: 768px;
-    width: 432px;
-    
+    display: none;
+    height: 100%;
+    width: 50vw;
+    /* height: 768px;
+    width: 432px; */
+    margin: auto;
     background-image: url("../images/bg.jpg");
     background-position: top;
     background-repeat: no-repeat;
 }
+
 
 /* Flèches Haut et Bas */
 
