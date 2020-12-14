@@ -268,7 +268,8 @@ function returnHtml(array) {
 	}
 	delete array.error
 	for (const [key, value] of Object.entries(array)) {
-		document.getElementsByName(key)[0].className = "error"
+		var input = document.getElementsByName(key)
+		input[input.length-1].className = "error"
 		myVar = setTimeout(function () { document.getElementsByName(key)[0].className = "" }, 5000)
 		for (let i = 0; i < value.length; i++) {
 			toastr["error"](value[i]);

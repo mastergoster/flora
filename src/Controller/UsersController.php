@@ -461,18 +461,24 @@ class UsersController extends Controller
 
     public function mail(): Response
     {
+        $paramUnique = TableauController::tableObjectToString("email", $this->users->all());
+        
         $form = new FormController();
         $form->field("name", ["require"]);
-        $form->field("email", ["require", "mail"]);
+        $form->field("email", ["require", "mail", "unique" => $paramUnique]);
         $form->field("message", ["require"]);
-        $errors =  $form->hasErrors();
+        $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
+            $datas['id_roles'] = 4; // 4 = Administrateur
             if (!$errors) {
                 $this->messages->create($datas);
                 $errors["error"] = false;
             } else {
                 $errors["error"] = true;
+                if (isset($errors['email'])) {
+                    $errors['email'] = ["Merci d'envoyer vos messages via votre messagerie interne."];
+                }
             }
         }
         return $this->jsonResponse($errors);
@@ -509,12 +515,10 @@ class UsersController extends Controller
 
     public function edit(): Response
     {
-
         if (!$this->session()->has("users")) {
             return $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
-
 
         $formUpdate = new FormController();
         $formUpdate->field("first_name", ["require"]);
@@ -551,12 +555,12 @@ class UsersController extends Controller
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
-                            $this->messageFlash()->success("Le mot de passe a bien été changé");
+                            $this->messageFlash()->success("Le mot de passe a bien été changé.");
                         } else {
-                            $this->messageFlash()->error("erreur inatendu lol");
+                            $this->messageFlash()->error("Erreur inattendu lol");
                         }
                     } else {
-                        $this->messageFlash()->error("mot de passe invalide");
+                        $this->messageFlash()->error("Mot de passe invalide.");
                     }
                 }
             }
@@ -570,5 +574,90 @@ class UsersController extends Controller
             $this->messageFlash()->error($error[0]);
         }
         return $this->render("user/edit", ["user" => $user, "errors" => $errors, "errorsP" => $errorsPassword]);
+    }
+
+    /**
+     * Function : qui permet d'afficher les messages émis en interne
+     * Affiche soit les messages qui sont destinés à l'user en session (via l'id du user connecté)
+     * soit les messages qui sont destinés au groupe (rôle) auquel le user connecté appartient
+     * ainsi qu'au groupe de level inférieur
+     *
+     * @return void
+     */
+    public function userMessages()
+    {
+        $display = "d-none";
+        
+        // Récupère les messages selon l'id user ou le level de l'user
+        $user = $this->session()->get("users");
+        $messages = $this->messages->messagesByIdUserAndLevelUser($user->getId(), $user->level);
+        foreach ($messages as $value) {
+            $mailExp = $value->getEmail();
+            if ($this->users->find($mailExp, 'email')) {
+                $value->idExp = $this->users->find($mailExp, 'email')->getId();
+            } else {
+                $value->idExp = "none";
+            }
+        }
+
+        // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
+        $roles = $this->roles->all();
+
+        $dests = $this->users->all(true, "last_name");
+
+        foreach ($roles as $value) {
+                $value->value = "r-" . $value->getId();
+        }
+
+        // Envoi du message par l'user à un destinataire
+    
+        $form = new FormController();
+        $form->field("destinataire", ["require"]);
+        $form->field("message", ["require"]);
+        
+        $errors = $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+
+            if (strpos($datas['destinataire'], "r-") === 0) {
+                $datas['id_roles'] = str_replace("r-", "", $datas['destinataire']);
+                unset($datas['destinataire']);
+            } else {
+                $datas['id_users'] = $datas['destinataire'];
+                unset($datas['destinataire']);
+            }
+
+            $datas['name'] = strtoupper($this->session()->get("users")->getLastName()) .
+            " " . ucfirst($this->session()->get("users")->getFirstName());
+            ;
+            $datas['email'] = $this->session()->get("users")->getEmail();
+
+            if (!$errors) {
+                $this->messages->create($datas);
+                $this->messageFlash()->success("Votre message a bien été envoyé.");
+                unset($datas);
+                return $this->redirect("userMessages");
+            } else {
+                $this->messageFlash()->error("Envoi impossible : " .
+                "Vous devez choisir un destinataire et écrire un message.");
+                $display = "";
+            }
+        }
+
+        if ($errors["post"]) {
+            unset($errors);
+        }
+
+        // Affiche la vue
+        return $this->render(
+            "user/messages",
+            [
+                "roles" => $roles,
+                "dests" => $dests,
+                "errors" => $errors,
+                "items" => $messages,
+                "display" => $display,
+            ]
+        );
     }
 }

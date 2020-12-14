@@ -9,8 +9,8 @@
 		<div class="col-md-8">
 			<div class="card">
 				<div class="card-header card-header-primary">
-					<h4 class="card-title">Edition du Profile</h4>
-					<p class="card-category">Complete ton profile</p>
+					<h4 class="card-title">Edition du Profil</h4>
+					<p class="card-category">Complète ton profil</p>
 				</div>
 				<div class="card-body">
 					<form method="post" action="?user">
@@ -23,13 +23,13 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group bmd-form-group">
-									<label class="form-group bmd-label-floating ">Telephone</label>
+									<label class="form-group bmd-label-floating ">Téléphone</label>
 									<input type="text" name="phone_number" value="{{ user.phoneNumber }}" class="form-control" disabled>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group bmd-form-group">
-									<label class="form-group bmd-label-floating ">Code pin</label>
+									<label class="form-group bmd-label-floating ">Code PIN</label>
 									<input type="number" min="0000" max="9999" name="pin" value="{{ user.pin }}" class="form-control" {% if user.verify == 0 %} disabled {% endif %}>
 								</div>
 							</div>
@@ -37,8 +37,8 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group bmd-form-group{% if errors['first_name'] %} has-danger{% endif %}">
-									<label class="bmd-label-floating">Prenom</label>
-									<input type="text" name="first_name" value="{{ user.firstName }}" class="form-control">
+									<label class="bmd-label-floating">Prénom</label>
+									<input type="text" name="first_name" value="{{ user.firstName | capitalize}}" class="form-control">
 									{% if errors['first_name'] %}
 										<span class="material-icons form-control-feedback">clear</span>
 									{% endif %}
@@ -47,7 +47,7 @@
 							<div class="col-md-6">
 								<div class="form-group bmd-form-group {% if errors['last_name'] %} has-danger{% endif %}">
 									<label class="bmd-label-floating">Nom</label>
-									<input type="text" name="last_name" value="{{ user.lastName }}" class="form-control">
+									<input type="text" name="last_name" value="{{ user.lastName | capitalize}}" class="form-control">
 									{% if errors['last_name'] %}
 										<span class="material-icons form-control-feedback">clear</span>
 									{% endif %}
@@ -117,7 +117,7 @@
 						<input type="hidden" value="{{ user.id }}" name="id" class="form-control">
 						<div class="col-md-12">
 							<div class="form-group bmd-form-group{% if errorsP['password'] %} has-danger{% endif %}">
-								<label class="bmd-label-floating">mot de passe actuel</label>
+								<label class="bmd-label-floating">Mot de passe actuel</label>
 								<input type="password" name="password" class="form-control">
 								{% if errorsP['password'] %}
 									<span class="material-icons form-control-feedback">clear</span>
@@ -131,7 +131,7 @@
 								{% endif %}
 							</div>
 							<div class="form-group bmd-form-group{% if errorsP['password_new_verify'] %} has-danger{% endif %}">
-								<label class="bmd-label-floating">verification du mot de passe</label>
+								<label class="bmd-label-floating">Vérification du mot de passe</label>
 								<input type="password" name="password_newVerify" class="form-control">
 								{% if errorsP['password_new_verify'] %}
 									<span class="material-icons form-control-feedback">clear</span>

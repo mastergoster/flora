@@ -34,14 +34,14 @@
 						<li class="nav-item{{ linkactive('userProfile', false, 2) }}">
 							<a class="nav-link" href="{{ path("userProfile")}}">
 								<i class="material-icons">dashboard</i>
-								<p>Dashboard</p>
+								<p>Tableau de bord</p>
 							</a>
 						</li>
 						{% block nav %}{% endblock %}
 						<li class="nav-item{{ linkactive('userEdit', false, 2) }}">
 							<a class="nav-link" href="{{ path("userEdit")}}">
 								<i class="material-icons">person</i>
-								<p>Profile</p>
+								<p>Profil</p>
 							</a>
 						</li>
 						<li class="nav-item{{ linkactive('userInvoces', false, 2) }}">
@@ -54,14 +54,20 @@
 							<li class="nav-item ">
 								<a class="nav-link" href="/admin">
 									<i class="material-icons">language</i>
-									<p>administration</p>
+									<p>Administration</p>
 								</a>
 							</li>
 						{% endif %}
+						<li class="nav-item{{ linkactive('userMessages', false, 2) }}">
+							<a class="nav-link" href="{{ path('userMessages')}}">
+								<i class="material-icons">email</i>
+								<p>Messagerie</p>
+							</a>
+						</li>
 						<li class="nav-item ">
 							<a class="nav-link" href="/user/logout">
 								<i class="material-icons">login</i>
-								<p>déconexion</p>
+								<p>Déconnexion</p>
 							</a>
 						</li>
 
