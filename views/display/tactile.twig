@@ -15,12 +15,12 @@
 		<form action="/display/admin/new/line" method="post" class="form">
 			<div class="container">
 				{% for user in users %}
-					<label class="option_item clicouille">
-						<input type="radio" name="user_email" class="checkbox" value="{{ user.email }}" required onClick="displayTactile()">
+					<label class="option_item clicouille clicDisplay">
+						<input type="radio" name="user_email" class="checkbox" value="{{ user.email }}" required>
 						<div class="option_inner instagram">
 							<div class="tickmark"></div>
 							<div class="icon">
-								<i class="fas fa-user" style="font-size: 50px;{% if user.presence %} color: green;{% endif %}"></i>
+								<i class="fas fa-user" style="font-size: 50px; {% if user.presence %} color: green {% endif %}"></i>
 							</div>
 							<div class="name">{{ user.firstName | capitalize }}
 								{{ user.LastName | upper }}</div>
@@ -29,7 +29,7 @@
 				{% endfor %}
 			</div>
 
-			<div class="inputCode">
+			<div id="codeTactile">
 				<div id="tactile">
 					<div class="line">
 						<input name="pin" type="password" id="inputcode" class="form-control" value="" required>

@@ -23,11 +23,17 @@ class DisplayController extends Controller
 
         foreach ($users as $user) {
             $user->presence = $this->hours->presence($user->getId());
+            if ($user->presence = $this->hours->presence($user->getId())) {
+                $presence[] = $user;
+            } else {
+                $absent[] = $user;
+            }
         }
+
         return $this->render(
             "display/tactile",
             [
-                "users" => $users
+                "users" => array_merge($presence, $absent)
             ]
         );
     }

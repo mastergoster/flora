@@ -42,7 +42,7 @@ body {
 
 /* Champs du code et pavé nuémrique */
 
-.inputCode {
+#codeTactile {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -51,7 +51,7 @@ body {
     background-image: url("../images/bg.jpg");
     background-position: top;
     background-repeat: no-repeat;
-    display: flex;
+    display: none;
 }
 
 #inputcode {
@@ -112,7 +112,7 @@ body {
 }
 
 #iFrameTV {
-    display: none;
+    display: flex;
     height: 100%;
     width: 50vw;
     /* height: 768px;

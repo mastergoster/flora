@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    function displayTactile() {
-        document.getElementById("iFrameTV").style.display = "none"
-        document.getElementsByClassName("inputCode").style.display = "flex"
-        };
-
     function pavetactile(e) {
         this.style.backgroundColor = "#18bfef";
         var touche = this
@@ -51,6 +46,16 @@ document.addEventListener('DOMContentLoaded', function () {
             element.click();
         });
     });
+
+    var clicDisplay = document.getElementsByClassName('clicDisplay');
+    Array.from(clicDisplay).forEach(element => {
+        element.addEventListener('mouseover', (e) => {
+            document.getElementById("iFrameTV").style.display = "none"
+            document.getElementById('codeTactile').style.display = "flex"
+            element.click();
+        });
+    });
+
 });
 
 document.addEventListener('DOMContentLoaded', function () {
