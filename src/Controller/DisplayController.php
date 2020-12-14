@@ -19,7 +19,7 @@ class DisplayController extends Controller
 
     public function tactile(): Response
     {
-        $users = $this->users->all();
+        $users = $this->users->all(true, "last_name");
 
         foreach ($users as $user) {
             $user->presence = $this->hours->presence($user->getId());

@@ -1,19 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
     function pavetactile(e) {
-        this.style.backgroundColor = "red";
+        this.style.backgroundColor = "#18bfef";
         var touche = this
         setTimeout(function () {
             touche.style.removeProperty("background-color");
         }, 100)
-        if (this.innerText == "sup") {
+        if (this.innerText == "X") {
             var value = document.getElementById("inputcode").value
             document.getElementById("inputcode").value = "" // value.substr(0, value.length - 1)
-
         } else {
-            document.getElementById("inputcode").value += this.innerText
+            if (document.getElementById("inputcode").value.length < 4) {
+                document.getElementById("inputcode").value += this.innerText
+            }
         }
         if (document.getElementById("inputcode").value.length == 4) {
-            document.getElementById('okvalide').click();
+            document.getElementById('okvalide').style.display = "flex";
+            // document.getElementById('okvalide').click();
+        }
+        if (document.getElementById("inputcode").value.length < 4) {
+            document.getElementById('okvalide').style.display = "none";
         }
     }
     var pave = document.getElementsByClassName('touche');
@@ -33,15 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(clicouille).forEach(element => {
         element.addEventListener('mouseover', (e) => {
             var background = element.style.backgroundColor;
-            element.style.backgroundColor = "red";
+            element.style.backgroundColor = "#18bfef";
             setTimeout(function () {
                 element.style.backgroundColor = background;
             }, 100)
             element.click();
         });
     });
-
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     function validate(data) {
         if (data.permission) {
@@ -52,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setInterval(function () {
             document.location.reload(true);
         }, 2000);
-
     }
 
     function submitajax(e) {
@@ -66,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then(response => response.json())
             // .then(json => console.log(json))
             .then(json => validate(json));
-
-
         return false;
     };
 
@@ -75,9 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(formlist).forEach(element => {
         element.addEventListener('submit', submitajax);
     });
-
-
-
 
 });
 function viewscroll(saut) {

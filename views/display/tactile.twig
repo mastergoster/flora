@@ -10,8 +10,8 @@
 	</head>
 
 	<body class="unselectable">
-		<div class="up clicouille" onclick="viewscroll(-195)">^</div>
-		<div class="down clicouille" onclick="viewscroll(195)">v</div>
+		<div class="up clicouille" onclick="viewscroll(-374)"><i class="fas fa-arrow-up"></i></div>
+		<div class="down clicouille" onclick="viewscroll(374)"><i class="fas fa-arrow-down"></i></div>
 		<form action="/display/admin/new/line" method="post" class="form">
 			<div class="container">
 				{% for user in users %}
@@ -22,37 +22,45 @@
 							<div class="icon">
 								<i class="fas fa-user" style="font-size: 50px;{% if user.presence %} color: green;{% endif %}"></i>
 							</div>
-							<div class="name">{{ user.firstName }}
-								{{ user.LastName }}</div>
+							<div class="name">{{ user.firstName | capitalize }}
+								{{ user.LastName | upper }}</div>
 						</div>
 					</label>
 				{% endfor %}
 			</div>
 
-			<input name="pin" type="password" id="inputcode" class="form-control" value="" required>
-
-			<div id="tactile">
-				<div class="line">
-					<div class="touche">1</div>
-					<div class="touche">2</div>
-					<div class="touche">3</div>
-				</div>
-				<div class="line">
-					<div class="touche">4</div>
-					<div class="touche">5</div>
-					<div class="touche">6</div>
-				</div>
-				<div class="line">
-					<div class="touche">7</div>
-					<div class="touche">8</div>
-					<div class="touche">9</div>
-				</div>
-				<div class="line">
-					<div class="touche">sup</div>
-					<div class="touche">0</div>
-					<input style="display:none;" id="okvalide" class="touchespecial" type="submit" value="0K">
+			<div class="inputCode">
+				<div id="tactile">
+					<div class="line">
+						<input name="pin" type="password" id="inputcode" class="form-control" value="" required>
+						<div class="touche toucheX">X</div>
+					</div>
+					<div class="line">
+						<div class="touche">1</div>
+						<div class="touche">2</div>
+						<div class="touche">3</div>
+					</div>
+					<div class="line">
+						<div class="touche">4</div>
+						<div class="touche">5</div>
+						<div class="touche">6</div>
+					</div>
+					<div class="line">
+						<div class="touche">7</div>
+						<div class="touche">8</div>
+						<div class="touche">9</div>
+					</div>
+					<div class="line">
+						<div class="touche">0</div>
+					</div>
+					<div class="line">
+						<input style="" id="okvalide" class="touche touchespecial" type="submit" value="Valider">
+					</div>
 				</div>
 			</div>
+
+			<iframe id="iFrameTV" width="432" height="768" title="Ecran de la TV" src="https://coworkinmoulins.fr/tv"></iframe>
+
 		</form>
 		<div id="popup" class="popup">
 			<p>Merci</p>
