@@ -87,6 +87,6 @@ class DatabaseMysqliteController extends DatabaseController
     }
     public function lastInsertId()
     {
-        return $this->pdo->lastInsertId();
+        return $this->getPDO()->lastInsertId();
     }
 }

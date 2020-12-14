@@ -4,6 +4,7 @@
 namespace Core\Controller;
 
 use App\App;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class FlashController
 {
@@ -15,9 +16,9 @@ class FlashController
     private $session;
 
 
-    public function __construct()
+    public function __construct(SessionInterface $session)
     {
-        $this->session = App::getInstance()->request->getSession();
+        $this->session = $session;
     }
 
 

@@ -104,7 +104,7 @@ class FormController
 
     private function errorRequire(string $field): void
     {
-        $data = isset($this->postDatas[$field])? $this->postDatas[$field] : "";
+        $data = isset($this->postDatas[$field]) ? $this->postDatas[$field] : "";
 
         if (isset($data) && (!empty($data) || $data === "0")) {
             $this->addToDatas($field);
@@ -138,7 +138,7 @@ class FormController
         if (strlen($this->postDatas[$field]) == $value) {
             $this->addToDatas($field);
         } else {
-            $this->newError("$field", "le champ {$field} doit avoir au minimum {$value} caractères");
+            $this->newError("$field", "le champ {$field} doit avoir {$value} caractères");
         }
     }
 
@@ -154,13 +154,13 @@ class FormController
 
     private function errorMail(string $field): void
     {
-
-        if (filter_var($this->datas[$field], FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($this->postDatas[$field], FILTER_VALIDATE_EMAIL)) {
             $this->addToDatas($field);
         } else {
             $this->newError("$field", "le champ {$field} doit un email valide");
         }
     }
+
     private function errorBoolean(string $field): void
     {
 
@@ -173,10 +173,9 @@ class FormController
 
     private function errorInt(string $field): void
     {
-        $data = $this->datas[$field];
+        $data = $this->postDatas[$field];
         $reg = "/^[0-9]*[\.\,]?[0-9]*$/";
         preg_match($reg, $data, $match);
-
         if ($match[0] !== null) {
             $this->addToDatas($field, str_replace(".", ",", $match[0]));
         } else {
@@ -186,14 +185,14 @@ class FormController
 
     private function errorDate(string $field): void
     {
-        $data = $this->datas[$field];
+        $data = $this->postDatas[$field];
         $reg = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$/";
         preg_match($reg, $data, $match);
 
         if ($match[0] !== null) {
             $this->addToDatas($field, $match[0]);
         } else {
-            $this->newError("$field", "le champ {$field} doit être une date au foramt 2020/11/20 12:30:00");
+            $this->newError("$field", "le champ {$field} doit être une date au foramt 2020-11-20 12:30:00");
         }
     }
 

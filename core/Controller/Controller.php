@@ -72,7 +72,7 @@ abstract class Controller
             }
             $this->twig->addGlobal('session', $this->session()->all());
             $this->twig->addGlobal('constant', get_defined_constants());
-            $this->twig->addExtension(new FlashExtension());
+            $this->twig->addExtension(new FlashExtension(App::getInstance()->request->getSession()));
             $this->twig->addExtension(new LinkExtension());
         }
         return $this->twig;
@@ -99,7 +99,7 @@ abstract class Controller
     protected function messageFlash()
     {
         if (is_null($this->messageFlash)) {
-            $this->messageFlash = new FlashController();
+            $this->messageFlash = new FlashController(App::getInstance()->request->getSession());
         }
         return $this->messageFlash;
     }

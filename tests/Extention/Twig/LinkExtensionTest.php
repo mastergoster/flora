@@ -3,8 +3,9 @@
 
 namespace Tests\Core\Extension\Twig;
 
-use Core\Extension\Twig\LinkExtension;
+use Twig\TwigFunction;
 use PHPUnit\Framework\TestCase;
+use Core\Extension\Twig\LinkExtension;
 
 class LinkExtensionTest extends TestCase
 {
@@ -67,5 +68,13 @@ class LinkExtensionTest extends TestCase
             '/blog/12-article-de-test',
             $linkExtention->getLink('blog', ['id' => 12, 'slug' => "article-de-test"])
         );
+    }
+
+    public function testGetFunctions()
+    {
+        $actual = (new LinkExtension())->getFunctions();
+        $this->assertIsArray($actual);
+        $this->assertInstanceOf(TwigFunction::class, $actual[0]);
+        $this->assertInstanceOf(TwigFunction::class, $actual[1]);
     }
 }

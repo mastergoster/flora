@@ -4,6 +4,7 @@ namespace Tests\Core\Model\ClassTest;
 
 use Core\Model\Table;
 
-class ClassNameTable extends Table
+class UserTestTable extends Table
 {
+    protected $table = 'users';
 }
