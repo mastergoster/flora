@@ -17,12 +17,12 @@
 				{% for user in users %}
 					<label class="option_item clicouille clicDisplay">
 						<input type="radio" name="user_email" class="checkbox" value="{{ user.email }}" required>
-						<div class="option_inner instagram">
+						<div class="option_inner instagram" style="{% if user.presence %}border-color: rgb(46, 204, 113); {% endif %}">
 							<div class="tickmark"></div>
 							<div class="icon">
-								<i class="fas fa-user" style="font-size: 50px; {% if user.presence %} color: green {% endif %}"></i>
+								<i class="fas fa-user" style="font-size: 50px; {% if user.presence %} color: #2ecc71 {% endif %}"></i>
 							</div>
-							<div class="name">{{ user.firstName | capitalize }}
+							<div class="name">{{ user.firstName | capitalize }} <br>
 								{{ user.LastName | upper }}</div>
 						</div>
 					</label>
@@ -58,9 +58,7 @@
 					</div>
 				</div>
 			</div>
-
-			<iframe id="iFrameTV" width="432" height="768" title="Ecran de la TV" src="https://coworkinmoulins.fr/tv"></iframe>
-
+				<iframe id="iFrameTV" title="Ecran de la TV" src="https://coworkinmoulins.fr/tv"></iframe>
 		</form>
 		<div id="popup" class="popup">
 			<p>Merci</p>
