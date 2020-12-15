@@ -6,157 +6,157 @@
 {% block nav %}{% endblock %}
 {% block content %}
 
-<div id="newMessageUser" class="{{ display }}">
-	<div class="card">
-		<div class="card-header card-header-primary dflex row justify-content-between">
-			<div>
-				<h4 class="card-title">Nouveau message</h4>
-				<p class="card-category">Pour envoyer un message à un coworker</p>
+	<div id="newMessageUser" class="{{ display }}">
+		<div class="card">
+			<div class="card-header card-header-primary dflex row justify-content-between">
+				<div>
+					<h4 class="card-title">Nouveau message</h4>
+					<p class="card-category">Pour envoyer un message à un coworker</p>
+				</div>
+				<button id="newMsgDown" type="reset" class="btn btn-info pull-right">
+					<i class="material-icons">clear</i>
+					Annuler</button>
 			</div>
-			<button id="newMsgDown" type="reset" class="btn btn-info pull-right">
-				<i class="material-icons">clear</i>
-				Annuler</button>
-		</div>
-		<div class="card-body">
-			<form method="post" action="#">
-				<div class="row">
-					<div class="col-12 col-md-6 col-lg-3">
-						<div class="form-group bmd-form-group">
-							<label for="destinataire" class="bmd-label">Destinataire :</label>
-							<select id="newDestinataire" name="destinataire" class="form-control">
-								<option value="">-- Choisir le destinataire --</option>
-								<optgroup class="btn btn-primary" label="Groupe de destinataire">
-									{% for role in roles %}
-										{% if role.name != "aucun" %}
-											<option class="btn btn-secondary" value="{{ role.value }}">{{ role.name | upper }}</option>
-										{% endif %}
-									{% endfor %}
-								</optgroup>
-								<optgroup class="btn btn-primary" label="Destinataire unique">
-									{% for dest in dests %}
-										<option class="btn btn-secondary" value="{{ dest.id }}">{{ dest.lastName | upper }}
-											{{ dest.firstName | capitalize }}</option>
-									{% endfor %}
-								</optgroup>
-							</select>
-							{% if errors['destinataire'] %}
-								<span class="material-icons form-control-feedback">clear</span>
-							{% endif %}
+			<div class="card-body">
+				<form method="post" action="#">
+					<div class="row">
+						<div class="col-12 col-md-6 col-lg-3">
+							<div class="form-group bmd-form-group">
+								<label for="destinataire" class="bmd-label">Destinataire :</label>
+								<select id="newDestinataire" name="destinataire" class="form-control">
+									<option value="">-- Choisir le destinataire --</option>
+									<optgroup class="btn btn-primary" label="Groupe de destinataire">
+										{% for role in roles %}
+											{% if role.name != "aucun" %}
+												<option class="btn btn-secondary" value="{{ role.value }}">{{ role.name | upper }}</option>
+											{% endif %}
+										{% endfor %}
+									</optgroup>
+									<optgroup class="btn btn-primary" label="Destinataire unique">
+										{% for dest in dests %}
+											<option class="btn btn-secondary" value="{{ dest.id }}">{{ dest.lastName | upper }}
+												{{ dest.firstName | capitalize }}</option>
+										{% endfor %}
+									</optgroup>
+								</select>
+								{% if errors['destinataire'] %}
+									<span class="material-icons form-control-feedback">clear</span>
+								{% endif %}
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="form-group bmd-form-group {% if errors['message'] %} has-danger{% endif %}">
-							<label class="bmd-label-floating">Message :</label>
-							<textarea id="destMessage" class="form-control" name="message" rows="5"></textarea>
-							{% if errors['message'] %}
-								<span class="material-icons form-control-feedback">clear</span>
-							{% endif %}
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group bmd-form-group {% if errors['message'] %} has-danger{% endif %}">
+								<label class="bmd-label-floating">Message :</label>
+								<textarea id="destMessage" class="form-control" name="message" rows="5"></textarea>
+								{% if errors['message'] %}
+									<span class="material-icons form-control-feedback">clear</span>
+								{% endif %}
+							</div>
 						</div>
 					</div>
-				</div>
-				<button type="submit" class="btn btn-primary pull-right">Envoyer mon message
-					<i class="material-icons">send</i>
-				</button>
-				<div class="clearfix"></div>
-			</form>
+					<button type="submit" class="btn btn-primary pull-right">Envoyer mon message
+						<i class="material-icons">send</i>
+					</button>
+					<div class="clearfix"></div>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="">
-	<div class="card">
-		<div class="card-header card-header-primary dflex row justify-content-between">
-			<div>
-				<h4 class="card-title ">Liste des messages</h4>
-				<p class="card-category">
-					Voici la liste de tes messages
-				</p>
+	<div class="">
+		<div class="card">
+			<div class="card-header card-header-primary dflex row justify-content-between">
+				<div>
+					<h4 class="card-title ">Liste des messages</h4>
+					<p class="card-category">
+						Voici la liste de tes messages
+					</p>
+				</div>
+				<button id="newMsgUp" class="btn btn-info pull-right">Nouveau message
+					<i class="material-icons">send</i>
+				</button>
 			</div>
-			<button id="newMsgUp" class="btn btn-info pull-right">Nouveau message
-				<i class="material-icons">send</i>
-			</button>
-		</div>
-		<div class="card-body">
-			<div class="table-responsive">
-				{% for key, groupes in items %}
-					<table class="table table-hover">
-						<thead class="text-primary">
-							<tr>
-								<th class="col-12">{{key}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for idsender, messagess in groupes %}
+			<div class="card-body">
+				<div class="table-responsive">
+					{% for key, groupes in items %}
+						<table class="table table-hover">
+							<thead class="text-primary">
 								<tr>
-									<td>
-										<table class="table table-hover">
-											<thead class="text-primary">
-												<tr>
-													<th class="col-10">{{roles[idsender].name}}
-														{{dests[idsender].lastname}}
-														{{dests[idsender].firstname}}
-														<br>
-														<p class="text-muted">
-															<small>
-																denier message le
-																{{ item.createdAt | date("d/m/Y à H:i:s") }}</small>
-														</p>
-													</th>
-
-													{% if idsender != "none" %}
-														<th class="col-2 justify-content-end align-center">
-															<button data-id-expeditor="{{idsender}}" class="btn btn-primary pull-right replyMsgUp" title="Répondre à {{ item.name }} par la messagerie" data-id>
-																<i class="material-icons" style="font-size: 10px;">reply</i>
-															</button>
-														</th>
-													{% endif %}
-
-
-												</tr>
-											</thead>
-											<tbody>
-												{% for message in messagess %}
-													<tr>
-
-														<td {% if message.idExp %} colspan="2" {% endif %}>
-															{%if message.idExp == user.id %}
-																Vous
-															{% else %}
-																{%if dests[message.idExp] is null %}
-																	{{message.email}}
-																{% endif %}
-																{{dests[message.idExp].lastname}}
-																{{dests[message.idExp].firstname}}
-															{% endif %}
-
-															<small class="text-muted">
-																le
-																{{ item.createdAt | date("d/m/Y à H:i:s") }}</small>
-
-															<br>
-															<p class="ml-2">{{message.message}}</p>
-
-														</td>
-														{% if message.idExp is null %}
-															<td class="col-2 justify-content-end align-center">
-																<a href="mailto:{{ message.email }}" class="btn btn-info pull-right" title="Répondre à {{ message.name }} par un email" onclick="mailTo()">
-																	<i class="material-icons" style="font-size: 10px;">alternate_email</i>
-																</a>
-															</td>
-														{% endif %}
-													</tr>
-												</td>
-											</tbody>
-										</tr>
-									{% endfor %}
+									<th class="col-12">{{key | upper}}</th>
 								</tr>
+							</thead>
+							<tbody>
+								{% for idsender, messages in groupes %}
+									<tr>
+										<td>
+											<table class="table table-hover">
+												<thead class="text-primary">
+													<tr>
+														<th class="col-10">{{roles[idsender].name | upper}}
+															{{dests[idsender].lastname | upper}}
+															{{dests[idsender].firstname | capitalize}}
+															<br>
+															<p class="text-muted">
+																<small>
+																	Dernier message le
+																	{{ item.createdAt | date("d/m/Y à H:i:s") }}</small>
+															</p>
+														</th>
+
+														{% if idsender != "none" %}
+															<th class="col-2 justify-content-end align-center">
+																<button data-id-expeditor="{{idsender}}" class="btn btn-primary pull-right replyMsgUp" title="Répondre à {{ item.name }} par la messagerie" data-id>
+																	<i class="material-icons">reply</i>
+																</button>
+															</th>
+														{% endif %}
+
+
+													</tr>
+												</thead>
+												<tbody>
+													{% for message in messages %}
+														<tr>
+															<td {% if message.idExp %} colspan="2" {% endif %}>
+																{%if message.idExp == user.id %}
+																	Vous
+																{% else %}
+																	{%if dests[message.idExp] is null %}
+																		{{message.email}}
+																	{% endif %}
+																	{{dests[message.idExp].lastname | upper}}
+																	{{dests[message.idExp].firstname | capitalize}}
+																{% endif %}
+
+																<small class="text-muted">
+																	le
+																	{{ item.createdAt | date("d/m/Y à H:i:s") }}</small>
+
+																<br>
+																<p class="ml-2">{{message.message}}</p>
+
+															</td>
+															{% if message.idExp is null %}
+																<td class="col-2 justify-content-end align-center">
+																	<a href="mailto:{{ message.email }}" class="btn btn-info pull-right" title="Répondre à {{ message.name }} par un email" onclick="mailTo()">
+																		<i class="material-icons">alternate_email</i>
+																	</a>
+																</td>
+															{% endif %}
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								{% endfor %}
 							</tbody>
-						</tbody>
-					</table>
-				</td>
-			</tr>
-		{% endfor %}
-	</tbody>
-</table>{% endfor %}</div></div></div></div><!-- Scripts --><script src="/assets/js/script-perso.js"></script>{% endblock %}
+						</table>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div><!-- Scripts --><script src="/assets/js/script-perso.js"></script>
+{% endblock %}
