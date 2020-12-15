@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     var clicDisplay = document.getElementsByClassName('clicDisplay');
+    var closeTactile = document.getElementById('closeTactile');
     Array.from(clicDisplay).forEach(element => {
         element.addEventListener('mouseover', (e) => {
             document.getElementById("bg-image").style.filter = "blur(1rem)"
@@ -56,9 +57,24 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById("iFrameTV").style.transition = "all 1s ease"
             document.getElementById('codeTactile').style.left = "683px"
             document.getElementById('codeTactile').style.transition = "all 1.5s ease"
+            document.getElementById('closeTactile').style.right = "10px"
+            document.getElementById('closeTactile').style.transition = "all 1.5s ease"
             element.click();
         });
     });
+
+
+    closeTactile.addEventListener('click',() => {
+        document.getElementById("bg-image").style.filter = ""
+        document.getElementById("bg-image").style.transition = "all 0.5s ease"
+        document.getElementById("iFrameTV").style.filter = ""
+        document.getElementById("iFrameTV").style.transition = "all 1s ease"
+        document.getElementById('codeTactile').style.left = "0px"
+        document.getElementById('codeTactile').style.transition = "all 1.5s ease-in"
+        document.getElementById('closeTactile').style.right = "-80px"
+        document.getElementById('closeTactile').style.transition = "all 1s ease-in"
+        // element.click();
+	});
 
 });
 

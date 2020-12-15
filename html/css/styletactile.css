@@ -168,6 +168,23 @@ body {
     z-index: 30;
 }
 
+#closeTactile {
+    height: 160px;
+    width: 80px;
+    position: absolute;
+    top: 304px;
+    right: -80px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    font-size: 80px;
+    color: #585c68;
+    z-index: 30;
+}
+
 
 /* Container */
 
