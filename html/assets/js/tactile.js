@@ -50,8 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var clicDisplay = document.getElementsByClassName('clicDisplay');
     Array.from(clicDisplay).forEach(element => {
         element.addEventListener('mouseover', (e) => {
-            document.getElementById("iFrameTV").style.filter = "blur(1.5rem)"
-            document.getElementById("iFrameTV").style.transition = "all 0.5s linear"
+            document.getElementById("bg-image").style.filter = "blur(1rem)"
+            document.getElementById("bg-image").style.transition = "all 0.5s ease"
+            document.getElementById("iFrameTV").style.filter = "blur(1rem)"
+            document.getElementById("iFrameTV").style.transition = "all 1s ease"
             document.getElementById('codeTactile').style.left = "683px"
             document.getElementById('codeTactile').style.transition = "all 1.5s ease"
             element.click();
