@@ -552,8 +552,7 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if (
-                        $user->getId() == $datasPassword["id"] &&
+                    if ($user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
