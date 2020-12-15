@@ -46,12 +46,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50vw;
-    height: 100%;
-    background-image: url("../images/bg.jpg");
-    background-position: top;
-    background-repeat: no-repeat;
-    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 768px;
+    width: 683px;
+    display: flex;
+    z-index: 1;
 }
 
 #inputcode {
@@ -61,7 +62,6 @@ body {
     font-size: 100px;
     border: solid 1px black;
     border-radius: 5px;
-    opacity: 0.7;
 }
 
 #tactile {
@@ -72,7 +72,6 @@ body {
     align-items: center;
     align-content: center;
     justify-content: space-between;
-    opacity: 0.9;
 }
 
 .line {
@@ -82,6 +81,10 @@ body {
     flex: auto;
     justify-content: center;
     margin: auto;
+}
+
+.line1 {
+    
 }
 
 .touche,
@@ -113,6 +116,7 @@ body {
 
 #iFrameTV {
     display: flex;
+    z-index: 0;
     height: 100%;
     width: 50vw;
     /* height: 768px;
@@ -121,6 +125,7 @@ body {
     background-image: url("../images/bg.jpg");
     background-position: top;
     background-repeat: no-repeat;
+    border: none;
 }
 
 
@@ -171,6 +176,7 @@ body {
     flex-wrap: wrap;
     overflow: hidden;
     padding: 10px;
+    z-index: 2;
 }
 
 .container .option_item {
@@ -257,6 +263,7 @@ body {
     align-content: center;
     border-radius: 50px;
     color: white;
+    z-index: 3;
 }
 
 .popup p {

@@ -50,8 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var clicDisplay = document.getElementsByClassName('clicDisplay');
     Array.from(clicDisplay).forEach(element => {
         element.addEventListener('mouseover', (e) => {
-            document.getElementById("iFrameTV").style.display = "none"
-            document.getElementById('codeTactile').style.display = "flex"
+            document.getElementById("iFrameTV").style.opacity = "0.5"
+            document.getElementById("iFrameTV").style.transition = "all 2s ease"
+            document.getElementById('codeTactile').style.left = "683px"
+            document.getElementById('codeTactile').style.transition = "all 1s ease"
             element.click();
         });
     });

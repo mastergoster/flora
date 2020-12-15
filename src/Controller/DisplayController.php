@@ -19,6 +19,8 @@ class DisplayController extends Controller
 
     public function tactile(): Response
     {
+        $presence = [];
+        $absent = [];
         $users = $this->users->all(true, "last_name");
 
         foreach ($users as $user) {
@@ -29,7 +31,6 @@ class DisplayController extends Controller
                 $absent[] = $user;
             }
         }
-
         return $this->render(
             "display/tactile",
             [
@@ -37,7 +38,6 @@ class DisplayController extends Controller
             ]
         );
     }
-
 
     public function tv(): Response
     {
