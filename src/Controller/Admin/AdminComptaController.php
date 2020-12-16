@@ -13,7 +13,8 @@ class AdminComptaController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            return $this->redirect('userProfile');
+            $this->redirect('userProfile')->send();
+            exit();
         }
         $this->loadModel("comptaLines");
         $this->loadModel("comptaNdf");
