@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let closeTactile = document.getElementById('closeTactile');
     Array.from(clicDisplay).forEach(element => {
         element.addEventListener('mouseover', (e) => {
-            document.getElementById("bg-image").style.filter = "blur(1rem)"
-            document.getElementById("bg-image").style.transition = "all 0.5s ease"
+            // document.getElementById("bg-image").style.filter = "blur(1rem)"
+            //document.getElementById("bg-image").style.transition = "all 0.5s ease"
             //document.getElementById("iFrameTV").style.display = "none"
             // document.getElementById("iFrameTV").style.transition = "all 1s ease"
             document.getElementById('codeTactile').style.left = "683px"
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     closeTactile.addEventListener('click', () => {
         document.getElementById("inputcode").value = ""
-        document.getElementById("bg-image").style.filter = ""
-        document.getElementById("bg-image").style.transition = "all 0.5s ease"
+        //document.getElementById("bg-image").style.filter = ""
+        //document.getElementById("bg-image").style.transition = "all 0.5s ease"
         //document.getElementById("iFrameTV").style.display = "flex"
         // document.getElementById("iFrameTV").style.transition = "all 1s ease"
         document.getElementById('codeTactile').style.left = "0px"
