@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
                 element.style.backgroundColor = background;
             }, 100)
-            element.click();
         });
     });
 
