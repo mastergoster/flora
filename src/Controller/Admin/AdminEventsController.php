@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use \Core\Controller\Controller;
 use Core\Controller\FormController;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminEventsController extends Controller
 {
@@ -11,13 +12,14 @@ class AdminEventsController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            $this->redirect('userProfile')->send();
+            exit();
         }
         $this->loadModel("events");
         $this->loadModel("bookingEvents");
     }
 
-    public function events()
+    public function events(): Response
     {
         $eventsbooking = $this->bookingEvents->all();
         $eventsbyid = [];
@@ -46,7 +48,7 @@ class AdminEventsController extends Controller
         );
     }
 
-    public function event(?int $id = null)
+    public function event(?int $id = null): Response
     {
         $form = new FormController();
         $form->field("title", ["require"]);
@@ -69,7 +71,7 @@ class AdminEventsController extends Controller
                 } else {
                     if ($this->events->create($datas)) {
                         $this->messageFlash()->success("l'évènement a bien été mis à jour");
-                        $this->redirect('adminEventSingle', ["id" => $this->events->lastInsertId()]);
+                        return $this->redirect('adminEventSingle', ["id" => $this->events->lastInsertId()]);
                     } else {
                         $this->messageFlash()->error("erreur de mise à jour");
                     }

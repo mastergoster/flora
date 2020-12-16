@@ -1,19 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
+
     function pavetactile(e) {
-        this.style.backgroundColor = "red";
+        this.style.backgroundColor = "#18bfef";
         var touche = this
+        let champsInput = document.getElementById("inputcode")
         setTimeout(function () {
             touche.style.removeProperty("background-color");
         }, 100)
-        if (this.innerText == "sup") {
-            var value = document.getElementById("inputcode").value
-            document.getElementById("inputcode").value = "" // value.substr(0, value.length - 1)
-
+        if (this.innerText == "X") {
+            champsInput.value = "" // value.substr(0, value.length - 1)
         } else {
-            document.getElementById("inputcode").value += this.innerText
+            if (champsInput.value.length < 4) {
+                champsInput.value += this.innerText
+            }
         }
-        if (document.getElementById("inputcode").value.length == 4) {
-            document.getElementById('okvalide').click();
+        if (champsInput.value.length == 4) {
+            document.getElementById('okvalide').style.display = "flex";
+            // document.getElementById('okvalide').click();
+        }
+        if (champsInput.value.length < 4) {
+            document.getElementById('okvalide').style.display = "none";
         }
     }
     var pave = document.getElementsByClassName('touche');
@@ -33,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(clicouille).forEach(element => {
         element.addEventListener('mouseover', (e) => {
             var background = element.style.backgroundColor;
-            element.style.backgroundColor = "red";
+            element.style.backgroundColor = "#18bfef";
             setTimeout(function () {
                 element.style.backgroundColor = background;
             }, 100)
@@ -41,7 +47,42 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    let clicDisplay = document.getElementsByClassName('clicDisplay');
+    let checkbox = document.getElementsByClassName('checkbox');
+    let closeTactile = document.getElementById('closeTactile');
+    Array.from(clicDisplay).forEach(element => {
+        element.addEventListener('mouseover', (e) => {
+            document.getElementById("bg-image").style.filter = "blur(1rem)"
+            document.getElementById("bg-image").style.transition = "all 0.5s ease"
+            document.getElementById("iFrameTV").style.filter = "blur(1rem)"
+            document.getElementById("iFrameTV").style.transition = "all 1s ease"
+            document.getElementById('codeTactile').style.left = "683px"
+            document.getElementById('codeTactile').style.transition = "all 1.5s ease"
+            closeTactile.style.right = "10px"
+            closeTactile.style.transition = "all 1.5s ease"
+            element.click();
+        });
+    });
+
+
+    closeTactile.addEventListener('click',() => {
+        document.getElementById("inputcode").value = ""
+        document.getElementById("bg-image").style.filter = ""
+        document.getElementById("bg-image").style.transition = "all 0.5s ease"
+        document.getElementById("iFrameTV").style.filter = ""
+        document.getElementById("iFrameTV").style.transition = "all 1s ease"
+        document.getElementById('codeTactile').style.left = "0px"
+        document.getElementById('codeTactile').style.transition = "all 1.5s ease-in"
+        closeTactile.style.right = "-80px"
+        closeTactile.style.transition = "all 1s ease-in"
+        document.getElementById('okvalide').style.display = "none"
+        Array.from(checkbox).forEach(element => {
+            element.checked = false
+        });
+	});
+
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     function validate(data) {
         if (data.permission) {
@@ -52,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setInterval(function () {
             document.location.reload(true);
         }, 2000);
-
     }
 
     function submitajax(e) {
@@ -66,8 +106,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then(response => response.json())
             // .then(json => console.log(json))
             .then(json => validate(json));
-
-
         return false;
     };
 
@@ -75,9 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(formlist).forEach(element => {
         element.addEventListener('submit', submitajax);
     });
-
-
-
 
 });
 function viewscroll(saut) {

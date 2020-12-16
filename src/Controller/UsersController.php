@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Model\Table\UsersTable;
 use \Core\Controller\Controller;
-use \App\Model\Entity\UserEntity;
-use App\Model\Entity\UsersEntity;
 use Core\Controller\SmsController;
 use Core\Controller\FormController;
 use Core\Controller\EmailController;
 use App\Model\Entity\RecapConsoEntity;
-use Core\Controller\SecurityController;
 use Core\Controller\Helpers\TableauController;
+use Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
@@ -28,10 +27,10 @@ class UsersController extends Controller
         $this->loadModel('invocesLines');
     }
 
-    public function login()
+    public function login(): Response
     {
         if ($this->security()->isConnect()) {
-            $this->redirect('userProfile');
+            return $this->redirect('userProfile');
         }
 
         $form = new FormController();
@@ -48,10 +47,9 @@ class UsersController extends Controller
                     if ($this->session()->has("redirect")) {
                         $url = $this->session()->get("redirect");
                         $this->session()->remove("redirect");
-                        $this->redirect($url);
-                        exit();
+                        return $this->redirect($url);
                     }
-                    $this->redirect("userProfile");
+                    return $this->redirect("userProfile");
                 }
                 $this->messageFlash()->error("Mot de passe ou utilisateur invalide");
             }
@@ -69,13 +67,13 @@ class UsersController extends Controller
         ]);
     }
 
-    public function logout(): void
+    public function logout(): Response
     {
         $this->security()->logout();
-        $this->redirect("home");
+        return $this->redirect("home");
     }
 
-    public function subscribe()
+    public function subscribe(): Response
     {
         //Création d'un tableau regroupant les champs requis
         $form = new \Core\Controller\FormController();
@@ -97,11 +95,11 @@ class UsersController extends Controller
                 //verifier que l'adresse mail et/ou que le numéro de téléphone n'existe(nt) pas
                 if ($userTable->find($datas["email"], "email")) {
                     $this->messageFlash()->error("Cet email existe déjà, merci de vous connecter");
-                    $this->redirect("usersLogin");
+                    return $this->redirect("usersLogin");
                 }
                 if ($userTable->find($datas["phone_number"], "phone_number")) {
                     $this->messageFlash()->error("Ce numero de téléphone existe déjà, merci de vous connecter");
-                    $this->redirect("usersLogin");
+                    return $this->redirect("usersLogin");
                 }
 
                 //crypter le password
@@ -143,17 +141,16 @@ class UsersController extends Controller
 
                 //informer le client qu'il va devoir valider son adresse mail
                 $this->messageFlash()->success("Nous vous avons envoyé un sms sur le numéro " .
-                "{$datas['phone_number']} et un mail à l'adresse {$datas['email']}.");
+                    "{$datas['phone_number']} et un mail à l'adresse {$datas['email']}.");
 
                 // Login automatique après inscription valide
                 $this->security()->login($datas["email"], $password_private);
                 if ($this->session()->has("redirect")) {
                     $url = $this->session()->get("redirect");
                     $this->session()->remove("redirect");
-                    $this->redirect($url);
-                    exit();
+                    return $this->redirect($url);
                 }
-                $this->redirect("userProfile");
+                return $this->redirect("userProfile");
             }
         }
 
@@ -176,7 +173,7 @@ class UsersController extends Controller
      *
      * @return void
      */
-    public function mdpoublie()
+    public function mdpoublie(): Response
     {
         // Création d'un tableau regroupant les champs requis
         $form = new FormController();
@@ -196,7 +193,7 @@ class UsersController extends Controller
                 // Verifie que l'adresse mail existe
                 if (!$userTable->find($datas["mailmdpoublie"], "email")) {
                     $message;
-                    $this->redirect("usersLogin");
+                    return $this->redirect("usersLogin");
                 }
 
                 if ($userTest = $userTable->find($datas["mailmdpoublie"], "email")) {
@@ -208,7 +205,7 @@ class UsersController extends Controller
                     // Vérifie si mail a été activé
                     if (!$datas["activate"]) {
                         $message;
-                        $this->redirect("usersLogin");
+                        return $this->redirect("usersLogin");
                     }
 
                     // Envoi du mail de confirmation
@@ -233,7 +230,7 @@ class UsersController extends Controller
                         );
 
                     // Redirection pour se connecter
-                    $this->redirect("usersLogin");
+                    return $this->redirect("usersLogin");
                 }
             }
         }
@@ -258,13 +255,13 @@ class UsersController extends Controller
      * @param string $slug
      * @return void
      */
-    public function mdpchange(string $slug)
+    public function mdpchange(string $slug): Response
     {
         $user = $this->users->find($slug, "token");
 
         if (!$user || is_null($slug)) {
             $this->messageFlash()->error("Merci de vous connecter.");
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
 
         if ($user && !is_null($slug)) {
@@ -281,13 +278,13 @@ class UsersController extends Controller
                     // Vérifie si le code PIN saisi est identique à celui de la BDD
                     if ($user->getPin() != $datas["pinmdpchange"]) {
                         $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
-                        $this->redirect("usersMdpchange", ['slug' => $slug]);
+                        return $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
                     // Vérifie si l'utilisatuer à une session en cours même sur un autre poste
                     if ($this->session()->has('users')) {
                         $this->messageFlash()->error("Votre demande ne peut aboutir, veuillez réessayer.");
-                        $this->redirect("usersMdpchange", ['slug' => $slug]);
+                        return $this->redirect("usersMdpchange", ['slug' => $slug]);
                     }
 
                     // Insertion dans la BBD du nouveau mot de passe
@@ -296,7 +293,7 @@ class UsersController extends Controller
 
                     $this->messageFlash()->success("Votre mot de passe a été modifié avec succès. " .
                         "Vous pouvez vous connecter.");
-                    $this->redirect("usersLogin");
+                    return $this->redirect("usersLogin");
                 }
             }
         }
@@ -313,10 +310,14 @@ class UsersController extends Controller
     }
 
 
-    public function profile($message = null)
+    public function profile($message = null): Response
     {
-        if (!$this->security()->accessRole('adherants')) {
-            $this->redirect('/403');
+        if (!$this->security()->accessRole(20)) {
+            if (!$this->security()->isActivate()) {
+                return $this->redirect('activatePage');
+            } else {
+                return $this->redirect('/403');
+            }
         }
         $user = $this->session()->get("users");
         $forfaitsLog = new RecapConsoEntity($user->getId());
@@ -344,7 +345,7 @@ class UsersController extends Controller
 
 
 
-    public function updateUser()
+    public function updateUser(): Response
     {
 
         if (count($_POST) > 0) {
@@ -360,7 +361,7 @@ class UsersController extends Controller
         }
     }
 
-    public function changePassword()
+    public function changePassword(): Response
     {
         if (count($_POST) > 0) {
             $user = $this->users->getUserById(htmlspecialchars($_POST['id']));
@@ -387,27 +388,25 @@ class UsersController extends Controller
         }
     }
 
-    public function ajaxNewUserLine()
+    public function ajaxNewUserLine(): Response
     {
         if ($this->session()->get("users")->getId() != $_POST["id_user"]) {
             $this->jsonResponse403();
         }
-        header('content-type:application/json');
-
-        echo json_encode($this->hours->ajout($this->session()->get("users")->getId()));
+        return $this->jsonResponse($this->hours->ajout($this->session()->get("users")->getId()));
     }
 
-    public function validate(string $verify)
+    public function validate(string $verify): Response
     {
         $token = $this->users->findAll($verify, "token");
         // Vérifie si le token n'existe pas ou que $verify n'est pas nul
         if (!$token || is_null($verify)) {
-            $this->redirect("home");
+            return $this->redirect("home");
         }
         // Si le mail a déjà été activé, renvoi sur la page d'accueil (le mail d'activation n'est plus utilisable)
         if ($token['0']->getActivate() && !is_null($verify)) {
             $this->messageFlash()->error("Cette adresse mail a déjà été validée.");
-            $this->redirect("home");
+            return $this->redirect("home");
         }
         // Passe le $verify dans la session['validate'] qui sera utilisé pour la 1ère connexion
         if ($token && !$token['0']->getActivate() && !is_null($verify)) {
@@ -415,43 +414,26 @@ class UsersController extends Controller
         }
         if ($this->session()->has("users")) {
             $this->messageFlash()->success("Votre adresse mail a été validée.");
-            $this->redirect("userProfile");
+            return $this->redirect("userProfile");
         }
         $this->messageFlash()->error("Merci de vous connecter à votre espace membre pour valider votre adresse mail.");
-        $this->redirect("usersLogin");
+        return $this->redirect("usersLogin");
     }
 
-    private function isValidate(UsersEntity $user)
-    {
-        if (isset($_SESSION["validate"]) && $user->getToken() == $_SESSION["validate"]) {
-            $this->users->update($user->getId(), 'id', ["activate" => '1', "token" => ""]);
-            $user->setToken("");
-            $user->setActivate("1");
-            unset($_SESSION["validate"]);
-        }
-        if ($user->getActivate() == '0' && $user->getVerify() == '0') {
-            $this->messageFlash()->error("Merci de valider votre compte (un mail vous a été envoyé)");
-            $_SESSION["user"] = "";
-            header('location: /login');
-            exit();
-        }
-    }
-
-    public function activatePage()
+    public function activatePage(): Response
     {
         if ($this->request()->query->has("disconnected")) {
             $this->security()->logout();
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
-        
+
         if (!$this->session()->has("users")) {
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
 
         $user = $this->session()->get("users");
 
         if ($this->request()->query->has("newMail")) {
-
             $userMail = $user->getEmail();
             $userToken = $user->getToken();
 
@@ -463,11 +445,11 @@ class UsersController extends Controller
                 ->message('confirmation', compact('datas'))
                 ->send();
             $this->messageFlash()->success("Un nouveau mail d'activation vous a été envoyé.");
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
 
         if ($user->getActivate()) {
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
 
         return $this->render(
@@ -478,29 +460,35 @@ class UsersController extends Controller
         );
     }
 
-    public function mail()
+    public function mail(): Response
     {
+        $paramUnique = TableauController::tableObjectToString("email", $this->users->all());
+
         $form = new FormController();
         $form->field("name", ["require"]);
-        $form->field("email", ["require", "mail"]);
+        $form->field("email", ["require", "mail", "unique" => $paramUnique]);
         $form->field("message", ["require"]);
-        $errors =  $form->hasErrors();
+        $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
+            $datas['id_roles'] = 4; // 4 = Administrateur
             if (!$errors) {
                 $this->messages->create($datas);
                 $errors["error"] = false;
             } else {
                 $errors["error"] = true;
+                if (isset($errors['email'])) {
+                    $errors['email'] = ["Merci d'envoyer vos messages via votre messagerie interne."];
+                }
             }
         }
         return $this->jsonResponse($errors);
     }
 
-    public function invoces()
+    public function invoces(): Response
     {
         if (!$this->session()->has("users")) {
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
 
@@ -512,28 +500,26 @@ class UsersController extends Controller
             ]
         );
     }
-    public function invoce($id)
+    public function invoce($id): Response
     {
         if (!$this->session()->has("users")) {
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
         $invoce = $this->invoces->findActivate($id, "id");
         if (!$invoce || $user->getId() != $invoce->getIdUsers()) {
             $this->messageFlash()->error("action non permise");
-            $this->redirect("userInvoces");
+            return $this->redirect("userInvoces");
         }
         return $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
     }
 
-    public function edit()
+    public function edit(): Response
     {
-
         if (!$this->session()->has("users")) {
-            $this->redirect("usersLogin");
+            return $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
-
 
         $formUpdate = new FormController();
         $formUpdate->field("first_name", ["require"]);
@@ -566,16 +552,17 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if ($user->getId() == $datasPassword["id"] &&
+                    if (
+                        $user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
-                            $this->messageFlash()->success("Le mot de passe a bien été changé");
+                            $this->messageFlash()->success("Le mot de passe a bien été changé.");
                         } else {
-                            $this->messageFlash()->error("erreur inatendu lol");
+                            $this->messageFlash()->error("Erreur inattendu lol");
                         }
                     } else {
-                        $this->messageFlash()->error("mot de passe invalide");
+                        $this->messageFlash()->error("Mot de passe invalide.");
                     }
                 }
             }
@@ -589,5 +576,109 @@ class UsersController extends Controller
             $this->messageFlash()->error($error[0]);
         }
         return $this->render("user/edit", ["user" => $user, "errors" => $errors, "errorsP" => $errorsPassword]);
+    }
+
+    /**
+     * Function : qui permet d'afficher les messages émis en interne
+     * Affiche soit les messages qui sont destinés à l'user en session (via l'id du user connecté)
+     * soit les messages qui sont destinés au groupe (rôle) auquel le user connecté appartient
+     * ainsi qu'au groupe de level inférieur
+     *
+     * @return void
+     */
+    public function userMessages()
+    {
+        if (!$this->session()->has("users")) {
+            return $this->redirect("usersLogin");
+        }
+        $display = "d-none";
+        // Récupère les messages selon l'id user ou le level de l'user
+        $user = $this->session()->get("users");
+
+        $messages = $this->messages->messagesByIdUserAndLevelUser(
+            $user->getId(),
+            $user->level,
+            $user->getEmail()
+        );
+
+        foreach ($messages as $key => $value) {
+            if ($value->idExp == $user->getId()) {
+                if ($value->getIdRoles() != null) {
+                    $messages["groupe"]["r-" . $value->getIdRoles()][] = $value;
+                } elseif ($value->getIdUsers() != null) {
+                    $messages["perso"][$value->getIdUsers()][] = $value;
+                }
+            } elseif ($value->getIdRoles() != null) {
+                $messages["groupe"]["r-" . $value->getIdRoles()][] = $value;
+            } elseif ($value->idExp != null) {
+                $messages["perso"][$value->idExp][] = $value;
+            }
+            unset($messages[$key]);
+        }
+
+        // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
+        $roles = $this->roles->all();
+
+        $dests =  TableauController::assocId($this->users->all(true, "last_name"));
+
+        foreach ($roles as $key => $value) {
+            $value->value = "r-" . $value->getId();
+            $roles[$value->value] = $value;
+            unset($roles[$key]);
+        }
+
+        // Envoi du message par l'user à un destinataire
+
+        $form = new FormController();
+        $form->field("destinataire", ["require"]);
+        $form->field("message", ["require"]);
+
+        $errors = $form->hasErrors();
+        if ($errors["post"] != ["no-data"]) {
+            $datas = $form->getDatas();
+
+            if (strpos($datas['destinataire'], "r-") === 0) {
+                $datas['id_roles'] = str_replace("r-", "", $datas['destinataire']);
+                unset($datas['destinataire']);
+            } else {
+                $datas['id_users'] = $datas['destinataire'];
+                unset($datas['destinataire']);
+            }
+
+            $datas['name'] = strtoupper($this->session()->get("users")->getLastName()) .
+                " " . ucfirst(
+                    $this->session()->get("users")->getFirstName()
+                );
+            $datas['email'] = $this->session()->get("users")->getEmail();
+
+            if (!$errors) {
+                $this->messages->create($datas);
+                $this->messageFlash()->success("Votre message a bien été envoyé.");
+                unset($datas);
+                return $this->redirect("userMessages");
+            } else {
+                $this->messageFlash()->error("Envoi impossible : " .
+                    "Vous devez choisir un destinataire et écrire un message.");
+                $display = "";
+            }
+        }
+
+        if ($errors["post"]) {
+            unset($errors);
+        }
+
+        // Affiche la vue
+        return $this->render(
+            "user/messages",
+            [
+
+                "user" => $user,
+                "roles" => $roles,
+                "dests" => $dests,
+                "errors" => $errors,
+                "items" => $messages,
+                "display" => $display,
+            ]
+        );
     }
 }

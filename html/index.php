@@ -7,12 +7,16 @@ $app = App\App::getInstance();
 $app->setStartTime();
 $app::load();
 
-
+// /test/coucou?page=1
 $url = explode("?", $_SERVER["REQUEST_URI"]);
+/// [ "/test/coucou/", "page=1"]
 $url[0] = explode("/", $url[0]);
+/// [ ["", "test","coucou", ""], "page=1"]
 unset($url[0][0]);
+/// [ ["test","coucou", ""], "page=1"]
 if (end($url[0]) == "") {
     array_pop($url[0]);
+    /// [ ["test","coucou"], "page=1"]
 }
 $_SERVER["REQUEST_URI"] = "/" . join("/", $url[0]) . (isset($url[1]) ? "?" . $url[1] : "");
 
@@ -67,6 +71,7 @@ $app->getRouter($basePath)
     ->get('/user/logout', 'users#logout', 'userLogout')
     ->get('/user/profile', 'users#profile', 'userProfile')
     ->get('/user/invoces', 'users#invoces', 'userInvoces')
+    ->match('/user/messages', 'users#userMessages', 'userMessages')
     ->match('/user/edit', 'users#edit', 'userEdit')
     ->get('/user/invoces/[i:id]', 'users#invoce', 'userInvoce')
     ->get('/activate', 'users#activatePage', 'activatePage')

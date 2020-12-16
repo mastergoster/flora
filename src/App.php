@@ -37,7 +37,9 @@ class App
         $app = self::getInstance();
         $app->request = Request::createFromGlobals();
         $app->request->setSession(new Session());
-        $app->request->getSession()->start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            //$app->request->getSession()->start();
+        }
         $app->request->hasPreviousSession();
         $session = $_SESSION ?: [];
         //retrocomptatibility
@@ -51,15 +53,14 @@ class App
 
         date_default_timezone_set('Europe/Paris');
         $app->response = new Response();
-
-        $config = self::getInstance()->rootfolder();
+        $config = $app->rootfolder();
         if (file_exists($config . "/.env")) {
             $dotenv = \Dotenv\Dotenv::createImmutable($config, "/.env");
             $dotenv->load();
             $install = false;
         }
         if (file_exists($config . "/config.php")) {
-            foreach (self::getInstance()->getConfig() as $key => $value) {
+            foreach ($app->getConfig() as $key => $value) {
                 if (!\array_key_exists($key, $_ENV)) {
                     putenv("$key=$value");
                 }
@@ -97,7 +98,7 @@ class App
         }
     }
 
-    public function getRouter($basePath = "/var/www"): RouterController
+    public function getRouter($basePath = "/var/www/"): RouterController
     {
         if (is_null($this->router)) {
             $this->router = new RouterController($basePath . 'views');

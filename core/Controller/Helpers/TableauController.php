@@ -13,4 +13,13 @@ class TableauController
         }
         return $new;
     }
+
+    public static function tableObjectToString(string $key, array $array): array
+    {
+        $method = "get" . ucfirst($key);
+        $param = array_map(function ($value) use ($method) {
+            return $value->$method();
+        }, $array);
+        return $param;
+    }
 }

@@ -73,7 +73,7 @@ class HControllerTest extends TestCase
     }
 
     // Tests sur "convertisseurTime"
-    public function testConvertisseurTime0s ()
+    public function testConvertisseurTime0s()
     {
         $Time = 0; // 0 minute et 0 seconde
         $expected = ["h" => 0, "m" => 0];
@@ -81,7 +81,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime1s ()
+    public function testConvertisseurTime1s()
     {
         $Time = 1; // 0 minute et 1 seconde
         $expected = ["h" => 0, "m" => 1];
@@ -89,7 +89,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime59s ()
+    public function testConvertisseurTime59s()
     {
         $Time = 59; // 0 minute et 59 secondes
         $expected = ["h" => 0, "m" => 1];
@@ -97,7 +97,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime60s ()
+    public function testConvertisseurTime60s()
     {
         $Time = 60; // 1 minute et 0 seconde
         $expected = ["h" => 0, "m" => 1];
@@ -105,7 +105,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime61s ()
+    public function testConvertisseurTime61s()
     {
         $Time = 61; // 1 minute et 1 seconde
         $expected = ["h" => 0, "m" => 2];
@@ -113,7 +113,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3540s ()
+    public function testConvertisseurTime3540s()
     {
         $Time = 3540; // 59 minutes et 0 seconde
         $expected = ["h" => 0, "m" => 59];
@@ -121,7 +121,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3541s ()
+    public function testConvertisseurTime3541s()
     {
         $Time = 3541; // 59 minutes et 1 seconde
         $expected = ["h" => 1, "m" => 0];
@@ -129,7 +129,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3569s ()
+    public function testConvertisseurTime3569s()
     {
         $Time = 3569; // 59 minutes et 29 secondes
         $expected = ["h" => 1, "m" => 0];
@@ -137,7 +137,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3570s ()
+    public function testConvertisseurTime3570s()
     {
         $Time = 3570; // 59 minutes et 30 secondes
         $expected = ["h" => 1, "m" => 0];
@@ -145,7 +145,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3599s ()
+    public function testConvertisseurTime3599s()
     {
         $Time = 3599; // 59 minutes et 59 secondes
         $expected = ["h" => 1, "m" => 0];
@@ -153,7 +153,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3600s ()
+    public function testConvertisseurTime3600s()
     {
         $Time = 3600; // 60 minutes et 0 seconde ou 1 heure 0 minute et 0 seconde
         $expected = ["h" => 1, "m" => 0];
@@ -161,7 +161,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime3601s ()
+    public function testConvertisseurTime3601s()
     {
         $Time = 3601; // 60 minutes et 1 seconde ou 1 heure 0 minute et 1 seconde
         $expected = ["h" => 1, "m" => 1];
@@ -169,7 +169,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime86400s ()
+    public function testConvertisseurTime86400s()
     {
         $Time = 86400; // 24 heure 0 minute et 0 seconde
         $expected = ["h" => 24, "m" => 0];
@@ -177,7 +177,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTime100000s ()
+    public function testConvertisseurTime100000s()
     {
         $Time = 100000; // 27 heure 46 minutes et 40 secondes
         $expected = ["h" => 27, "m" => 47];
@@ -185,7 +185,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative0 ()
+    public function testConvertisseurTimeNegative0()
     {
         $Time = -0;
         $expected = ["h" => 0, "m" => 0];
@@ -193,7 +193,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative1s ()
+    public function testConvertisseurTimeNegative1s()
     {
         $Time = -1; // - 0 minute et 1 seconde
         $expected = ["h" => -0, "m" => 1];
@@ -201,7 +201,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative59s ()
+    public function testConvertisseurTimeNegative59s()
     {
         $Time = -59; // - 0 minute et 59 secondes
         $expected = ["h" => -0, "m" => 1];
@@ -209,7 +209,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative60s ()
+    public function testConvertisseurTimeNegative60s()
     {
         $Time = -60; // - 1 minute et 0 seconde
         $expected = ["h" => -0, "m" => 1];
@@ -217,7 +217,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative61s ()
+    public function testConvertisseurTimeNegative61s()
     {
         $Time = -61; // - 1 minute et 1 seconde
         $expected = ["h" => -0, "m" => 2];
@@ -225,7 +225,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3540s ()
+    public function testConvertisseurTimeNegative3540s()
     {
         $Time = -3540; // - 59 minutes et 0 seconde
         $expected = ["h" => - 0, "m" => 59];
@@ -233,7 +233,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3541s ()
+    public function testConvertisseurTimeNegative3541s()
     {
         $Time = -3541; // - 59 minutes et 1 seconde
         $expected = ["h" => -1, "m" => 0];
@@ -241,7 +241,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3569s ()
+    public function testConvertisseurTimeNegative3569s()
     {
         $Time = -3569; // - 59 minutes et 29 secondes
         $expected = ["h" => -1, "m" => 0];
@@ -249,7 +249,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3570s ()
+    public function testConvertisseurTimeNegative3570s()
     {
         $Time = -3570; // - 59 minutes et 30 secondes
         $expected = ["h" => -1, "m" => 0];
@@ -257,7 +257,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3599s ()
+    public function testConvertisseurTimeNegative3599s()
     {
         $Time = -3599; // - 59 minutes et 59 secondes
         $expected = ["h" => -1, "m" => 0];
@@ -265,7 +265,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3600s ()
+    public function testConvertisseurTimeNegative3600s()
     {
         $Time = -3600; // - 60 minutes et 0 seconde ou - 1 heure 0 minute et 0 seconde
         $expected = ["h" => -1, "m" => 0];
@@ -273,7 +273,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative3601s ()
+    public function testConvertisseurTimeNegative3601s()
     {
         $Time = -3601; // -60 minutes et 1 seconde ou - 1 heure 0 minute et 1 seconde
         $expected = ["h" => -1, "m" => 1];
@@ -281,7 +281,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative86400s ()
+    public function testConvertisseurTimeNegative86400s()
     {
         $Time = -86400; // - 24 heure, 0 minute et 0 seconde
         $expected = ["h" => -24, "m" => 0];
@@ -289,7 +289,7 @@ class HControllerTest extends TestCase
         $this->assertEquals($expected, HController::convertisseurTime($Time));
     }
 
-    public function testConvertisseurTimeNegative100000s ()
+    public function testConvertisseurTimeNegative100000s()
     {
         $Time = -100000; // -27 heure, 46 minutes et 40 secondes
         $expected = ["h" => -27, "m" => 47];

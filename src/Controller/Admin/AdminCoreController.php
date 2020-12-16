@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use \Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminCoreController extends Controller
 {
@@ -11,12 +12,13 @@ class AdminCoreController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            $this->redirect('userProfile')->send();
+            exit();
         }
         chdir("/var/www");
     }
 
-    public function update()
+    public function update(): Response
     {
         if (\getenv("ENV_DEV")) {
             return $this->render(
@@ -30,7 +32,7 @@ class AdminCoreController extends Controller
         $this->md5("phinx");
         $request = $this->request()->query;
         putenv("BRANCH=" . \getenv("BRANCH"));
-        $git = explode("\n", `sudo git pull origin $(printenv BRANCH) 2>&1`);
+        $git = explode("\n", `git pull origin $(printenv BRANCH) 2>&1`);
 
 
         if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {
@@ -46,7 +48,6 @@ class AdminCoreController extends Controller
             $phinx = ["non lancé"];
         }
 
-        `sudo chown -R www-data:www-data *`;
 
         return $this->render("admin/update", ["itemss" => [
             "git" => $git,
@@ -56,7 +57,7 @@ class AdminCoreController extends Controller
     }
 
 
-    private function md5Hash(string $folder, string $item)
+    private function md5Hash(string $folder, string $item): void
     {
         if (is_dir($item)) {
             $this->md5Folder($folder, $item);
@@ -65,7 +66,7 @@ class AdminCoreController extends Controller
         }
     }
 
-    private function md5Folder(string $folder, string $item)
+    private function md5Folder(string $folder, string $item): void
     {
         foreach (scandir($item) as $value) {
             if ($value[0] != ".") {
@@ -74,10 +75,11 @@ class AdminCoreController extends Controller
         }
     }
 
-    private function md5(string $folder, bool $verify = false)
+    private function md5(string $folder, bool $verify = false): bool
     {
         if (!$verify) {
-            return $this->md5Hash($folder, $folder);
+            $this->md5Hash($folder, $folder);
+            return true;
         }
         $this->md5Hash("verify_" . $folder, $folder);
         return array_diff_assoc($this->md5Hash["verify_" . $folder], $this->md5Hash[$folder]) ? false : true;

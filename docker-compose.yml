@@ -8,12 +8,13 @@ services:
     container_name: Mailcatcher
 
   dev:
-    image: chialab/php-dev:7.4-apache
+    image: chialab/php:7.4-apache
     volumes:
       - ./:/var/www/
     ports:
       - "8080:80"
     container_name: Flora
+    working_dir: /var/www
 
 networks:
   default:

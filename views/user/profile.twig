@@ -16,20 +16,20 @@
 					<h6 class="card-category text-gray">{{ roleUser.name }}</h6>
 					<h4 class="card-title">{{ user.firstName }}
 						{{ user.lastName }}</h4>
-					<h4 class="card-title">mail :
+					<h4 class="card-title">Mail :
 						{{ user.email }}<br>
 						(
-						{% if user.activate %}validé{% else %}non validé
+						{% if user.activate %}Validé{% else %}Non validé
 						{% endif %})</p>
 				</h4>
-				<h4 class="card-title">telephone :{{ user.phoneNumber }}<br>(
-					{% if user.verify %}validé{% else %}non validé
+				<h4 class="card-title">Téléphone :{{ user.phoneNumber }}<br>(
+					{% if user.verify %}Validé{% else %}Non validé
 					{% endif %})</h4>
-				<h4 class="card-title">mon code pin :
+				<h4 class="card-title">Mon code PIN :
 					{% if user.verify %}
 						{{ user.pin }}
 					{% else %}
-						valider votre tel
+						Valider votre tél.
 					{% endif %}
 				</h4>
 				<p class="card-description">
@@ -53,7 +53,7 @@
 				</div>
 				<div class="card-footer">
 					<div class="stats">
-						expire le :
+						Expire le :
 						{{ ForfaitExpiredAt | date("d/m/Y")  }}
 					</div>
 				</div>
@@ -67,9 +67,9 @@
 					</div>
 					<p class="card-category">
 						{% if presence %}
-							tu es au coworking
+							Tu es au coworking
 						{% else %}
-							tu n'es pas au coworking
+							Tu n'es pas au coworking
 						{% endif %}
 					</p>
 					<h3 class="card-title" id="compteur">
@@ -81,9 +81,9 @@
 					<div class="stats">
 						<i class="material-icons">date_range</i>
 						{% if presence %}
-							arreter ma journée
+							Arreter ma journée
 						{% else %}
-							continuer ma journée
+							Continuer ma journée
 						{% endif %}
 					</div>
 				</div>
@@ -103,7 +103,7 @@
 				<div class="card-footer">
 					<div class="stats">
 						<i class="material-icons">local_offer</i>
-						denière présence le :
+						Denière présence le :
 						{{last.date | date("d/m/Y") }}
 					</div>
 				</div>

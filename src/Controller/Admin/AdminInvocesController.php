@@ -9,13 +9,15 @@ use Core\Controller\FormController;
 use App\Model\Table\InvocesLinesTable;
 use App\Model\Entity\InvocesLinesEntity;
 use Core\Controller\Helpers\TableauController;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminInvocesController extends Controller
 {
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            $this->redirect('userProfile')->send();
+            exit();
         }
         $this->loadModel('invoces');
         $this->loadModel('users');
@@ -24,7 +26,7 @@ class AdminInvocesController extends Controller
         $this->loadModel('comptaLines');
     }
 
-    public function all()
+    public function all(): Response
     {
         $invocesServices = new InvocesServices;
         $formInvoce = new FormController();
@@ -75,7 +77,7 @@ class AdminInvocesController extends Controller
         );
     }
 
-    public function single($id)
+    public function single($id): Response
     {
 
         $formInvoce = new FormController();
@@ -101,7 +103,7 @@ class AdminInvocesController extends Controller
         }
         $invoces = $this->invoces->find($id);
         if ($invoces->getActivate()) {
-            $this->redirect("adminInvocePdf", ["id" => $id]);
+            return $this->redirect("adminInvocePdf", ["id" => $id]);
         }
         $users = $this->users->find($invoces->getIdUsers());
         $invocesLines = $this->invocesLines->findAll($id, 'id_invoces');
@@ -124,7 +126,7 @@ class AdminInvocesController extends Controller
         );
     }
 
-    public function validate($id)
+    public function validate($id): Response
     {
         $invoces = $this->invoces->find($id);
         if ($invoces) {
@@ -133,10 +135,10 @@ class AdminInvocesController extends Controller
             $this->invoces->updateByClass($invoces);
         }
         $this->messageFlash()->success("la facture est activé");
-        $this->redirect('adminInvoces');
+        return $this->redirect('adminInvoces');
     }
 
-    public function actualise($id)
+    public function actualise($id): Response
     {
         $invoces = $this->invoces->find($id);
         if ($invoces->getActivate() == 1) {
@@ -145,10 +147,10 @@ class AdminInvocesController extends Controller
                 unlink($file);
             }
         }
-        $this->redirect('adminInvoces');
+        return $this->redirect('adminInvoces');
     }
 
-    public function invocePdf($id)
+    public function invocePdf($id): Response
     {
         $invoces = $this->invoces->find($id);
         $user = $this->users->find($invoces->getIdUsers());
@@ -156,7 +158,7 @@ class AdminInvocesController extends Controller
         return $this->renderPdf("user/invoce", ["invoce" => $invoces, "user" => $user, "title" => $invoces->getRef()]);
     }
 
-    public function products()
+    public function products(): Response
     {
         $form = new FormController();
         $form->field("ref", ["require"]);

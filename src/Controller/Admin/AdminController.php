@@ -3,9 +3,10 @@
 namespace App\Controller\Admin;
 
 use \Core\Controller\Controller;
-use App\Model\Entity\RecapConsoEntity;
 use Core\Controller\FormController;
+use App\Model\Entity\RecapConsoEntity;
 use Core\Controller\Helpers\TableauController;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
@@ -13,7 +14,8 @@ class AdminController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            $this->redirect('userProfile');
+            $this->redirect('userProfile')->send();
+            exit();
         }
         $this->loadModel('users');
         $this->loadModel('hours');
@@ -24,7 +26,7 @@ class AdminController extends Controller
         $this->loadModel("messages");
     }
 
-    public function panel()
+    public function panel(): Response
     {
 
         $users = [];
@@ -36,7 +38,7 @@ class AdminController extends Controller
         );
     }
 
-    public function users()
+    public function users(): Response
     {
 
         $users = TableauController::assocId($this->users->all());
@@ -59,7 +61,7 @@ class AdminController extends Controller
     }
 
 
-    public function user($id)
+    public function user($id): Response
     {
         if (count($_POST) >= 1) {
             if (isset($_POST["idForfait"])) {
@@ -98,7 +100,7 @@ class AdminController extends Controller
         );
     }
 
-    public function products()
+    public function products(): Response
     {
         $form = new FormController();
         $form->field('name', ["require"]);
@@ -122,7 +124,7 @@ class AdminController extends Controller
         );
     }
 
-    public function orders()
+    public function orders(): Response
     {
         $users = [];
         return $this->render(
@@ -133,7 +135,7 @@ class AdminController extends Controller
         );
     }
 
-    public function role($id)
+    public function role($id): Response
     {
 
         $users = $this->roles->find($id);
@@ -144,7 +146,7 @@ class AdminController extends Controller
             ]
         );
     }
-    public function roles()
+    public function roles(): Response
     {
 
         $users = $this->roles->all();
@@ -156,7 +158,7 @@ class AdminController extends Controller
         );
     }
 
-    public function modifHeure($id)
+    public function modifHeure($id): Response
     {
 
         if (count($_POST) >= 1) {
@@ -190,7 +192,7 @@ class AdminController extends Controller
         );
     }
 
-    public function messages()
+    public function messages(): Response
     {
         $messages = $this->messages->all();
         return $this->render(
@@ -200,19 +202,4 @@ class AdminController extends Controller
             ]
         );
     }
-
-    
-    /**
-     * Undocumented function
-     *
-     * @param integer $id
-     * @return void
-     */
-    // public function messageDelete(int $id)
-    // {
-    //     $message = $this->messages->find($id, "id");
-    //     dd($message);
-
-    //     $this->redirect("adminMessages");
-    // }
 }

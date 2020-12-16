@@ -49,9 +49,9 @@ abstract class Table
         return $class_name;
     }
 
-    public function count()
+    public function count(): int
     {
-        return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
+        return count($this->query("SELECT id FROM {$this->table}", null, false, null));
     }
 
     public function last()
@@ -76,7 +76,7 @@ abstract class Table
     public function findAll($value, $column, $order = false, $colomunOrder = "id")
     {
         if ($order) {
-            $order = " ORDER BY " . $colomunOrder . " " . ($order === true ? "ASC" : "DESC");
+            $order = " ORDER BY  UPPER(" . $colomunOrder . ") " . ($order === true ? "ASC" : "DESC");
         } else {
             $order = "";
         }
@@ -86,7 +86,7 @@ abstract class Table
     public function all($order = false, $colomun = "id")
     {
         if ($order) {
-            $order = " ORDER BY " . $colomun . " " . ($order === true ? "ASC" : "DESC");
+            $order = " ORDER BY  UPPER(" . $colomun . ") " . ($order === true ? "ASC" : "DESC");
         } else {
             $order = "";
         }
@@ -98,24 +98,7 @@ abstract class Table
         $sql_parts = [];
         $attributes = [];
         if ($class) {
-            $methods = get_class_methods($fields);
-            $array = [];
-            foreach ($methods as $value) {
-                if (strrpos($value, 'get') === 0) {
-                    if ($fields->$value() !== null) {
-                        $column = str_replace('get', '', $value);
-                        $columname = $column[0];
-                        for ($i = 1; $i < strlen($column); $i++) {
-                            if (ctype_upper($column[$i])) {
-                                $columname .= "_";
-                            }
-                            $columname .= $column[$i];
-                        }
-                        $array[strtolower($columname)] = $fields->$value();
-                    }
-                }
-            }
-            $fields = $array;
+            $fields = $this->objectToArray($fields);
         }
         foreach ($fields as $k => $v) {
             $sql_parts[] = $k;
@@ -128,37 +111,12 @@ abstract class Table
     }
     public function updateByClass($obj, $columnDef = "id")
     {
-        $sql_parts = [];
-        $attributes = [];
         if (\is_object($obj)) {
-            $methods = get_class_methods($obj);
-            $array = [];
-            foreach ($methods as $value) {
-                if (strrpos($value, 'get') === 0) {
-                    if ($obj->$value() !== null) {
-                        $column = str_replace('get', '', $value);
-                        $columname = $column[0];
-                        for ($i = 1; $i < strlen($column); $i++) {
-                            if (ctype_upper($column[$i])) {
-                                $columname .= "_";
-                            }
-                            $columname .= $column[$i];
-                        }
-                        $array[strtolower($columname)] = $obj->$value();
-                    }
-                }
-            }
-            $fields = $array;
+            $fields = $this->objectToArray($obj);
         } else {
             throw new \Exception("ceci n'est pas un objet", 1);
         }
-        foreach ($fields as $k => $v) {
-            $sql_parts[] = "$k = :$k";
-            $attributes[$k] = $v;
-        }
-
-        $sql_part = implode(', ', $sql_parts);
-        return $this->query("UPDATE {$this->table} SET $sql_part WHERE $columnDef = :$columnDef", $attributes, true);
+        return $this->update($fields[$columnDef], $columnDef, $fields);
     }
 
     public function update($id, $column, $fields)
@@ -204,5 +162,27 @@ abstract class Table
     public function lastInsertId()
     {
         return $this->db->lastInsertId();
+    }
+
+    protected function objectToArray($object)
+    {
+        $methods = get_class_methods($object);
+        $array = [];
+        foreach ($methods as $value) {
+            if (strrpos($value, 'get') === 0) {
+                if ($object->$value() !== null) {
+                    $column = str_replace('get', '', $value);
+                    $columname = $column[0];
+                    for ($i = 1; $i < strlen($column); $i++) {
+                        if (ctype_upper($column[$i])) {
+                            $columname .= "_";
+                        }
+                        $columname .= $column[$i];
+                    }
+                    $array[strtolower($columname)] = $object->$value();
+                }
+            }
+        }
+        return $array;
     }
 }
