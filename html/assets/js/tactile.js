@@ -53,33 +53,33 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(clicDisplay).forEach(element => {
         element.addEventListener('mouseover', (e) => {
             document.getElementById("bg-image").style.filter = "blur(1rem)"
-            document.getElementById("bg-image").style.transition = "all 0.5s ease"
+            // document.getElementById("bg-image").style.transition = "all 0.5s ease"
             document.getElementById("iFrameTV").style.filter = "blur(1rem)"
-            document.getElementById("iFrameTV").style.transition = "all 1s ease"
+            // document.getElementById("iFrameTV").style.transition = "all 1s ease"
             document.getElementById('codeTactile').style.left = "683px"
-            document.getElementById('codeTactile').style.transition = "all 1.5s ease"
+            // document.getElementById('codeTactile').style.transition = "all 1.5s ease"
             closeTactile.style.right = "10px"
-            closeTactile.style.transition = "all 1.5s ease"
+            // closeTactile.style.transition = "all 1.5s ease"
             element.click();
         });
     });
 
 
-    closeTactile.addEventListener('click',() => {
+    closeTactile.addEventListener('click', () => {
         document.getElementById("inputcode").value = ""
         document.getElementById("bg-image").style.filter = ""
-        document.getElementById("bg-image").style.transition = "all 0.5s ease"
+        // document.getElementById("bg-image").style.transition = "all 0.5s ease"
         document.getElementById("iFrameTV").style.filter = ""
-        document.getElementById("iFrameTV").style.transition = "all 1s ease"
+        // document.getElementById("iFrameTV").style.transition = "all 1s ease"
         document.getElementById('codeTactile').style.left = "0px"
-        document.getElementById('codeTactile').style.transition = "all 1.5s ease-in"
+        // document.getElementById('codeTactile').style.transition = "all 1.5s ease-in"
         closeTactile.style.right = "-80px"
-        closeTactile.style.transition = "all 1s ease-in"
+        // closeTactile.style.transition = "all 1s ease-in"
         document.getElementById('okvalide').style.display = "none"
         Array.from(checkbox).forEach(element => {
             element.checked = false
         });
-	});
+    });
 
 });
 
