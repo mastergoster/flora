@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('codeTactile').style.transition = "all 1.5s ease-in"
         closeTactile.style.right = "-80px"
         closeTactile.style.transition = "all 1s ease-in"
-        // document.getElementsByClassName('checkbox').checked = false
+        document.getElementById('okvalide').style.display = "none"
         Array.from(checkbox).forEach(element => {
             element.checked = false
         });
