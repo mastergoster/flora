@@ -101,7 +101,7 @@
 															<p class="text-muted">
 																<small>
 																	Dernier message le
-																	{{ item.createdAt | date("d/m/Y à H:i:s") }}</small>
+																	{{ messages[0].createdAt | date("d/m/Y à H:i:s") }}</small>
 															</p>
 														</th>
 
@@ -132,7 +132,7 @@
 
 																<small class="text-muted">
 																	le
-																	{{ item.createdAt | date("d/m/Y à H:i:s") }}</small>
+																	{{ message.createdAt | date("d/m/Y à H:i:s") }}</small>
 
 																<br>
 																<p class="ml-2">{{message.message}}</p>
