@@ -32,10 +32,6 @@ class DisplayController extends Controller
                 $absent[] = $user;
             }
         }
-
-        dump($users);
-        dump($absent);
-        dd($presence);
         return $this->render(
             "display/tactile",
             [
