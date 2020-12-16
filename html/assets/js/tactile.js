@@ -45,6 +45,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 100)
             element.click();
         });
+        element.addEventListener('clic', (e) => {
+            var background = element.style.backgroundColor;
+            element.style.backgroundColor = "#18bfef";
+            setTimeout(function () {
+                element.style.backgroundColor = background;
+            }, 100)
+            element.click();
+        });
     });
 
     let clicDisplay = document.getElementsByClassName('clicDisplay');
