@@ -3,22 +3,22 @@ document.addEventListener('DOMContentLoaded', function () {
     function pavetactile(e) {
         this.style.backgroundColor = "#18bfef";
         var touche = this
+        let champsInput = document.getElementById("inputcode")
         setTimeout(function () {
             touche.style.removeProperty("background-color");
         }, 100)
         if (this.innerText == "X") {
-            var value = document.getElementById("inputcode").value
-            document.getElementById("inputcode").value = "" // value.substr(0, value.length - 1)
+            champsInput.value = "" // value.substr(0, value.length - 1)
         } else {
-            if (document.getElementById("inputcode").value.length < 4) {
-                document.getElementById("inputcode").value += this.innerText
+            if (champsInput.value.length < 4) {
+                champsInput.value += this.innerText
             }
         }
-        if (document.getElementById("inputcode").value.length == 4) {
+        if (champsInput.value.length == 4) {
             document.getElementById('okvalide').style.display = "flex";
             // document.getElementById('okvalide').click();
         }
-        if (document.getElementById("inputcode").value.length < 4) {
+        if (champsInput.value.length < 4) {
             document.getElementById('okvalide').style.display = "none";
         }
     }
@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    var clicDisplay = document.getElementsByClassName('clicDisplay');
-    var closeTactile = document.getElementById('closeTactile');
+    let clicDisplay = document.getElementsByClassName('clicDisplay');
+    let checkbox = document.getElementsByClassName('checkbox');
+    let closeTactile = document.getElementById('closeTactile');
     Array.from(clicDisplay).forEach(element => {
         element.addEventListener('mouseover', (e) => {
             document.getElementById("bg-image").style.filter = "blur(1rem)"
@@ -57,23 +58,27 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById("iFrameTV").style.transition = "all 1s ease"
             document.getElementById('codeTactile').style.left = "683px"
             document.getElementById('codeTactile').style.transition = "all 1.5s ease"
-            document.getElementById('closeTactile').style.right = "10px"
-            document.getElementById('closeTactile').style.transition = "all 1.5s ease"
+            closeTactile.style.right = "10px"
+            closeTactile.style.transition = "all 1.5s ease"
             element.click();
         });
     });
 
 
     closeTactile.addEventListener('click',() => {
+        document.getElementById("inputcode").value = ""
         document.getElementById("bg-image").style.filter = ""
         document.getElementById("bg-image").style.transition = "all 0.5s ease"
         document.getElementById("iFrameTV").style.filter = ""
         document.getElementById("iFrameTV").style.transition = "all 1s ease"
         document.getElementById('codeTactile').style.left = "0px"
         document.getElementById('codeTactile').style.transition = "all 1.5s ease-in"
-        document.getElementById('closeTactile').style.right = "-80px"
-        document.getElementById('closeTactile').style.transition = "all 1s ease-in"
-        // element.click();
+        closeTactile.style.right = "-80px"
+        closeTactile.style.transition = "all 1s ease-in"
+        // document.getElementsByClassName('checkbox').checked = false
+        Array.from(checkbox).forEach(element => {
+            element.checked = false
+        });
 	});
 
 });
