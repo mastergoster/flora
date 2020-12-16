@@ -31,7 +31,7 @@ class AdminCoreController extends Controller
         $this->md5("phinx");
         $request = $this->request()->query;
         putenv("BRANCH=" . \getenv("BRANCH"));
-        $git = explode("\n", `sudo git pull origin $(printenv BRANCH) 2>&1`);
+        $git = explode("\n", `git pull origin $(printenv BRANCH) 2>&1`);
 
 
         if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {
@@ -47,7 +47,6 @@ class AdminCoreController extends Controller
             $phinx = ["non lancé"];
         }
 
-        `sudo chown -R www-data:www-data *`;
 
         return $this->render("admin/update", ["itemss" => [
             "git" => $git,

@@ -9,6 +9,7 @@ use Core\Controller\FormController;
 use Core\Controller\EmailController;
 use App\Model\Entity\RecapConsoEntity;
 use Core\Controller\Helpers\TableauController;
+use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -462,7 +463,7 @@ class UsersController extends Controller
     public function mail(): Response
     {
         $paramUnique = TableauController::tableObjectToString("email", $this->users->all());
-        
+
         $form = new FormController();
         $form->field("name", ["require"]);
         $form->field("email", ["require", "mail", "unique" => $paramUnique]);
@@ -587,34 +588,47 @@ class UsersController extends Controller
     public function userMessages()
     {
         $display = "d-none";
-        
         // Récupère les messages selon l'id user ou le level de l'user
         $user = $this->session()->get("users");
-        $messages = $this->messages->messagesByIdUserAndLevelUser($user->getId(), $user->level);
-        foreach ($messages as $value) {
-            $mailExp = $value->getEmail();
-            if ($this->users->find($mailExp, 'email')) {
-                $value->idExp = $this->users->find($mailExp, 'email')->getId();
-            } else {
-                $value->idExp = "none";
+
+        $messages = $this->messages->messagesByIdUserAndLevelUser(
+            $user->getId(),
+            $user->level,
+            $user->getEmail()
+        );
+
+        foreach ($messages as $key => $value) {
+            if ($value->idExp == $user->getId()) {
+                if ($value->getIdRoles() != null) {
+                    $messages["groupe"]["r-" . $value->getIdRoles()][] = $value;
+                } elseif ($value->getIdUsers() != null) {
+                    $messages["perso"][$value->getIdUsers()][] = $value;
+                }
+            } elseif ($value->getIdRoles() != null) {
+                $messages["groupe"]["r-" . $value->getIdRoles()][] = $value;
+            } elseif ($value->idExp != null) {
+                $messages["perso"][$value->idExp][] = $value;
             }
+            unset($messages[$key]);
         }
 
         // Récupère l'id de tous les rôles et le nom associé pour l'affichage des destinataires possible
         $roles = $this->roles->all();
 
-        $dests = $this->users->all(true, "last_name");
+        $dests =  TableauController::assocId($this->users->all(true, "last_name"));
 
-        foreach ($roles as $value) {
-                $value->value = "r-" . $value->getId();
+        foreach ($roles as $key => $value) {
+            $value->value = "r-" . $value->getId();
+            $roles[$value->value] = $value;
+            unset($roles[$key]);
         }
 
         // Envoi du message par l'user à un destinataire
-    
+
         $form = new FormController();
         $form->field("destinataire", ["require"]);
         $form->field("message", ["require"]);
-        
+
         $errors = $form->hasErrors();
         if ($errors["post"] != ["no-data"]) {
             $datas = $form->getDatas();
@@ -628,8 +642,9 @@ class UsersController extends Controller
             }
 
             $datas['name'] = strtoupper($this->session()->get("users")->getLastName()) .
-            " " . ucfirst($this->session()->get("users")->getFirstName());
-            ;
+                " " . ucfirst(
+                    $this->session()->get("users")->getFirstName()
+                );
             $datas['email'] = $this->session()->get("users")->getEmail();
 
             if (!$errors) {
@@ -639,7 +654,7 @@ class UsersController extends Controller
                 return $this->redirect("userMessages");
             } else {
                 $this->messageFlash()->error("Envoi impossible : " .
-                "Vous devez choisir un destinataire et écrire un message.");
+                    "Vous devez choisir un destinataire et écrire un message.");
                 $display = "";
             }
         }
@@ -652,6 +667,8 @@ class UsersController extends Controller
         return $this->render(
             "user/messages",
             [
+
+                "user" => $user,
                 "roles" => $roles,
                 "dests" => $dests,
                 "errors" => $errors,
