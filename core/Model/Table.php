@@ -76,7 +76,7 @@ abstract class Table
     public function findAll($value, $column, $order = false, $colomunOrder = "id")
     {
         if ($order) {
-            $order = " ORDER BY " . $colomunOrder . " " . ($order === true ? "ASC" : "DESC");
+            $order = " ORDER BY  UPPER(" . $colomunOrder . ") " . ($order === true ? "ASC" : "DESC");
         } else {
             $order = "";
         }
@@ -86,7 +86,7 @@ abstract class Table
     public function all($order = false, $colomun = "id")
     {
         if ($order) {
-            $order = " ORDER BY " . $colomun . " " . ($order === true ? "ASC" : "DESC");
+            $order = " ORDER BY  UPPER(" . $colomun . ") " . ($order === true ? "ASC" : "DESC");
         } else {
             $order = "";
         }
