@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var pave = document.getElementsByClassName('touche');
     Array.from(pave).forEach(element => {
         element.addEventListener('mouseover', pavetactile);
+        element.addEventListener('click', pavetactile);
     });
     document.getElementById('okvalide').addEventListener('mouseover', (e) => {
         var background = document.getElementById('okvalide').style.backgroundColor;
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 100)
             element.click();
         });
-        element.addEventListener('clic', (e) => {
+        element.addEventListener('click', (e) => {
             var background = element.style.backgroundColor;
             element.style.backgroundColor = "#18bfef";
             setTimeout(function () {
