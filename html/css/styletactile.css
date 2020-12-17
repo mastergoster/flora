@@ -41,6 +41,22 @@ body {
     user-select: none;
 }
 
+.full-clock {
+	font-size: 1.5em;
+	font-synthesis: none;
+    font-weight: 800;
+    position: absolute;
+    top: 5px;
+    left: 785px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    color: black;
+    z-index: 30;
+    text-transform: uppercase
+}
+
 
 /* Box n°2 : dans la box n°1 */
 
