@@ -91,10 +91,11 @@
 								{% for idsender, messages in groupes %}
 									<tr>
 										<td>
-											<table class="table table-hover">
+											<table class="table table-hover" id="parent-collapse-{{idsender}}">
 												<thead class="text-primary">
 													<tr>
-														<th class="col-10">{{roles[idsender].name | upper}}
+														<th class="col-10" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapse-{{idsender}}">
+															{{roles[idsender].name | upper}}
 															{{dests[idsender].lastname | upper}}
 															{{dests[idsender].firstname | capitalize}}
 															<br>
@@ -116,7 +117,7 @@
 
 													</tr>
 												</thead>
-												<tbody>
+												<tbody class="collapse show" id="collapse-{{idsender}}" data-parent="#parent-collapse-{{idsender}}">
 													{% for message in messages %}
 														<tr>
 															<td {% if message.idExp %} colspan="2" {% endif %}>
@@ -158,5 +159,8 @@
 				</div>
 			</div>
 		</div>
-	</div><!-- Scripts --><script src="/assets/js/script-perso.js"></script>
+	</div>
+	<!-- Scripts -->
+	<script src="/assets/js/script-perso.js"></script>
+
 {% endblock %}

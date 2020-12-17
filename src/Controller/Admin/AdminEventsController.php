@@ -12,7 +12,8 @@ class AdminEventsController extends Controller
     public function __construct()
     {
         if (!$this->security()->isAdmin()) {
-            return $this->redirect('userProfile');
+            $this->redirect('userProfile')->send();
+            exit();
         }
         $this->loadModel("events");
         $this->loadModel("bookingEvents");

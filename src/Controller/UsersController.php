@@ -552,7 +552,8 @@ class UsersController extends Controller
             if ($errorsPassword["post"] != ["no-data"]) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if ($user->getId() == $datasPassword["id"] &&
+                    if (
+                        $user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
@@ -587,6 +588,9 @@ class UsersController extends Controller
      */
     public function userMessages()
     {
+        if (!$this->session()->has("users")) {
+            return $this->redirect("usersLogin");
+        }
         $display = "d-none";
         // Récupère les messages selon l'id user ou le level de l'user
         $user = $this->session()->get("users");

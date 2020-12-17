@@ -11,10 +11,15 @@
 
 	<body class="unselectable";>
 		<div id="bg-image"></div>
-		<div class="full-clock clk-marker"></div>
-		<div class="up clicouille" onclick="viewscroll(-374)"><i class="fas fa-arrow-up"></i></div>
-		<div class="down clicouille" onclick="viewscroll(374)"><i class="fas fa-arrow-down"></i></div>
-		<div id="closeTactile" class="clicouille"><i class="fas fa-chevron-left"></i></div>
+		<div class="up clicouille unselectable" onclick="viewscroll(-374)">
+			<i class="fas fa-arrow-up"></i>
+		</div>
+		<div class="down clicouille unselectable" onclick="viewscroll(374)">
+			<i class="fas fa-arrow-down"></i>
+		</div>
+		<div id="closeTactile" class="clicouille">
+			<i class="fas fa-chevron-left"></i>
+		</div>
 		<form action="/display/admin/new/line" method="post" class="form">
 			<div class="container">
 				{% for user in users %}
@@ -25,7 +30,8 @@
 							<div class="icon">
 								<i class="fas fa-user" style="font-size: 50px; {% if user.presence %} color: #2ecc71 {% endif %}"></i>
 							</div>
-							<div class="name">{{ user.firstName | capitalize }} <br>
+							<div class="name">{{ user.firstName | capitalize }}
+								<br>
 								{{ user.LastName | upper }}</div>
 						</div>
 					</label>
@@ -56,15 +62,15 @@
 						<div class="touche">0</div>
 					</div>
 					<div class="line">
-						<input style="" id="okvalide" class="touche touchespecial" type="submit" value="Valider">
+						<input style="" id="okvalide" class="touche touchespecial unselectable" type="submit" value="Valider">
 					</div>
 				</div>
 			</div>
-				<iframe id="iFrameTV" title="Ecran de la TV" src="https://coworkinmoulins.fr/tv"></iframe>
+			<iframe id="iFrameTV" title="Ecran de la TV" src="https://coworkinmoulins.fr/tv"></iframe>
 		</form>
 		<div id="popup" class="popup">
 			<p>Merci</p>
 		</div>
-			<script src="/assets/js/tactile.js?v1.2"></script>
+		<script src="/assets/js/tactile.js?v1.2"></script>
 	</body>
 </html>
