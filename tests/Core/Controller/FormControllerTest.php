@@ -286,7 +286,6 @@ class FormControllerTest extends TestCase
         $form->field('mail', ['require']);
         $error = $form->hasErrors();
         $this->assertArrayHasKey("post", $error);
-        $this->assertArrayHasKey("mail", $error);
         $actual = $form->html();
         $this->assertEquals($expected, $actual);
     }
@@ -568,6 +567,16 @@ class FormControllerTest extends TestCase
         $this->assertEquals(["mail" => ["Le champ mail doit être un email valide."]], $error);
         $datas = $form->getDatas();
         $this->assertEquals([], $datas);
+    }
+
+    public function testConstraintMailNoPost(): void
+    {
+        $_POST = [];
+        $form = new FormController();
+        $form->field("mail", ["require", "mail"]);
+        $error = $form->hasErrors();
+        $this->assertArrayHasKey("post", $error);
+        $this->assertEquals(['no-data'], $error['post']);
     }
 
     public function testHydrate(): void

@@ -82,7 +82,8 @@ class FormController
      */
     private function verifyError(): void
     {
-        if (!$this->isverify) {
+
+        if (!$this->isverify && !isset($this->errors["post"])) {
             foreach ($this->fields as $field => $constraints) {
                 //pas de contrainte defini
                 if (count($constraints) <= 0) {
@@ -116,7 +117,8 @@ class FormController
     private function errorVerify(string $field, bool $value): void
     {
         $fieldVerify = $field . "Verify";
-        if (isset($this->postDatas[$fieldVerify]) &&
+        if (
+            isset($this->postDatas[$fieldVerify]) &&
             $this->postDatas[$fieldVerify] == $this->postDatas[$field]
         ) {
             $this->addToDatas($field);
@@ -154,7 +156,7 @@ class FormController
 
     private function errorMail(string $field): void
     {
-        if (filter_var($this->postDatas[$field], FILTER_VALIDATE_EMAIL)) {
+        if (isset($this->postDatas[$field]) && filter_var($this->postDatas[$field], FILTER_VALIDATE_EMAIL)) {
             $this->addToDatas($field);
         } else {
             $this->newError("$field", "Le champ {$field} doit être un email valide.");

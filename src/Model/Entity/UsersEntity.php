@@ -89,6 +89,8 @@ class UsersEntity extends Entity
 
     private $postal_code;
 
+    private $id_images;
+
     /**
      * Get undocumented variable
      *
@@ -390,6 +392,26 @@ class UsersEntity extends Entity
     public function setPostalCode($postal_code)
     {
         $this->postal_code = $postal_code;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id_images
+     */
+    public function getIdImages()
+    {
+        return $this->id_images;
+    }
+
+    /**
+     * Set the value of id_images
+     *
+     * @return  self
+     */
+    public function setIdImages($id_images)
+    {
+        $this->id_images = $id_images;
 
         return $this;
     }

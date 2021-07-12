@@ -25,6 +25,7 @@ class UsersController extends Controller
         $this->loadModel('messages');
         $this->loadModel('invoces');
         $this->loadModel('invocesLines');
+        $this->loadModel('images');
     }
 
     public function login(): Response
@@ -39,7 +40,7 @@ class UsersController extends Controller
 
 
         $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             //verifie qu'il n'y ai pas d'erreurs
             if (!$errors) {
@@ -55,11 +56,13 @@ class UsersController extends Controller
             }
         }
 
-        //supprime le mdp pour le renvoie a la vue
-        unset($datas["password"]);
 
-        if ($errors["post"]) {
-            unset($errors);
+        if (isset($datas["password"])) {
+            unset($datas["password"]);
+        }
+
+        if (isset($errors["post"])) {
+            $errors = [];
         }
         return $this->render('user/login', [
             'page' => 'Connexion',
@@ -325,7 +328,10 @@ class UsersController extends Controller
         $roles = TableauController::assocId($this->roles->all());
         $rolesLog = $this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at");
         $roleUser = $roles[reset($rolesLog)->getIdRoles()];
-
+        if ($user->getIdImages()) {
+            $images = $this->images->find($user->getIdImages());
+            $user->img = "/" . $images->getRef() . "/" . $images->getName();
+        }
 
 
         return $this->render('user/profile', [
@@ -442,8 +448,8 @@ class UsersController extends Controller
             $datas["token"] = "http://" . $_SERVER["HTTP_HOST"] . "/validation/" . $userToken;
             $mail->object('Validez votre inscription sur le site ' . getenv('siteName'))
                 ->to($userMail)
-                ->message('confirmation', compact('datas'))
-                ->send();
+                ->message('confirmation', compact('datas'));
+            $mail->send();
             $this->messageFlash()->success("Un nouveau mail d'activation vous a été envoyé.");
             return $this->redirect("usersLogin");
         }
@@ -520,7 +526,6 @@ class UsersController extends Controller
             return $this->redirect("usersLogin");
         }
         $user = $this->session()->get("users");
-
         $formUpdate = new FormController();
         $formUpdate->field("first_name", ["require"]);
         $formUpdate->field("last_name", ["require"]);
@@ -534,7 +539,7 @@ class UsersController extends Controller
         $errors = [];
         if ($this->request()->query->has("user")) {
             $errors =  $formUpdate->hasErrors();
-            if ($errors["post"] != ["no-data"]) {
+            if (!isset($errors["post"])) {
                 $datas = $formUpdate->getDatas();
                 if (!$errors) {
                     $this->users->update($user->getId(), "id", $datas);
@@ -574,6 +579,10 @@ class UsersController extends Controller
         }
         foreach ($errorsPassword as $error) {
             $this->messageFlash()->error($error[0]);
+        }
+        if ($user->getIdImages()) {
+            $images = $this->images->find($user->getIdImages());
+            $user->img = "/" . $images->getRef() . "/" . $images->getName();
         }
         return $this->render("user/edit", ["user" => $user, "errors" => $errors, "errorsP" => $errorsPassword]);
     }
