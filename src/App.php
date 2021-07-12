@@ -41,7 +41,7 @@ class App
             //$app->request->getSession()->start();
         }
         $app->request->hasPreviousSession();
-        $session = $_SESSION ?: [];
+        $session = isset($_SESSION) ? $_SESSION : [];
         //retrocomptatibility
         unset($session["_sf2_attributes"]);
         unset($session["_symfony_flashes"]);

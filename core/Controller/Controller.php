@@ -32,12 +32,13 @@ abstract class Controller
     {
         $response = new Response();
         $folder  = $this->getApp()->rootfolder() . "/files/$view/";
-        $name = ($variables["title"] ?: "pdf") . ".pdf";
+        $title = (isset($variables["title"]) ? $variables["title"] : "pdf");
+        $name =  $title . ".pdf";
 
         if (!file_exists($folder . $name)) {
             $mpdf = new \Mpdf\Mpdf();
-            $mpdf->SetTitle($variables["title"] ?: "pdf");
-            $mpdf->WriteHTML($this->render($view, $variables));
+            $mpdf->SetTitle($title);
+            $mpdf->WriteHTML($this->render($view, $variables)->getContent());
             $folderLink = "";
             foreach (explode("/", $folder) as $value) {
                 if (!is_dir($folderLink . "/" . $value) && $value != "") {
@@ -128,7 +129,7 @@ abstract class Controller
     protected function redirect($path, $params = [])
     {
 
-        if (\substr($path, 0, 1) == "/" || \strpos($path, 0, 4) == "http") {
+        if (\substr($path, 0, 1) == "/" || \substr($path, 0, 4) == "http") {
             $url = $path;
         } else {
             $url = $this->generateUrl($path, $params);

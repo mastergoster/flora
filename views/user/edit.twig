@@ -5,6 +5,41 @@
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block content %}
+	<style>
+		#upform {
+			max-width: 600px;
+			padding: 20px;
+			margin-bottom: 10px;
+			background: #f2f2f2;
+			border: 2px solid #ccc;
+			font-family: arial, sans-serif;
+		}
+		#upform h1 {
+			margin: 0;
+		}
+		.hidden {
+			display: none !important;
+		}
+		#upform label,
+		#upform input {
+			display: block;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		#upform label img {
+			width: 100%;
+		}
+		#upform input[type=submit] {
+			background: #3961a3;
+			color: #fff;
+			border: 0;
+			padding: 5px;
+			display: none;
+		}
+		#upform {
+			margin-top: 10px;
+		}
+	</style>
 	<div class="row">
 		<div class="col-md-8">
 			<div class="card">
@@ -113,7 +148,6 @@
 				</div>
 				<div class="card-body">
 					<form method="post" action="?password">
-
 						<input type="hidden" value="{{ user.id }}" name="id" class="form-control">
 						<div class="col-md-12">
 							<div class="form-group bmd-form-group{% if errorsP['password'] %} has-danger{% endif %}">
@@ -144,5 +178,110 @@
 				</form>
 			</div>
 		</div>
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Modification de ta photo</h4>
+				</div>
+				<div class="card-body">
+					<form id="upform" onsubmit="return ajaxup.add();">
+						<label for="upfile"><img id="upstat" src="{% if user.img %}{{user.img}}{% else %}/assets/img/faces/avatar.jpg{% endif %}"></label>
+						<input class="hidden" type="file" accept=".png,.jpg,.jpeg" id="upfile" required/>
+						<input type="submit" value="Upload"/>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>{% endblock %}{% block script %}{% endblock %}
+{% endblock %}
+{% block script %}
+	<script>
+		function getCookie(nomCookie) {
+deb = document.cookie.indexOf(nomCookie + "=")
+if (deb >= 0) {
+deb += nomCookie.length + 1
+fin = document.cookie.indexOf(";", deb)
+if (fin < 0) 
+fin = document.cookie.length
+
+
+
+
+
+return unescape(document.cookie.substring(deb, fin))
+} else 
+return ""
+
+
+
+
+
+}
+
+var ajaxup = { // (A) ADD TO UPLOAD QUEUE
+queue: [], // upload queue
+add: function () {
+for (let f of document.getElementById("upfile").files) {
+ajaxup.queue.push(f);
+}
+document.getElementById("upform").reset();
+if (! ajaxup.uploading) {
+ajaxup.go();
+}
+return false;
+},
+
+// (B) AJAX UPLOAD
+uploading: false, // upload in progress
+go: function () { // (B1) UPLOAD ALREADY IN PROGRESS
+ajaxup.uploading = true;
+
+// (B2) FILE TO UPLOAD
+var data = new FormData();
+data.append("upfile", ajaxup.queue[0]);
+// APPEND MORE VARIABLES IF YOU WANT
+data.append("id_user", {{ user.id }});
+data.append("function", "updatepicture");
+
+// (B3) AJAX REQUEST
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "/ajax");
+
+xhr.onreadystatechange = function () {
+if (xhr.readyState == 4 && xhr.status == 200) {
+objresponse = JSON.parse(this.response)
+document.getElementById("upstat").src = objresponse.url;
+}
+if (xhr.readyState == 4 && xhr.status == 500) {
+$.notify({
+message: 'Erreur de chargement'
+}, {
+placement: {
+from: "top",
+align: "center"
+},
+type: 'danger'
+});
+
+}
+// (B4) SHOW UPLOAD RESULTS
+
+
+// (B5) NEXT FILE
+ajaxup.queue.shift();
+if (ajaxup.queue.length != 0) {
+ajaxup.go();
+} else {
+ajaxup.uploading = false;
+}
+};
+
+// (B6) GO!
+xhr.send(data);
+}
+};
+document.getElementById("upfile").onchange = function () {
+return ajaxup.add();
+};
+	</script>
+{% endblock %}

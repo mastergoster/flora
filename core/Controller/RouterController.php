@@ -2,6 +2,7 @@
 
 namespace Core\Controller;
 
+use App\RouteConfig;
 use mysql_xdevapi\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,10 +13,22 @@ class RouterController
 
     private $viewPath;
 
-    public function __construct(string $viewPath)
+    public function __construct(string $viewPath, ?RouteConfig $routeConfig = null)
     {
         $this->viewPath = $viewPath;
         $this->router = new \AltoRouter();
+        $this->addConfig($routeConfig);
+    }
+
+    public function addConfig(?RouteConfig $routeConfig = null): self
+    {
+        if (!is_null($routeConfig)) {
+            foreach ($routeConfig->getConfig() as $route) {
+                $methode = $route[0];
+                $this->$methode($route[1], $route[2], $route[3]);
+            };
+        }
+        return $this;
     }
 
     public function get(string $uri, string $file, string $name): self

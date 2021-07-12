@@ -11,6 +11,7 @@ composer.lock
 .vscode
 /files
 /html/image
+/html/medias
 /covehtml/*
 /covHtml/*
 
