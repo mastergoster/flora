@@ -39,6 +39,46 @@
 		#upform {
 			margin-top: 10px;
 		}
+		.container {
+			position: relative;
+			width: 50%;
+		}
+
+		.image {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+
+		.overlay {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 100%;
+			width: 100%;
+			opacity: 0;
+			transition: 0.5s ease;
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+
+		.container:hover .overlay {
+			opacity: 1;
+			cursor: pointer;
+		}
+
+		.text {
+			color: white;
+			font-size: 20px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			text-align: center;
+		}
 	</style>
 	<div class="row">
 		<div class="col-md-8">
@@ -185,7 +225,12 @@
 				</div>
 				<div class="card-body">
 					<form id="upform" onsubmit="return ajaxup.add();">
-						<label for="upfile"><img id="upstat" src="{% if user.img %}{{user.img}}{% else %}/assets/img/faces/avatar.jpg{% endif %}"></label>
+						<label class="container" for="upfile">
+							<img id="upstat" src="{% if user.img %}{{user.img}}{% else %}/assets/img/faces/avatar.jpg{% endif %}">
+							<div class="overlay">
+								<div class="text">Changer ma photo</div>
+							</div>
+						</label>
 						<input class="hidden" type="file" accept=".png,.jpg,.jpeg" id="upfile" required/>
 						<input type="submit" value="Upload"/>
 					</form>

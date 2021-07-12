@@ -25,6 +25,7 @@ class UsersController extends Controller
         $this->loadModel('messages');
         $this->loadModel('invoces');
         $this->loadModel('invocesLines');
+        $this->loadModel('images');
     }
 
     public function login(): Response
@@ -327,7 +328,10 @@ class UsersController extends Controller
         $roles = TableauController::assocId($this->roles->all());
         $rolesLog = $this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at");
         $roleUser = $roles[reset($rolesLog)->getIdRoles()];
-
+        if ($user->getIdImages()) {
+            $images = $this->images->find($user->getIdImages());
+            $user->img = "/" . $images->getRef() . "/" . $images->getName();
+        }
 
 
         return $this->render('user/profile', [
@@ -575,6 +579,10 @@ class UsersController extends Controller
         }
         foreach ($errorsPassword as $error) {
             $this->messageFlash()->error($error[0]);
+        }
+        if ($user->getIdImages()) {
+            $images = $this->images->find($user->getIdImages());
+            $user->img = "/" . $images->getRef() . "/" . $images->getName();
         }
         return $this->render("user/edit", ["user" => $user, "errors" => $errors, "errorsP" => $errorsPassword]);
     }
