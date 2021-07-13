@@ -15,7 +15,7 @@ class AdminCoreController extends Controller
             $this->redirect('userProfile')->send();
             exit();
         }
-        chdir("/var/www");
+        chdir(\getenv("PATH_BASE"));
     }
 
     public function update(): Response
@@ -36,7 +36,7 @@ class AdminCoreController extends Controller
 
 
         if (!$this->md5("composer.json", true) || $request->get("composer") == "force") {
-            putenv("COMPOSER_HOME=/var/www/.config/composer");
+            //putenv("COMPOSER_HOME=/var/www/.config/composer");
             $composer = explode("\n", `composer update -v --no-dev -o 2>&1`);
         } else {
             $composer = ["non lancé"];
