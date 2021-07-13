@@ -36,8 +36,27 @@ abstract class Controller
         $name =  $title . ".pdf";
 
         if (!file_exists($folder . $name)) {
-            $mpdf = new \Mpdf\Mpdf();
+            $mpdf = new \Mpdf\Mpdf([
+                'margin_left' => 20,
+                'margin_right' => 15,
+                'margin_top' => 48,
+                'margin_bottom' => 25,
+                'margin_header' => 10,
+                'margin_footer' => 10
+            ]);
+            $mpdf->SetProtection(['print']);
             $mpdf->SetTitle($title);
+
+            $mpdf->SetAuthor("CoWorkInMoulins by FLORA");
+            if (isset($paid)) {
+                $mpdf->SetWatermarkText("Paid");
+                $mpdf->showWatermarkText = true;
+                $mpdf->watermark_font = 'DejaVuSansCondensed';
+                $mpdf->watermarkTextAlpha = 0.1;
+            }
+
+            $mpdf->SetDisplayMode('fullpage');
+
             $mpdf->WriteHTML($this->render($view, $variables)->getContent());
             $folderLink = "";
             foreach (explode("/", $folder) as $value) {
@@ -48,7 +67,7 @@ abstract class Controller
                     $folderLink = $folderLink . "/" . $value;
                 }
             }
-
+            $mpdf->setProtection([]);
             $mpdf->Output($folder . $name, \Mpdf\Output\Destination::FILE);
         }
         $response->headers->set("Content-Description", "File Transfer");

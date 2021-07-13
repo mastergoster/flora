@@ -1,364 +1,227 @@
-<!doctype html>
 <html>
-
 	<head>
-		<title>Facture
-			{{invoce.ref}}</title>
-		<meta charset="UTF-8">
 		<style>
-			html,
-			body,
-			div,
-			span,
-			applet,
-			object,
-			iframe,
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6,
-			p,
-			blockquote,
-			pre,
-			a,
-			abbr,
-			acronym,
-			address,
-			big,
-			cite,
-			code,
-			del,
-			dfn,
-			em,
-			img,
-			ins,
-			kbd,
-			q,
-			s,
-			samp,
-			small,
-			strike,
-			strong,
-			sub,
-			sup,
-			tt,
-			var,
-			b,
-			u,
-			i,
-			center,
-			dl,
-			dt,
-			dd,
-			ol,
-			ul,
-			li,
-			fieldset,
-			form,
-			label,
-			legend,
-			table,
-			caption,
-			tbody,
-			tfoot,
-			thead,
-			tr,
-			th,
-			td,
-			article,
-			aside,
-			canvas,
-			details,
-			embed,
-			figure,
-			figcaption,
-			footer,
-			header,
-			hgroup,
-			menu,
-			nav,
-			output,
-			ruby,
-			section,
-			summary,
-			time,
-			mark,
-			audio,
-			video {
+			body {
+				font-family: sans-serif;
+				font-size: 10pt;
+			}
+			p {
 				margin: 0;
-				padding: 0;
-				border: 0;
-				font-size: 100%;
-				font: inherit;
-				vertical-align: baseline;
 			}
-
-			article,
-			aside,
-			details,
-			figcaption,
-			figure,
-			footer,
-			header,
-			hgroup,
-			menu,
-			nav,
-			section {
-				display: block;
+			table.items {
+				border: 0.1mm solid #000000;
 			}
-
-			body {
-				line-height: 1;
+			td {
+				vertical-align: top;
 			}
-
-			ol,
-			ul {
-				list-style: none;
-			}
-
-			blockquote,
-			q {
-				quotes: none;
-			}
-
-			blockquote:before,
-			blockquote:after,
-			q:before,
-			q:after {
-				content: '';
-				content: none;
-			}
-
-			table {
-				border-collapse: collapse;
-				border-spacing: 0;
-			}
-
-			body {
-				-webkit-text-size-adjust: none;
-			}
-
-			mark {
-				background-color: transparent;
-				color: inherit;
-			}
-
-			input::-moz-focus-inner {
-				border: 0;
-				padding: 0;
-			}
-
-			input,
-			select,
-			textarea {
-				-moz-appearance: none;
-				-webkit-appearance: none;
-				-ms-appearance: none;
-				appearance: none;
-			}
-
-			html,
-			body {
-				height: 29.7cm;
-				width: 21cm;
-
-			}
-
-			body {
-				width: 21cm;
-				padding: 2cm;
-				position: relative;
-				color: #222;
-				font-family: "Helvetica Neue", Arial, Verdana, sens-serif;
-				line-height: 1.4;
-			}
-
-			h1 {
-				font-size: 3em;
-				font-weight: bold;
-				margin: 0 0 1cm;
-			}
-			h1 strong {
-				font-size: 0.4em;
-			}
-
-			.address_label,
-			.infos_label {
-				color: #555;
-				float: left;
-				width: 1cm;
-				text-align: right;
-			}
-
-			.address_content,
-			.infos_content {
-				margin-left: 1.1cm;
-				border-left: 1px solid #CCCCCC;
-				padding-left: 10px;
-			}
-
-			.address-from {
-				float: left;
-				width: 50%;
-			}
-
-			.address-to {
-				float: left;
-				width: 50%;
-			}
-
-			.infos {
-				float: right;
-				width: 100%;
-			}
-
-			.infos_label,
-			.infos_content {
-				padding-top: 4px;
-				padding-bottom: 4px;
-			}
-
-			.cb {
-				clear: both;
-			}
-
-			.items {
-				margin: 50px 0;
-				width: 100%;
-				border-spacing: 0;
-				border-collapse: collapse;
-			}
-
-			.items tbody tr:nth-child(odd) {
-				background: #F6F6F6;
-			}
-
-			.items th {
-				border-bottom: 1px solid #DDDDDD;
-				text-align: left;
-				border-top: none;
-				padding: 10px;
-				font-size: 0.9em;
-			}
-
 			.items td {
-				border: 1px solid #DDDDDD;
-				border-left: none;
-				border-right: none;
-				padding: 10px;
+				border-left: 0.1mm solid #000000;
+				border-right: 0.1mm solid #000000;
 			}
-
-			.total {
-				background-color: transparent !important;
+			table thead td {
+				background-color: #EEEEEE;
+				text-align: center;
+				border: 0.1mm solid #000000;
+				font-variant: small-caps;
 			}
-
-			.total td {
-				border: none !important;
+			.items tr:nth-child(2n) {
+				background-color: #f2f2f2;
 			}
-
-			.total_label {
+			.items td.blanktotal {
+				background-color: #EEEEEE;
+				border: 0.1mm solid #000000;
+				background-color: #FFFFFF;
+				border: 0 none #000000;
+				border-top: 0.1mm solid #000000;
+				border-right: 0.1mm solid #000000;
+			}
+			.items td.totals {
 				text-align: right;
-				background-color: transparent;
+				border: 0.1mm solid #000000;
 			}
-
-			.total-first td {
-				padding-top: 28px;
+			.items td.cost {
+				text-align: "." center;
 			}
-
-			.total-big td {
-				padding-top: 10px;
-				font-size: 1.3em;
-				font-weight: bold;
-			}
-
-			footer {
-				border-top: 1px solid #CCCCCC;
-				padding: 1em 5px 0;
-				font-size: 0.8em;
+			.items tr.result {
+				background-color: #FFFFFF;
 			}
 		</style>
-
 	</head>
-
 	<body>
 
-		<h1>Facture
-			<br>
-			<strong>n°{{ invoce.ref }}
-				<br>du
-				{{ invoce.dateAt | date("d F Y") }}</strong>
-		</h1>
-		<div class="address address-to">
-			<div class="address_label">Pour</div>
-			<div class="address_content">
-				<strong>{{ user.firstName }}
-					{{ user.lastName }}</strong><br>
-				{{ user.street }}<br>
-				{{ user.postalCode }}
-				{{ user.city }}<br>
-				{{ user.phoneNumber  }}
+		<!--mpdf
+			<htmlpageheader name="myheader">
+			<table width="100%"><tr>
+			<td width="25%"><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"
+			xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+			xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" id="svg2" xml:space="preserve"
+			width="155" height="33" viewBox="0 0 541.30798 339.78" sodipodi:docname="logo.ai">
+			<metadata id="metadata8">
+			<rdf:RDF>
+			<cc:Work rdf:about="">
+			<dc:format>image/svg+xml</dc:format>
+			<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+			</cc:Work>
+			</rdf:RDF>
+			</metadata>
+			<defs id="defs6">
+			<clipPath clipPathUnits="userSpaceOnUse" id="clipPath18">
+			<path d="M 0,254.835 H 405.981 V 0 H 0 Z" id="path16" />
+			</clipPath>
+			</defs>
+			<sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10"
+			gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640"
+			inkscape:window-height="480" id="namedview4" />
+			<g id="g10" inkscape:groupmode="layer" inkscape:label="logo" transform="matrix(1.3333333,0,0,-1.3333333,0,339.78)">
+			<g id="g12">
+			<g id="g14" clip-path="url(#clipPath18)">
+			<g id="g20" transform="translate(304.1805,229.4091)">
+			<path
+			d="M 0,0 H -274.319 V -203.984 H 29.726 v -16.345 h -302.144 c -9.552,0 -17.296,7.745 -17.296,17.297 v 202.08 c 0,9.553 7.744,17.297 17.297,17.297 H 6.565 c 44.539,0 80.769,-37.539 80.769,-83.686 V -220.329 H 71.939 L 71.97,-71.985 C 71.979,-32.231 39.754,0 0,0"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path22" />
+			</g>
+			<g id="g24" transform="translate(76.5838,164.1352)">
+			<path
+			d="M 0,0 8.641,-3.346 C 7.293,-9.377 5.05,-13.783 1.912,-16.565 c -3.138,-2.783 -6.999,-4.174 -11.583,-4.174 -5.761,0 -10.431,2.218 -14.01,6.656 -4.118,5.123 -6.177,12.036 -6.177,20.738 0,9.193 2.071,16.388 6.22,21.585 3.607,4.511 8.454,6.766 14.54,6.766 4.955,0 9.101,-1.691 12.438,-5.074 2.381,-2.403 4.124,-5.97 5.228,-10.701 l -8.825,-2.574 c -0.564,2.918 -1.689,5.155 -3.371,6.711 -1.683,1.557 -3.665,2.335 -5.948,2.335 -3.27,0 -5.932,-1.422 -7.995,-4.266 -2.062,-2.843 -3.095,-7.538 -3.095,-14.083 0,-6.791 1.005,-11.62 3.016,-14.488 2.01,-2.868 4.621,-4.302 7.832,-4.302 2.353,0 4.388,0.913 6.104,2.739 C -1.998,-6.87 -0.76,-3.972 0,0"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path26" />
+			</g>
+			<g id="g28" transform="translate(99.4925,163.8407)">
+			<path
+			d="m 0,0 c 0,-3.959 0.775,-6.953 2.323,-8.981 1.547,-2.029 3.413,-3.043 5.601,-3.043 2.139,0 3.969,1.02 5.492,3.061 1.522,2.041 2.285,5.053 2.285,9.037 0,3.885 -0.775,6.848 -2.323,8.889 -1.547,2.041 -3.401,3.061 -5.564,3.061 -2.139,0 -3.975,-1.02 -5.51,-3.061 C 0.766,6.922 0,3.935 0,0 m -8.678,0.552 c 0,3.833 0.76,7.32 2.28,10.461 1.52,3.144 3.505,5.504 5.957,7.072 2.451,1.576 5.209,2.36 8.273,2.36 5.148,0 9.193,-2.019 12.135,-6.061 2.941,-4.039 4.412,-8.761 4.412,-14.163 0,-4.027 -0.766,-7.661 -2.298,-10.903 -1.532,-3.242 -3.542,-5.681 -6.03,-7.315 -2.488,-1.629 -5.216,-2.448 -8.182,-2.448 -4.756,0 -8.702,1.818 -11.841,5.451 -3.137,3.635 -4.706,8.817 -4.706,15.546"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path30" />
+			</g>
+			<g id="g32" transform="translate(142.3035,144.3154)">
+			<path
+			d="m 0,0 -10.593,53.907 h 9.156 L 5.2,16.859 13.281,53.907 h 10.636 l 7.758,-37.673 6.822,37.673 h 8.972 L 36.734,0 H 27.232 L 18.401,40.32 9.649,0 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path34" />
+			</g>
+			<g id="g36" transform="translate(199.8846,163.8407)">
+			<path
+			d="m 0,0 c 0,-3.959 0.775,-6.953 2.323,-8.981 1.547,-2.029 3.413,-3.043 5.601,-3.043 2.139,0 3.968,1.02 5.491,3.061 1.523,2.041 2.286,5.053 2.286,9.037 0,3.885 -0.775,6.848 -2.323,8.889 -1.547,2.041 -3.401,3.061 -5.564,3.061 -2.139,0 -3.975,-1.02 -5.51,-3.061 C 0.766,6.922 0,3.935 0,0 m -8.678,0.552 c 0,3.833 0.76,7.32 2.28,10.461 1.52,3.144 3.505,5.504 5.957,7.072 2.451,1.576 5.209,2.36 8.273,2.36 5.148,0 9.193,-2.019 12.135,-6.061 2.941,-4.039 4.412,-8.761 4.412,-14.163 0,-4.027 -0.766,-7.661 -2.298,-10.903 -1.532,-3.242 -3.542,-5.681 -6.031,-7.315 -2.487,-1.629 -5.215,-2.448 -8.181,-2.448 -4.756,0 -8.702,1.818 -11.841,5.451 -3.137,3.635 -4.706,8.817 -4.706,15.546"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path38" />
+			</g>
+			<g id="g40" transform="translate(239.0457,144.3154)">
+			<path
+			d="m 0,0 h -8.494 v 39.051 h 7.869 v -5.552 c 1.349,2.598 2.556,4.326 3.622,5.185 1.066,0.858 2.298,1.286 3.695,1.286 1.937,0 3.788,-0.649 5.553,-1.949 L 9.598,29.013 C 8.2,30.14 6.876,30.704 5.626,30.704 4.45,30.704 3.414,30.269 2.519,29.396 1.625,28.525 0.981,26.947 0.588,24.667 0.196,22.384 0,18.187 0,12.076 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path42" />
+			</g>
+			<g id="g44" transform="translate(254.637,144.3154)">
+			<path
+			d="M 0,0 V 53.907 H 8.494 V 25.341 l 9.907,13.71 H 28.847 L 17.889,24.756 29.619,0 H 20.506 L 12.383,17.577 8.494,12.502 V 0 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path46" />
+			</g>
+			<path d="m 300.779,198.222 h 8.898 v -53.907 h -8.898 z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path48" />
+			<g id="g50" transform="translate(347.2952,144.3154)">
+			<path
+			d="m 0,0 h -8.495 v 19.955 c 0,3.999 -0.159,6.661 -0.478,7.985 -0.319,1.327 -0.913,2.344 -1.783,3.058 -0.87,0.711 -1.857,1.066 -2.96,1.066 -1.422,0 -2.709,-0.459 -3.861,-1.381 -1.152,-0.92 -1.961,-2.191 -2.427,-3.809 -0.466,-1.622 -0.699,-4.676 -0.699,-9.166 V 0 h -8.494 v 39.051 h 7.869 v -5.699 c 1.397,2.206 2.973,3.86 4.725,4.964 1.753,1.103 3.696,1.654 5.829,1.654 2.476,0 4.566,-0.643 6.269,-1.933 1.704,-1.287 2.881,-2.945 3.53,-4.967 C -0.325,31.044 0,28.118 0,24.291 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path52" />
+			</g>
+			<g id="g54" transform="translate(48.1595,54.245)">
+			<path
+			d="M 0,0 V 71.421 H 17.681 L 28.33,22.654 38.894,71.421 H 56.659 V 0 H 45.649 V 56.27 L 33.973,0 H 22.597 L 11.01,56.27 V 0 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path56" />
+			</g>
+			<g id="g58" transform="translate(125.2806,80.1147)">
+			<path
+			d="m 0,0 c 0,-5.246 1.027,-9.212 3.077,-11.899 2.05,-2.688 4.523,-4.032 7.422,-4.032 2.834,0 5.257,1.352 7.275,4.056 2.018,2.704 3.029,6.694 3.029,11.972 0,5.148 -1.028,9.074 -3.078,11.778 -2.05,2.704 -4.506,4.056 -7.372,4.056 -2.834,0 -5.266,-1.352 -7.3,-4.056 C 1.015,9.171 0,5.213 0,0 m -11.498,0.73 c 0,5.08 1.007,9.7 3.021,13.861 2.014,4.165 4.644,7.291 7.893,9.37 3.247,2.087 6.901,3.126 10.961,3.126 6.821,0 12.18,-2.675 16.077,-8.03 C 30.352,13.706 32.3,7.45 32.3,0.292 c 0,-5.334 -1.015,-10.149 -3.045,-14.445 -2.029,-4.295 -4.693,-7.527 -7.989,-9.691 -3.297,-2.159 -6.911,-3.243 -10.84,-3.243 -6.301,0 -11.53,2.407 -15.688,7.222 -4.157,4.815 -6.236,11.68 -6.236,20.595"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path60" />
+			</g>
+			<g id="g62" transform="translate(194.2171,54.245)">
+			<path
+			d="M 0,0 V 7.738 C -1.555,4.933 -3.597,2.736 -6.126,1.157 c -2.53,-1.583 -5.173,-2.375 -7.929,-2.375 -2.789,0 -5.286,0.731 -7.491,2.193 -2.204,1.465 -3.849,3.544 -4.936,6.244 -1.084,2.695 -1.628,6.613 -1.628,11.749 v 32.771 h 11.254 V 27.964 c 0,-6.788 0.17,-11.099 0.511,-12.934 0.337,-1.835 1.092,-3.256 2.257,-4.263 1.165,-1.007 2.574,-1.511 4.227,-1.511 1.875,0 3.609,0.658 5.196,1.973 1.587,1.316 2.631,3.005 3.134,5.067 0.5,2.063 0.751,6.602 0.751,13.617 V 51.739 H 10.474 L 10.474,0 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path64" />
+			</g>
+			<path d="m 216.384,125.666 h 11.254 V 54.245 h -11.254 z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path66" />
+			<path d="m 239.135,105.984 h 11.254 V 54.245 h -11.254 z m 0,19.682 h 11.254 v -12.667 h -11.254 z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path68" />
+			<g id="g70" transform="translate(300.4715,54.245)">
+			<path
+			d="m 0,0 h -11.254 v 26.438 c 0,5.298 -0.211,8.826 -0.633,10.58 -0.423,1.758 -1.21,3.106 -2.363,4.052 -1.153,0.942 -2.46,1.412 -3.922,1.412 -1.884,0 -3.589,-0.608 -5.115,-1.831 -1.527,-1.217 -2.599,-2.902 -3.215,-5.046 -0.618,-2.147 -0.926,-6.195 -0.926,-12.143 V 0 h -11.254 v 51.739 h 10.426 v -7.551 c 1.851,2.923 3.938,5.115 6.26,6.577 2.322,1.461 4.896,2.192 7.722,2.192 3.28,0 6.049,-0.853 8.306,-2.562 2.258,-1.705 3.817,-3.901 4.677,-6.581 C -0.43,41.13 0,37.253 0,32.183 Z"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path72" />
+			</g>
+			<g id="g74" transform="translate(307.9256,68.9579)">
+			<path
+			d="m 0,0 11.254,2.095 c 0.974,-5.424 3.995,-8.136 9.061,-8.136 2.696,0 4.71,0.52 6.041,1.559 1.332,1.04 1.998,2.387 1.998,4.048 0,1.137 -0.292,2.03 -0.877,2.679 -0.617,0.65 -1.839,1.218 -3.666,1.705 -9.216,2.448 -15.074,4.783 -17.575,6.995 -3.118,2.769 -4.677,6.561 -4.677,11.38 0,4.82 1.526,8.676 4.58,11.575 3.052,2.894 7.486,4.344 13.299,4.344 5.554,0 9.777,-1.08 12.667,-3.24 2.891,-2.16 4.921,-5.643 6.09,-10.45 L 27.623,22.167 c -0.942,4.157 -3.605,6.236 -7.99,6.236 -2.76,0 -4.725,-0.398 -5.895,-1.198 -1.169,-0.795 -1.753,-1.831 -1.753,-3.098 0,-1.14 0.536,-2.082 1.607,-2.833 1.068,-0.78 4.397,-1.961 9.979,-3.541 6.265,-1.774 10.519,-3.913 12.764,-6.414 2.213,-2.505 3.322,-5.834 3.322,-9.995 0,-5.002 -1.713,-9.131 -5.14,-12.379 -3.427,-3.252 -8.161,-4.876 -14.202,-4.876 -5.488,0 -9.971,1.356 -13.446,4.068 C 3.394,-9.151 1.104,-5.196 0,0"
+			style="fill:#1d1d1b;fill-opacity:1;fill-rule:nonzero;stroke:none" id="path76" />
+			</g>
+			</g>
+			</g>
+			</g>
+			</svg></td>
+			<td width="25%" style=""><span style="font-weight: bold; font-size: 14pt;">CoWorkInMoulins</span><br />1 place Maréchal de Lattre de Tassigny<br />03000 - Moulins<br />contact@coworkinmoulins.fr<br /><span style="font-family:dejavusanscondensed;">&#9742;</span> 07.83.34.69.12</td>
+			<td width="50%" style="text-align: right;">FACTURE<br /><span style="font-weight: bold; font-size: 12pt;">{{ invoce.ref }}</span></td>
+			</tr></table>
+			</htmlpageheader>
+			
+			<htmlpagefooter name="myfooter">
+			<div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
+			Facture réalisé par FLORA by Apprendre.co - Page {PAGENO} of {nb}
 			</div>
-		</div>
-		<div class="address address-from">
-			<div class="address_label">De</div>
-			<div class="address_content">
-				<strong>CoWorkInMoulins</strong><br>
-				1 place Mal de Lattre de Tassigny<br>
-				03000 Moulins<br>
-				W032006859<br>
-				07.83.34.69.12
-			</div>
-		</div>
+			</htmlpagefooter>
+			
+			<sethtmlpageheader name="myheader" value="on" show-this-page="1" />
+			<sethtmlpagefooter name="myfooter" value="on" />
+			mpdf-->
+		<div style="text-align: right">Date:
+			{{ invoce.dateAt | date("d/m/Y", "Europe/Paris") }}</div>
 
+		<table width="100%" style="font-family: serif;" cellpadding="10">
+			<tr>
+				<td width="45%" style="border: 0.1mm solid #888888; ">
+					<span style="font-size: 7pt; color: #555555; font-family: sans;">Pour :</span><br/><br/>{{ user.firstName }}
+					{{ user.lastName }}<br>
+					{{ user.street }}<br/>
+					{{ user.postalCode }}
+					-
+					{{ user.city }}<br/>
+					{{ user.phoneNumber }}</td>
+				<td width="10%">&nbsp;</td>
+				<td width="45%" style=""></td>
+			</tr>
+		</table>
 
-		<div class="cb"></div>
+		<br/>
 
-		<table class="items">
+		<table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
 			<thead>
 				<tr>
-					<th>Description</th>
-					<th style="width: 78px;">Quantité</th>
-					<th style="width: 78px;">Prix Unitaire</th>
-					<th style="width: 108px;">Prix Total</th>
+					<td width="15%">Ref.</td>
+					<td width="10%">Qte</td>
+					<td width="45%">Description</td>
+					<td width="15%">Prix Unitaire</td>
+					<td width="15%">Prix Total</td>
 				</tr>
 			</thead>
 			<tbody>
+				<!-- ITEMS HERE -->
 				{% for line in invoce.getInvocesLines %}
-					<tr>
+					<tr class="line">
+						<td align="center">{{ line.ref }}</td>
+						<td align="center">{{ line.qte }}</td>
 						<td>{{ line.desc }}</td>
-						<td style="text-align: center;">{{ line.qte }}</td>
-						<td style="text-align: right;">{{ (line.price)|number_format(2, '.', ',') }}
+						<td class="cost">{{ (line.price)|number_format(2, '.', ',') }}
 							€</td>
-						<td style="text-align: right;">
-							{{ (line.qte * line.price)|number_format(2, '.', ',')}}
+						<td class="cost">{{ (line.qte * line.price)|number_format(2, '.', ',')}}
 							€</td>
 					</tr>
 				{% endfor %}
-				<tr class="total total-first">
-					<td colspan="3" class="total_label">Sous-total</td>
-					<td style="text-align: right;">
-						<strong>{{ invoce.price }}
-							€</strong>
+				<!-- END ITEMS HERE -->
+				<tr class="result">
+					<td class="blanktotal" colspan="3" rowspan="6"></td>
+					<td class="totals">
+						<b>TOTAL:</b>
+					</td>
+					<td class="totals cost">
+						<b>{{ invoce.price }}
+							€</b>
 					</td>
 				</tr>
-				<tr class="total total-big">
-					<td colspan="3" class="total_label">Total</td>
-					<td style="text-align: right;">
-						<strong>{{ invoce.price }}
-							€</strong>
-					</td>
-				</tr>
+
 			</tbody>
 		</table>
-
-		<footer style="text-align: center;">
-			TVA non applicable, article 293 B du Code général des impôts - 
-																																				Association loi de 1901 -
-																																				CoWorkInMoulins.fr
-		</footer>
-
+		<div style="text-align: center; font-style: italic;">TVA non applicable, article 293 B du Code général des impôts</div>
 	</body>
-
 </html>
