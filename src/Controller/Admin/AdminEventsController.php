@@ -32,7 +32,7 @@ class AdminEventsController extends Controller
         $form = new FormController();
         $form->field("id", ["require", "int"]);
         $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             if (!$errors) {
                 $this->events->delete($datas["id"]);
@@ -58,7 +58,7 @@ class AdminEventsController extends Controller
         $form->field("date_at", ["require", "date"]);
         $form->field("publish", ["boolean"]);
         $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             if (!$errors) {
                 if ($id) {

@@ -33,7 +33,7 @@ class AdminInvocesController extends Controller
         $formInvoce->field("id_user", ["require"]);
         $formInvoce->field("date_at", ["require", "date"]);
         $errors =  $formInvoce->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $formInvoce->getDatas();
             if (!$errors) {
                 $invocesServices->getNewInvoce($datas);
@@ -85,7 +85,7 @@ class AdminInvocesController extends Controller
         $formInvoce->field("qte");
         $formInvoce->field("discount");
         $errors =  $formInvoce->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $formInvoce->getDatas();
             if (!$errors) {
                 if ($datas["id_products"]) {
@@ -167,7 +167,7 @@ class AdminInvocesController extends Controller
         $form->field("price", ["require", "int"]);
         $form->field("activate", ["require", "boolean"]);
         $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             if (!$errors) {
                 $this->products->create($datas);

@@ -107,7 +107,7 @@ class AdminController extends Controller
         $form->field('duration', ["require", 'int']);
         $form->field('price', ["require", 'int']);
         $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             if (!$errors) {
                 $this->packages->create($datas);
