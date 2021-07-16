@@ -87,7 +87,7 @@ class UsersController extends Controller
         $form->field('phone_number', ["require", "tel"]);
 
         $errors = $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             //verifie qu'il n'y a pas d'erreur
             if (!$errors) {
@@ -183,7 +183,7 @@ class UsersController extends Controller
         $form->field('mailmdpoublie', ["require", "mail"]);
 
         $errors = $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             // Verifie qu'il n'y a pas d'erreur
             if (!$errors) {
@@ -274,7 +274,7 @@ class UsersController extends Controller
             $form->field('pinmdpchange', ["require"]);
 
             $errors = $form->hasErrors();
-            if ($errors["post"] != ["no-data"]) {
+            if (!isset($errors["post"])) {
                 $datas = $form->getDatas();
                 // Verifie qu'il n'y a pas d'erreur
                 if (!$errors) {
@@ -475,7 +475,7 @@ class UsersController extends Controller
         $form->field("email", ["require", "mail", "unique" => $paramUnique]);
         $form->field("message", ["require"]);
         $errors = $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             $datas['id_roles'] = 4; // 4 = Administrateur
             if (!$errors) {
@@ -554,7 +554,7 @@ class UsersController extends Controller
         $formPassword->field("password_new", ["require", "verify"]);
         if ($this->request()->query->has("password")) {
             $errorsPassword =  $formPassword->hasErrors();
-            if ($errorsPassword["post"] != ["no-data"]) {
+            if (!isset($errors["post"])) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
                     if (
@@ -643,7 +643,7 @@ class UsersController extends Controller
         $form->field("message", ["require"]);
 
         $errors = $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
 
             if (strpos($datas['destinataire'], "r-") === 0) {
@@ -673,7 +673,7 @@ class UsersController extends Controller
         }
 
         if ($errors["post"]) {
-            unset($errors);
+            $errors = [];
         }
 
         // Affiche la vue
