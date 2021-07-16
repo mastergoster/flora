@@ -66,7 +66,6 @@ abstract class Controller
                     $folderLink = $folderLink . "/" . $value;
                 }
             }
-            $mpdf->setProtection([]);
             $mpdf->Output($folder . $name, \Mpdf\Output\Destination::FILE);
         }
         $response->headers->set("Content-Description", "File Transfer");
