@@ -13,7 +13,7 @@ class GesUsersController extends Controller
 
     public function __construct()
     {
-        if (!$this->security()->isAdmin()) {
+        if (!$this->security()->accessRole(40)) {
             $this->redirect('userProfile')->send();
             exit();
         }
