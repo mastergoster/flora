@@ -32,7 +32,7 @@ class EventsController extends Controller
         $form->field("email", ["require"]);
 
         $errors =  $form->hasErrors();
-        if ($errors["post"] != ["no-data"]) {
+        if (!isset($errors["post"])) {
             $datas = $form->getDatas();
             if (!$errors) {
                 $email = $datas["email"];

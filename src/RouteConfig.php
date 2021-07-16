@@ -51,7 +51,8 @@ class RouteConfig
             ["post",    '/user/admin/newline', 'Users#ajaxNewUserLine', 'post_AjaxNewUserLine'],
             ["post",    '/display/admin/new/line', 'Display#ajaxDisplayNewLine', 'post_ajaxDisplayNewLine'],
             ["post",    '/login', 'Users#login', 'post_usersLogin'],
-            ["match",    '/ajax', 'Ajax#init', 'ajax']
+            ["match",    '/ajax', 'Ajax#init', 'ajax'],
+            ["get",    '/gestion/users', 'GesUsers#users', 'gestion_users']
         ];
     }
 }
