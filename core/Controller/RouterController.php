@@ -59,7 +59,7 @@ class RouterController
 
         $match = $this->router->match();
 
-        $admin = "";
+        $folder = "";
 
         if (!is_array($match) && !strpos($match['target'], "#")) {
             $controller = "App\\Controller\\ErrorsController";
@@ -68,9 +68,12 @@ class RouterController
         } else {
             [$controller, $method] = explode("#", $match['target']);
             if (substr($controller, 0, 5) == "Admin") {
-                $admin = "Admin\\";
+                $folder = "Admin\\";
+            } elseif (substr($controller, 0, 3) == "Ges") {
+                $folder = "Gestion\\";
             }
-            $controller = "App\\Controller\\" . $admin . ucfirst($controller) . "Controller";
+
+            $controller = "App\\Controller\\" . $folder . ucfirst($controller) . "Controller";
         }
 
         $response = (new $controller())->$method(...array_values($match['params']));

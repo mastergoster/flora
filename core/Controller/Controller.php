@@ -44,7 +44,6 @@ abstract class Controller
                 'margin_header' => 10,
                 'margin_footer' => 10
             ]);
-            $mpdf->SetProtection(['print']);
             $mpdf->SetTitle($title);
 
             $mpdf->SetAuthor("CoWorkInMoulins by FLORA");
