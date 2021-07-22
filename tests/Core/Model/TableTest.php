@@ -151,6 +151,11 @@ class TableTest extends TestCase
         $user->activate = '1';
         $user->verify = '1';
         $user->created_at = '2020-12-14 10:37:56';
+        $user->street = null;
+        $user->city = null;
+        $user->desc = null;
+        $user->id_images = null;
+        $user->display = '0000';
         $result = $users->query("SELECT * FROM users");
         $this->assertEquals([$user], $result);
     }
@@ -170,6 +175,11 @@ class TableTest extends TestCase
         $user->activate = '1';
         $user->verify = '1';
         $user->created_at = '2020-12-14 10:37:56';
+        $user->street = null;
+        $user->city = null;
+        $user->desc = null;
+        $user->id_images = null;
+        $user->display = '0000';
 
 
         $users = new UserTestTable($db);
@@ -206,6 +216,11 @@ class TableTest extends TestCase
         $user->activate = '1';
         $user->verify = '1';
         $user->created_at = '2020-12-14 10:37:56';
+        $user->street = null;
+        $user->city = null;
+        $user->desc = null;
+        $user->id_images = null;
+        $user->display = '0000';
         $users = new UserTestTable($db);
         $users->updateByClass($user);
 
@@ -229,6 +244,11 @@ class TableTest extends TestCase
         $user->activate = '1';
         $user->verify = '1';
         $user->created_at = '2020-12-14 10:37:56';
+        $user->street = null;
+        $user->city = null;
+        $user->desc = null;
+        $user->id_images = null;
+        $user->display = '0000';
         $users = new UserTestTable($db);
         $users->updateByClass($user, "email");
 
