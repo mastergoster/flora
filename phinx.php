@@ -12,6 +12,10 @@ return
             'development' => [
                 'name' => 'application.dev',
                 'connection' => App\App::getInstance()->getDb()->getPDO()
+            ],
+            'prod' => [
+                'name' => 'application.prod',
+                'connection' => App\App::getInstance()->getDb()->getPDO()
             ]
         ]
     ];
