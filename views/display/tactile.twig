@@ -7,6 +7,13 @@
 		<title>tactile</title>
 		<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 		<link rel="stylesheet" href="css/styletactile.css?v1.2">
+		<style>
+			label.green div.instagram,
+			label.green div.icon {
+				color: #2ecc71;
+				border-color: rgb(46, 204, 113) !important;
+			}
+		</style>
 	</head>
 
 	<body class="unselectable";>
@@ -21,14 +28,14 @@
 			<i class="fas fa-chevron-left"></i>
 		</div>
 		<form action="/display/admin/new/line" method="post" class="form">
-			<div class="container">
+			<div class="container" id="container">
 				{% for user in users %}
-					<label class="option_item clicouille clicDisplay">
+					<label id="{{user.id}}" class="option_item clicouille clicDisplay {% if user.presence %} green{% endif %}">
 						<input type="radio" name="user_email" class="checkbox" value="{{ user.email }}" required>
-						<div class="option_inner instagram" style="{% if user.presence %}border-color: rgb(46, 204, 113); {% endif %}">
+						<div class="option_inner instagram">
 							<div class="tickmark"></div>
 							<div class="icon">
-								<i class="fas fa-user" style="font-size: 50px; {% if user.presence %} color: #2ecc71 {% endif %}"></i>
+								<i class="fas fa-user" style="font-size: 50px;"></i>
 							</div>
 							<div class="name">{{ user.firstName | capitalize }}
 								<br>
