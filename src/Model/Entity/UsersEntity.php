@@ -91,6 +91,8 @@ class UsersEntity extends Entity
 
     private $id_images;
 
+    private $display;
+
     /**
      * Get undocumented variable
      *
@@ -412,6 +414,26 @@ class UsersEntity extends Entity
     public function setIdImages($id_images)
     {
         $this->id_images = $id_images;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of display
+     */
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    /**
+     * Set the value of display
+     *
+     * @return  self
+     */
+    public function setDisplay($display)
+    {
+        $this->display = $display;
 
         return $this;
     }
