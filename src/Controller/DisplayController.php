@@ -22,7 +22,7 @@ class DisplayController extends Controller
     {
         $presence = [];
         $absent = [];
-        $users = $this->users->all(true, "last_name");
+        $users = $this->users->alldisplay('0001', true, "last_name");
         foreach ($users as $user) {
             $user->presence = $this->hours->presence($user->getId());
             if ($user->presence = $this->hours->presence($user->getId())) {

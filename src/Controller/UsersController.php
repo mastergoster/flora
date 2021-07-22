@@ -112,6 +112,7 @@ class UsersController extends Controller
                 //créer token et pin
                 $datas["token"] =  substr(md5(uniqid()), 0, 10);
                 $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
+                $datas["display"] = "0001";
 
                 //persiter user en bdd
                 if (!$userTable->create($datas)) {

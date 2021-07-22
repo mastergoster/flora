@@ -82,9 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-});
-
-document.addEventListener('DOMContentLoaded', function () {
     function validate(data) {
         if (data.permission) {
             document.getElementById("popup").style.backgroundColor = "#c0392b";
@@ -115,13 +112,85 @@ document.addEventListener('DOMContentLoaded', function () {
         element.addEventListener('submit', submitajax);
     });
 
+    sortHtml();
+
 });
+
+var form = new FormData();
+form.append('function', 'tactileusers');
+var refresh = setInterval(function () {
+    fetch('/ajax', {
+        method: "POST",
+        body: form
+    })
+        .then(response => response.json())
+        .then(data => {
+            liste = new Object();
+            [].slice.call(document.getElementById("container").children).forEach(function (element) {
+                var name = element.getElementsByClassName("name")[0].innerText.split("\n")
+                liste[element.id] = {
+                    "id": element.id,
+                    "presence": element.classList.contains("green") ? true : false,
+                    "lastname": name[1],
+                    "firstname": name[0],
+                    "email": element.children.user_email.value
+                }
+            });
+            compare(data, liste);
+        });
+}, 6000);
+
+
+function compare(expected, actual) {
+    for (let index = 0; index < Object.keys(expected).length + 10; index++) {
+        if (typeof (expected[index]) == 'undefined') {
+            if (document.getElementById(index)) {
+                let elem = document.getElementById(index);
+                elem.parentNode.removeChild(elem)
+            }
+        } else if (typeof (actual[index]) == 'undefined') {
+            var label = document.createElement("label");
+            label.innerHTML = '<input type="radio" name="user_email" class="checkbox" value="" required><div class="option_inner instagram"><div class="tickmark"></div><div class="icon"><i class="fas fa-user" style="font-size: 50px;"></i></div><div class="name"><br></div></div>';
+            label.classList.add('option_item');
+            label.classList.add('clicouille');
+            label.classList.add('clicDisplay');
+            if (expected[index].presence) {
+                label.classList.add('green');
+            }
+            label.id = index;
+            label.children.user_email.value = expected[index].email
+            label.getElementsByClassName("name")[0].innerText = expected[index].firstname + "\n" + expected[index].lastname.toUpperCase()
+            document.getElementById("container").appendChild(label)
+        } else if (expected[index].presence !== actual[expected[index].id].presence) {
+            if (expected[index].presence == true) {
+                document.getElementById(index).classList.add("green")
+            } else {
+                document.getElementById(index).classList.remove("green")
+            }
+        }
+    }
+    sortHtml();
+}
+function sortHtml() {
+    let parentNode = document.getElementById("container");
+    var e = parentNode.children;
+    [].slice
+        .call(e)
+        .sort(function (a, b) {
+            let spacea = a.classList.contains("green") ? "AAAA" : ""
+            let spaceb = b.classList.contains("green") ? "AAAA" : ""
+            return (spacea + a.getElementsByClassName("name")[0].innerText).localeCompare(spaceb + b.getElementsByClassName("name")[0].innerText);
+        })
+        .forEach(function (val, index) {
+            parentNode.appendChild(val);
+        });
+}
+var liste = new Object();
+
+
+
 function viewscroll(saut) {
     var container = document.getElementsByClassName('container')[0];
     var position = container.scrollTop;
     container.scroll(0, position + saut);
 }
-
-var refresh = setInterval(function () {
-    document.location.reload(true);
-}, 60000);

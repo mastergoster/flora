@@ -6,6 +6,15 @@ use Core\Model\Table;
 
 class UsersTable extends Table
 {
+    public function alldisplay(string $display, bool $order = false, $colomun = "id")
+    {
+        if ($order) {
+            $order = " ORDER BY  UPPER(" . $colomun . ") " . ($order === true ? "ASC" : "DESC");
+        } else {
+            $order = "";
+        }
+        return $this->query("SELECT * FROM $this->table WHERE display = ?" . $order, [$display]);
+    }
     // public function getUser($mail, $password)
     // {
     //     $user = $this->query("SELECT $this->table.*,
