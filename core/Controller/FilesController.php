@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class FilesController
 {
 
-    private string $path;
-    private string $test;
+    private $path;
+    private $test;
 
     public function __construct(string $path, bool $test = false)
     {
