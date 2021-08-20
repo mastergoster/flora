@@ -60,29 +60,21 @@
 						<div id="scroll_to_top">
 							<a href="#wrapper" class="button icon solid solo fa-arrow-up scrolly">Continue</a>
 						</div>
-						
+
 						<!-- Featured Post -->
-						
+
 						<article class="post featured">
-							
+
 							<header class="major">
 								<h2>Espace de Cowoking<br>
 									à Moulins
 								</h2>
 								<nav class="nav-accueil">
 									<ul>
-										<li>
-											<a href="/inscription" class="button scrolly">S'inscrire</a>
-										</li>
-										<li>
-											<a href="#horaires" class="button scrolly">Horaires &amp; Accès</a>
-										</li>
-										<li>
-											<a href="#tarifs" class="button scrolly">Tarifs</a>
-										</li>
-										<li>
-											<a href="#footer" class="button scrolly">Contacts</a>
-										</li>
+										<li><a href="/inscription" class="button scrolly">S'inscrire</a></li>
+										<li><a href="#horaires" class="button scrolly">Horaires &amp; Accès</a></li>
+										<li><a href="#tarifs" class="button scrolly">Tarifs</a></li>
+										<li><a href="#footer" class="button scrolly">Contacts</a></li>
 									</ul>
 								</nav>
 								<p>L'espace de coworking se situe au 1 place Maréchal de Lattre de Tassigny<br>
@@ -90,7 +82,7 @@
 							</header>
 							<img height="500px" src="/images/pic01.jpg" alt="Photo de l'intérieur des locaux avec les bureaux en premier plan et l'entrée et l'espace détente en arrière plan"/>
 						</article>
-						
+
 						<section id="horaires" class="posts">
 							<article>
 								<header>
@@ -102,27 +94,39 @@
 								<header>
 									<h2 id="horaires">Stationnement</h2>
 								</header>
-								<p><span class="title">Parking Achille Roche</span><span class="align-center"> (gratuit)</span><br>
-									<a href="http://www.ville-moulins.fr/ma-ville/vie-quotidienne/stationnement.html" class="em" title="Lien vers le site de la ville de Moulins">&rarr; En savoir plus sur le stationnement à Moulins</a>
 								<p>
-								<p><span class="title">Parking Tassigny</span><span class="align-center"> (payant)<br>
-									<a href="http://www.ville-moulins.fr/ma-ville/vie-quotidienne/stationnement/stationnement-payant.html" class="em" title="Lien vers le site de la ville de Moulins">&rarr; En savoir plus sur les tarifs du stationnement</a>
+									<span class="title">Parking Achille Roche</span>
+									<span class="align-center">
+										(gratuit)</span><br>
+									<a href="http://www.ville-moulins.fr/ma-ville/vie-quotidienne/stationnement.html" class="em" title="Lien vers le site de la ville de Moulins">&rarr; En savoir plus sur le stationnement à Moulins</a>
+								</p>
+								<p></p>
+								<p>
+									<span class="title">Parking Tassigny</span>
+									<span class="align-center">
+										(payant)<br>
+										<a href="http://www.ville-moulins.fr/ma-ville/vie-quotidienne/stationnement/stationnement-payant.html" class="em" title="Lien vers le site de la ville de Moulins">&rarr; En savoir plus sur les tarifs du stationnement</a>
+									</p>
 								</p>
 							</article>
 							<article>
 								<header>
 									<h2 id="plan">Plan d'accès</h2>
 								</header>
-								<p class="align-center">1 place Maréchal de Lattre de Tassigny <br> 03000 MOULINS<br>
+								<p class="align-center">1 place Maréchal de Lattre de Tassigny
+									<br>
+									03000 MOULINS<br>
 									<a href="https://www.openstreetmap.org/directions?from=&to=46.56202%2C3.32980#map=19/46.56202/3.32980" class="em" title="Lien vers le site d'openstreetmap.org">Etablir mon trajet pour venir au Coworking</a>
 								</p>
 								<div>
-									<div id="planOverlay" class="planOverlay" onClick="style.display='none'"><p class="align-center">Cliquez sur la carte pour zoomer</p></div>
+									<div id="planOverlay" class="planOverlay" onclick="style.display='none'">
+										<p class="align-center">Cliquez sur la carte pour zoomer</p>
+									</div>
 									<object id="mapOpen" title="La carte d'openstreetmap avec la position du coworking" scrolling="no" width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" border="1" data="https://www.openstreetmap.org/export/embed.html?bbox=3.328683078289032%2C46.56135744293931%2C3.330936133861542%2C46.5626723603294&amp;layer=mapnik&amp;marker=46.562013983516%2C3.329809606075287" style="border: 1px solid black"></object><br/><a href="https://www.openstreetmap.org/?mlat=46.56201&amp;mlon=3.32981#map=19/46.56201/3.32981" class="em" title="Lien vers le site d'openstreetmap.org">Agrandir la carte</a>
 								</div>
 							</article>
 						</section>
-						
+
 						<article id="tarifs" class="post featured">
 							<header>
 								<h2>
@@ -268,11 +272,13 @@
 				</footer>
 
 				<!-- Copyright -->
-				
+
 				<div id="copyright">
 					<section>
 						<ul>
-							<li>By julien in {{debugTime}} ms</li>
+							<li>By julien in
+								{{debugTime}}
+								ms</li>
 							<li>Design :
 								<a href="https://html5up.net">HTML5 UP</a>
 							</li>
@@ -280,14 +286,11 @@
 					</section>
 					<section class="CG">
 						<p class="align-center">
-							<a href="#" title="Lien vers la page des conditions générales">Conditions générales</a>
-						</p>
-						<p class="align-center">
-							<a href="#" title="Lien vers la page des mentions légales">Mentions légales</a>
+							<a href="{{ path('legal') }}" title="Lien vers la page des mentions légales">Mentions légales</a>
 						</p>
 					</section>
 				</div>
-				
+
 			</div><!-- Scripts --><script src="/assets/js/jquery.min.js"></script>
 			<script src="/assets/js/jquery.scrollex.min.js"></script>
 			<script src="/assets/js/jquery.scrolly.min.js"></script>
