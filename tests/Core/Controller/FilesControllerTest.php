@@ -33,8 +33,7 @@ class FilesControllerTest extends TestCase
 
     public function testCreateFolder()
     {
-        dump($this->folderName);
-        new FilesController($this->folderName);
+        new FilesController($this->folderName, true);
         $this->assertFileExists($this->folderName);
     }
 
