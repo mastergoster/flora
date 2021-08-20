@@ -23,6 +23,8 @@ class InvocesEntity extends Entity
 
     private $invocesLines;
 
+    private $ref_stripe_token;
+
     /**
      * Get the value of ref
      */
@@ -199,6 +201,26 @@ class InvocesEntity extends Entity
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of refStripeToken
+     */
+    public function getRefStripeToken()
+    {
+        return $this->ref_stripe_token;
+    }
+
+    /**
+     * Set the value of refStripeToken
+     *
+     * @return  self
+     */
+    public function setRefStripeToken($refStripeToken)
+    {
+        $this->ref_stripe_token = $refStripeToken;
 
         return $this;
     }

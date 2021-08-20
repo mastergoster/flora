@@ -18,9 +18,10 @@ class RouterController
         $this->viewPath = $viewPath;
         $this->router = new \AltoRouter();
         $this->addConfig($routeConfig);
+        $this->addConfig(new \Core\RouteConfig());
     }
 
-    public function addConfig(?RouteConfig $routeConfig = null): self
+    public function addConfig($routeConfig = null): self
     {
         if (!is_null($routeConfig)) {
             foreach ($routeConfig->getConfig() as $route) {
@@ -62,7 +63,7 @@ class RouterController
         $folder = "";
 
         if (!is_array($match) && !strpos($match['target'], "#")) {
-            $controller = "App\\Controller\\ErrorsController";
+            $controller = "Core\\Controller\\ErrorsController";
             $method = "er404";
             $match['params'] = [];
         } else {
@@ -73,7 +74,21 @@ class RouterController
                 $folder = "Gestion\\";
             }
 
-            $controller = "App\\Controller\\" . $folder . ucfirst($controller) . "Controller";
+            if (
+                class_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
+                method_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller", $method)
+            ) {
+                $controller = "App\\Controller\\" . $folder . ucfirst($controller) . "Controller";
+            } elseif (
+                class_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
+                method_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller", $method)
+            ) {
+                $controller = "Core\\Controller\\" . $folder . ucfirst($controller) . "Controller";
+            } else {
+                $controller = "Core\\Controller\\ErrorsController";
+                $method = "er404";
+                $match['params'] = [];
+            }
         }
 
         $response = (new $controller())->$method(...array_values($match['params']));

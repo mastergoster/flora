@@ -43,7 +43,7 @@ class AdminInvocesController extends Controller
             $form = new FormController();
             $form->field("id", ["require"]);
             $errorsDelete =  $form->hasErrors();
-            if ($errorsDelete["post"] != ["no-data"]) {
+            if (!isset($errorsDelete["post"])) {
                 $datasDel = $form->getDatas();
                 if (!$errorsDelete) {
                     $inv = $this->invoces->find($datasDel["id"]);
@@ -141,6 +141,12 @@ class AdminInvocesController extends Controller
     public function actualise($id): Response
     {
         $invoces = $this->invoces->find($id);
+        $uid = \uniqid();
+        while ($this->invoces->find($uid, "ref_stripe_token")) {
+            $uid = \uniqid();
+        }
+        $invoces->setRefStripeToken($uid);
+        $this->invoces->updateByClass($invoces);
         if ($invoces->getActivate() == 1) {
             $file = App::getInstance()->rootFolder() . "/files/user/invoce/" . $invoces->getRef() . ".pdf";
             if (file_exists($file)) {

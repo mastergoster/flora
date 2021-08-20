@@ -500,6 +500,7 @@ class UsersController extends Controller
         $user = $this->session()->get("users");
 
         $invoce = $this->invoces->allActivateByUser($user->getId());
+
         return $this->render(
             "user/invoces",
             [

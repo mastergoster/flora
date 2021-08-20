@@ -174,7 +174,7 @@ class FormController
 
     private function errorInt(string $field): void
     {
-        $data = $this->postDatas[$field];
+        $data = isset($this->postDatas[$field]) ? $this->postDatas[$field] : "";
         $reg = "/^[0-9]*[\.\,]?[0-9]*$/";
         preg_match($reg, $data, $match);
         if (isset($match[0]) && $match[0] !== null) {
@@ -186,7 +186,7 @@ class FormController
 
     private function errorDate(string $field): void
     {
-        $data = $this->postDatas[$field];
+        $data = isset($this->postDatas[$field]) ? $this->postDatas[$field] : "";
         $reg = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$/";
         preg_match($reg, $data, $match);
 

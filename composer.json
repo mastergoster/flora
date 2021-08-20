@@ -9,7 +9,8 @@
         "symfony/http-foundation": "^5.1",
         "mpdf/mpdf": "^8.0",
         "phpdocumentor/type-resolver": "^1.4",
-        "symfony/mime": "^5.3"
+        "symfony/mime": "^5.3",
+        "stripe/stripe-php": "^7.94"
     },
     "autoload": {
         "psr-4": {

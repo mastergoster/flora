@@ -26,7 +26,9 @@
 		oui
 	{% else %}
 		non
-	{% endif %}
+	{% endif %}<br>
+	Stripe uid :
+	{{ item.RefStripeToken }}
 	<br><br><br>
 	{% if item.activate == 0 %}
 		<div class="form-inline">

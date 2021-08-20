@@ -53,6 +53,9 @@
 										<a href="{{ path("userInvoce", {id: invoce.id}) }}" class="btn btn-primary">
 											<i class="material-icons">cloud_download</i>
 										</a>
+										<a href="{{ path("charge", {id: invoce.id}) }}" class="btn btn-success">
+											<i class="material-icons">euro_symbol</i>
+										</a>
 									</td>
 								</tr>
 							{% endfor %}

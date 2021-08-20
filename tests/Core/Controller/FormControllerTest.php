@@ -558,6 +558,18 @@ class FormControllerTest extends TestCase
         $this->assertEquals(["date" => "2020-11-20 12:30:00"], $datas);
     }
 
+    public function testDoubleConstraintDateNoPost(): void
+    {
+        $_POST = [];
+        $_POST = ["moi" => "sde"];
+        $form = new FormController();
+        $form->field("date", ["require", "date"]);
+        $error = $form->hasErrors();
+        $this->assertEquals(["date" => ['Le champ date ne peut être vide.', "Le champ date doit être une date au format 2020-11-20 12:30:00"]], $error);
+        $datas = $form->getDatas();
+        $this->assertEquals([], $datas);
+    }
+
     public function testDoubleConstraintValidAndInvalid(): void
     {
         $_POST = ["mail" => "badEmail.fr"];

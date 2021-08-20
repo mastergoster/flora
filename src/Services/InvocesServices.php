@@ -25,6 +25,10 @@ class InvocesServices extends Controller
             $newInvoces->setDateAt($datas["date_at"]);
         }
         $newInvoces->setRef("PROV_" . date("YmdHis"));
+        $uid = uniqid();
+        if (!$this->invoces->find($uid, "ref_stripe_token")) {
+            $newInvoces->setRefStripeToken($uid);
+        }
         if (!$this->invoces->create($newInvoces, true)) {
             return false;
         }

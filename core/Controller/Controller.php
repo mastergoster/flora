@@ -128,12 +128,13 @@ abstract class Controller
         return $response->setStatusCode(403);
     }
 
-    protected function jsonResponse($data): Response
+    protected function jsonResponse($data, $code = 200): Response
     {
         $response = new Response;
         $response->setContent(
             json_encode($data)
         );
+        $response->setStatusCode($code);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
