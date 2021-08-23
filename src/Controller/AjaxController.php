@@ -56,6 +56,19 @@ class AjaxController extends Controller
                 $render->{$user->getId()} = $userstd;
             }
             return $this->jsonResponse($render);
+        } elseif ($datas->get("function") == "d-tactile") {
+            if (!$this->security()->accessRole(40)) {
+                return $this->jsonResponse403();
+                exit();
+            }
+            $userdata = $this->users->find($datas->get("id_user"));
+            if ($userdata->getDisplay() === '0001') {
+                $userdata->setDisplay("0000");
+            } else {
+                $userdata->setDisplay("0001");
+            }
+            $this->users->updateByClass($userdata);
+            return $this->jsonResponse(["state" => $userdata->getDisplay()]);
         }
         return $this->jsonResponse(["oups"]);
     }

@@ -59,10 +59,10 @@
 											{% endif %}
 										</td>
 										<td class="text-right">
-											<a href="#" class="btn btn-link btn-black btn-just-icon edit">
+											<a href="#" class="btn btn-link btn-black btn-just-icon edit" data-id="{{user.id}}">
 												<i class="material-icons">receipt</i>
 											</a>
-											<a href="#" class="btn btn-link btn-success btn-just-icon edit">
+											<a href="#" class="btn btn-link btn-{% if user.display == '0000' %}danger{% else %}success{% endif %} btn-just-icon display" data-id="{{user.id}}">
 												<i class="material-icons">dvr</i>
 											</a>
 										</td>
@@ -83,7 +83,7 @@
 {% block script %}
 	<script>
 		$(document).ready(function () {
-$('#datatables').DataTable({
+var myTable = $('#datatables').DataTable({
 "pagingType": "full_numbers",
 "lengthMenu": [
 [
@@ -98,6 +98,36 @@ language: {
 search: "_INPUT_",
 searchPlaceholder: "Filtre"
 }
+});
+$('#datatables').on('click', '.display', function () {
+let formData = new FormData();
+formData.append("id_user", $(this).data('id'));
+formData.append("function", "d-tactile");
+fetch("/ajax", {
+method: "post",
+body: formData
+}).then(function (response) {
+if (response.ok) {
+response.json().then(function (json) {
+if (json.state === "0001") {
+$(this).removeClass("btn-danger")
+$(this).addClass("btn-success")
+} else {
+$(this).removeClass("btn-success")
+$(this).addClass("btn-danger")
+}
+
+}.bind(this));
+} else {
+console.log('Mauvaise réponse du réseau');
+}
+}.bind(this)).catch(function (error) {
+console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+});
+});
+
+$('#datatables').on('click', '.edit', function () {
+console.log($(this).data('id'));
 });
 });
 	</script>
