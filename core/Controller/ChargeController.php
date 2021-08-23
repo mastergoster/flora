@@ -53,7 +53,7 @@ class ChargeController extends Controller
                     'price_data' => [
                         'currency' => 'eur',
                         'product_data' => [
-                            'images' => [App::getInstance()->getConfig("siteUrl") . '/images/image-ol-721x407.jpg'],
+                            'images' => [App::getInstance()->getConfig("siteUrl") . '/images/image-ol.jpg'],
                             'name' => 'FACTURE ' . $invoce->getRef(),
                         ],
                         'unit_amount' => $invoce->getPrice() * 100,
