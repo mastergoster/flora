@@ -194,6 +194,11 @@ class AdminController extends Controller
 
     public function messages(): Response
     {
+        if (count($_POST) >= 1) {
+            if (isset($_POST["id"])) {
+                $this->messages->delete($_POST["id"]);
+            }
+        }
         $messages = $this->messages->all();
         return $this->render(
             "admin/messages",

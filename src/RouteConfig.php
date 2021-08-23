@@ -30,7 +30,7 @@ class RouteConfig
             ["get",     '/admin/users', 'Admin#users', 'adminUsers'],
             ["get",     '/admin/roles', 'Admin#roles', 'adminRoles'],
             ["get",     '/admin/roles/[i:id]', 'Admin#role', 'adminRole'],
-            ["get",     '/admin/messages', 'Admin#messages', 'adminMessages'],
+            ["match",     '/admin/messages', 'Admin#messages', 'adminMessages'],
             ["match",   '/admin/invoices', 'AdminInvoces#all', 'adminInvoces'],
             ["match",   '/admin/invoices/[i:id]/pdf', 'AdminInvoces#invocePdf', 'adminInvocePdf'],
             ["post",    '/admin/invoices/[i:id]/validate', 'AdminInvoces#validate', 'adminInvoceValidate'],
