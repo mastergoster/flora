@@ -59,12 +59,12 @@
 											{% endif %}
 										</td>
 										<td class="text-right">
-											<a href="#" class="btn btn-link btn-black btn-just-icon edit" data-id="{{user.id}}">
+											<button class="btn btn-link btn-black btn-just-icon edit" data-id="{{user.id}}">
 												<i class="material-icons">receipt</i>
-											</a>
-											<a href="#" class="btn btn-link btn-{% if user.display == '0000' %}danger{% else %}success{% endif %} btn-just-icon display" data-id="{{user.id}}">
+											</button>
+											<button class="btn btn-link btn-{% if user.display == '0000' %}danger{% else %}success{% endif %} btn-just-icon display" data-id="{{user.id}}">
 												<i class="material-icons">dvr</i>
-											</a>
+											</button>
 										</td>
 									</tr>
 								{% endfor %}
