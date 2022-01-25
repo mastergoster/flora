@@ -148,11 +148,23 @@ class AdminController extends Controller
     }
     public function roles(): Response
     {
+        $form = new FormController();
+        $form->field("name", ["require"]);
+        $form->field("level", ["require"]);
+        $form->field("activate", ["require", "boolean"]);
+        $errors =  $form->hasErrors();
+        if (!isset($errors["post"])) {
+            $datas = $form->getDatas();
+            if (!$errors) {
+                $this->roles->create($datas);
+            }
+        }
 
         $users = $this->roles->all();
         return $this->render(
             "admin/roles",
             [
+                "form" => $form->html(),
                 "items" => $users,
             ]
         );

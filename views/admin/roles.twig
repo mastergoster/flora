@@ -4,29 +4,30 @@
 	<h1 class="h2">Roles</h1>
 {% endblock %}
 {% block content %}
-
-	<div class="table-responsive">
-		<table class="table table-striped table-sm text-center">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>nom</th>
-					<th>level</th>
-					<th>activate</th>
-					<th>createdAt</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for item in items %}
+	{{ form | raw }}
+		<div class="table-responsive">
+			<table class="table table-striped table-sm text-center">
+				<thead>
 					<tr>
-						<td>{{ item.id }}</td>
-						<td>{{ item.name }}</td>
-						<td>{{ item.level }}</td>
-						<td>{{ item.activate }}</td>
-						<td>{{ item.createdAt | date("d/m/Y") }}</td>
+						<th>Id</th>
+						<th>nom</th>
+						<th>level</th>
+						<th>activate</th>
+						<th>createdAt</th>
 					</tr>
-				{% endfor %}
+				</thead>
+				<tbody>
+					{% for item in items %}
+						<tr>
+							<td>{{ item.id }}</td>
+							<td>{{ item.name }}</td>
+							<td>{{ item.level }}</td>
+							<td>{{ item.activate }}</td>
+							<td>{{ item.createdAt | date("d/m/Y") }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
 			</tbody>
-		</tbody>
-	</table>
-</div>{% endblock %}
+		</table>
+	</div>
+{% endblock %}

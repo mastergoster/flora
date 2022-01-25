@@ -28,7 +28,7 @@ class RouteConfig
             ["match",   '/admin/events', 'AdminEvents#events', 'adminEvents'],
             ["match",   '/admin/event/[i:id]?', 'AdminEvents#event', 'adminEventSingle'],
             ["get",     '/admin/users', 'Admin#users', 'adminUsers'],
-            ["get",     '/admin/roles', 'Admin#roles', 'adminRoles'],
+            ["match",     '/admin/roles', 'Admin#roles', 'adminRoles'],
             ["get",     '/admin/roles/[i:id]', 'Admin#role', 'adminRole'],
             ["match",     '/admin/messages', 'Admin#messages', 'adminMessages'],
             ["match",   '/admin/invoices', 'AdminInvoces#all', 'adminInvoces'],
