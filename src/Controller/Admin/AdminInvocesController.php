@@ -33,6 +33,7 @@ class AdminInvocesController extends Controller
         $formInvoce->field("id_user", ["require"]);
         $formInvoce->field("date_at", ["require", "date"]);
         $errors =  $formInvoce->hasErrors();
+
         if (!isset($errors["post"])) {
             $datas = $formInvoce->getDatas();
             if (!$errors) {
@@ -117,6 +118,7 @@ class AdminInvocesController extends Controller
         return $this->render(
             "admin/invoces/invoce",
             [
+                "date" => time(),
                 "item" => $invoces,
                 "users" => $users,
                 "form" => $formInvoce,

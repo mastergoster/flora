@@ -74,7 +74,7 @@ class InvocesEntity extends Entity
      */
     public function getPrice()
     {
-        if ($this->price === null) {
+        if ($this->price === null && $this->invocesLines !== null) {
             $price = 0;
             foreach ($this->invocesLines as $line) {
                 $price += $line->getPrice() * $line->getQte();
@@ -245,9 +245,7 @@ class InvocesEntity extends Entity
     }
 
     /**
-     * Set the value of paiement
-     *
-     * @return  self
+     * set the value of paiement
      */
     public function setPaiement($paiement)
     {
@@ -256,19 +254,21 @@ class InvocesEntity extends Entity
         return $this;
     }
 
+
+
     /**
      * recupère l'état du payment
      *
      * @return  self
      */
-    public function getStatePaiement()
+    public function statePaiement()
     {
         if ($this->price === null) {
             return false;
         }
+
         if ($this->getPaiement()) {
             $pay = 0;
-
             foreach ($this->getPaiement() as $line) {
                 /** @var ComptaLinesEntity $line */
                 $pay += $line->getCredit() - $line->getDebit();

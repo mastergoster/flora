@@ -117,8 +117,7 @@ class FormController
     private function errorVerify(string $field, bool $value): void
     {
         $fieldVerify = $field . "Verify";
-        if (
-            isset($this->postDatas[$fieldVerify]) &&
+        if (isset($this->postDatas[$fieldVerify]) &&
             $this->postDatas[$fieldVerify] == $this->postDatas[$field]
         ) {
             $this->addToDatas($field);
@@ -186,7 +185,14 @@ class FormController
 
     private function errorDate(string $field): void
     {
+
+
         $data = isset($this->postDatas[$field]) ? $this->postDatas[$field] : "";
+        $reg = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
+        preg_match($reg, $data, $match);
+        if (isset($match[0]) && $match[0] !== null) {
+            $data = str_replace("T", " ", $data) . ":00";
+        }
         $reg = "/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$/";
         preg_match($reg, $data, $match);
 

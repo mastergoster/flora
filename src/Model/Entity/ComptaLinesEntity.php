@@ -10,7 +10,7 @@ class ComptaLinesEntity extends Entity
 {
     private $id;
 
-    private $description;
+    private $desc;
 
     private $credit;
 
@@ -48,7 +48,7 @@ class ComptaLinesEntity extends Entity
      */
     public function getDescription()
     {
-        return $this->description;
+        return $this->desc;
     }
 
     /**
@@ -58,7 +58,7 @@ class ComptaLinesEntity extends Entity
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->desc = $description;
 
         return $this;
     }

@@ -559,8 +559,7 @@ class UsersController extends Controller
             if (!isset($errors["post"])) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if (
-                        $user->getId() == $datasPassword["id"] &&
+                    if ($user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {

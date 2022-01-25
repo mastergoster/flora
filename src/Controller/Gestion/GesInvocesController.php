@@ -2,7 +2,9 @@
 
 namespace App\Controller\Gestion;
 
+use App\Model\Entity\ComptaLinesEntity;
 use \Core\Controller\Controller;
+use Core\Controller\FormController;
 use App\Model\Entity\RecapConsoEntity;
 use Core\Controller\Helpers\HController;
 use Core\Controller\Helpers\TableauController;
@@ -46,6 +48,7 @@ class GesInvocesController extends Controller
         if (!$this->session()->has("users")) {
             return $this->redirect("usersLogin");
         }
+
         $invoce = $this->invoces->findActivate($id, "id");
         if (!$invoce) {
             $this->messageFlash()->error("action non permise");
@@ -53,5 +56,35 @@ class GesInvocesController extends Controller
         }
         $user = $this->users->find($invoce->getIdUsers());
         return $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
+    }
+
+
+    public function payeInvoce()
+    {
+        if (!$this->security()->accessRole(50)) {
+            $this->redirect('userProfile')->send();
+            exit();
+        }
+
+        if ($this->request()->request->has("id")) {
+            $form = new FormController();
+            $form->field("id", ["require"]);
+            $errorsPaye =  $form->hasErrors();
+            if (!isset($errorsPaye["post"])) {
+                $datasDel = $form->getDatas();
+                if (!$errorsPaye) {
+                    $inv = $this->invoces->find($datasDel["id"]);
+
+                    $data = [];
+                    $data["desc"] = $inv->getRef();
+                    $data["credit"] = $inv->getPrice();
+                    $data["debit"] = 0;
+                    $data["date_at"] = date("Y-m-d h:i:s");
+                    $data["created_at"] = date("Y-m-d h:i:s");
+                    $this->comptaLines->create($data);
+                }
+            }
+        }
+        return $this->redirect("gestion_invoces");
     }
 }

@@ -565,7 +565,10 @@ class FormControllerTest extends TestCase
         $form = new FormController();
         $form->field("date", ["require", "date"]);
         $error = $form->hasErrors();
-        $this->assertEquals(["date" => ['Le champ date ne peut être vide.', "Le champ date doit être une date au format 2020-11-20 12:30:00"]], $error);
+        $this->assertEquals(["date" => [
+            'Le champ date ne peut être vide.',
+            "Le champ date doit être une date au format 2020-11-20 12:30:00"
+        ]], $error);
         $datas = $form->getDatas();
         $this->assertEquals([], $datas);
     }

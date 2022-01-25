@@ -49,7 +49,7 @@
 								Année</option>
 							<option value="2020">2020</option>
 							<option value="2021">2021</option>
-							<option value="2022">2022</option>
+							<option value="2022" selected>2022</option>
 						</select>
 
 						<select id="month">
@@ -100,17 +100,26 @@
 										<div class="card-body">
 											<h4 class="card-title">{{ invoce.user.firstname}}
 												{{ invoce.user.lastname}}</h4>
-											<p>
-												<a href="{{ path("GetInvoce", {id: invoce.id}) }}" class="btn btn">
+											<div class="form-inline">
+												<a href="{{ path("GetInvoce", {id: invoce.id}) }}" class="btn btn form-inline">
 													{% if invoce.statePaiement is same as(false) %}
-														edit
+														éditer
 													{% else  %}
-														download
+														téléchrger
 													{% endif %}
 												</a>
+												{% if invoce.statePaiement > 0  %}
+													<form class="form-inline" method="post" action="{{ path("gestion_paye_Invoce")}}" onsubmit="return confirm('Êtes vous sur de vouloir marquer comme payée cette facture? \n \n La demarche est définitive et ne peut être inversée.')">
+														<div class="form-group">
+															<input name="id" type="hidden" class="form-control" id="id" value="{{ invoce.id }}">
+														</div>
+														<button type="submit" class="btn btn-success">
+															Payé
+														</button>
+													</form>
+												{% endif %}
+											</div>
 
-
-											</p>
 										</div>
 										<div class="card-footer">
 											<div class="stats">
@@ -132,7 +141,6 @@
 		<!-- end col-md-12 -->
 	</div>
 {% endblock %}
-
 {% block script %}
 	<script>
 		const rating = document.getElementById('rating');
@@ -187,5 +195,23 @@ element.classList.add('hidden-month');
 }
 });
 });
+
+function gogogogog() {
+let value = "2022";
+[... elements].forEach((element) => {
+if (value === '') {
+element.classList.remove('hidden-year');
+} else {
+const rating = element.dataset.year;
+if (! rating || rating == value) {
+element.classList.remove('hidden-year');
+} else {
+element.classList.add('hidden-year');
+}
+}
+});
+}
+
+gogogogog()
 	</script>
 {% endblock %}
