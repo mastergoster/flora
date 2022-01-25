@@ -1,0 +1,80 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Dashboard
+{% endblock %}
+{% block titlePage %}Dashboard
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-primary card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">people</i>
+					</div>
+					<h4 class="card-title">FACTURES</h4>
+				</div>
+				<div class="card-body">
+					<div
+						class="toolbar"><!--        Here you can write extra buttons/actions for the toolbar              -->
+					</div>
+					<div class="material-datatables">
+						<div class="col-md-12 row">
+							{% for invoce in invoces %}
+
+								<div class="col-lg-3 col-md-3 col-sm-3">
+									<div class="card card-stats">
+										<div class="card-header card-header-{% if invoce.statePaiement is same as(false) %}danger{% elseif invoce.statePaiement <= 0  %}success{% else %}warning{% endif %} card-header-icon">
+											<div class="card-icon">
+												<i class="material-icons">
+													{% if invoce.statePaiement is same as(false) %}
+														dangerous
+													{% elseif invoce.statePaiement <= 0  %}
+														check
+													{% else %}
+														access_time
+													{% endif %}
+												</i>
+											</div>
+											<p class="card-category">{{invoce.ref}}</p>
+											<h3 class="card-title">
+												{{ invoce.price }}<small>€</small>
+											</h3>
+										</div>
+										<div class="card-body">
+											<h4 class="card-title">{{ invoce.user.firstname}}
+												{{ invoce.user.firstname}}</h4>
+											<p>
+												<a href="{{ path("GetInvoce", {id: invoce.id}) }}" class="btn btn">
+													{% if invoce.statePaiement is same as(false) %}
+														edit
+													{% else  %}
+														download
+													{% endif %}
+												</a>
+
+
+											</p>
+										</div>
+										<div class="card-footer">
+											<div class="stats">
+												le :
+												{{ invoce.dateAt | date("d/m/Y")  }}
+											</div>
+										</div>
+									</div>
+								</div>
+
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<!-- end content-->
+			</div>
+			<!--  end card  -->
+		</div>
+		<!-- end col-md-12 -->
+	</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

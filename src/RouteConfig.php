@@ -52,6 +52,8 @@ class RouteConfig
             ["post",    '/login', 'Users#login', 'post_usersLogin'],
             ["match",    '/ajax', 'Ajax#init', 'ajax'],
             ["get",    '/gestion/users', 'GesUsers#users', 'gestion_users'],
+            ["get",    '/gestion/invoces', 'GesInvoces#invoces', 'gestion_invoces'],
+            ["get",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
             ["get",    '/Mentions-Legales', 'Pages#legal', 'legal']
         ];
     }
