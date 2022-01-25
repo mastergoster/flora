@@ -3,6 +3,29 @@
 {% endblock %}
 {% block titlePage %}Dashboard
 {% endblock %}
+{% block style %}
+	<style>
+		.hidden-state {
+			display: none;
+		}
+		.hidden-year {
+			display: none;
+		}
+		.hidden-month {
+			display: none;
+		}
+		select {
+			border: none;
+			color: #3C4858;
+			font-weight: 300;
+			font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+			text-align: center;
+			text-decoration: underline dotted red;
+			text-transform: uppercase;
+			padding: 0 10px
+		}
+	</style>
+{% endblock %}
 {% block nav %}{% endblock %}
 {% block content %}
 	<div class="row">
@@ -12,17 +35,50 @@
 					<div class="card-icon">
 						<i class="material-icons">people</i>
 					</div>
-					<h4 class="card-title">FACTURES</h4>
+					<h4 class="card-title">FACTURES
+						<select id="rating">
+							<option value="">
+								État</option>
+							<option value=".1">Payé</option>
+							<option value=".2">Impayé</option>
+							<option value=".3">Brouillon</option>
+						</select>
+
+						<select id="year">
+							<option value="">
+								Année</option>
+							<option value="2020">2020</option>
+							<option value="2021">2021</option>
+							<option value="2022">2022</option>
+						</select>
+
+						<select id="month">
+							<option value="">
+								Mois</option>
+							<option value="01">janvier</option>
+							<option value="02">fevrier</option>
+							<option value="03">mars</option>
+							<option value="04">avril</option>
+							<option value="05">mai</option>
+							<option value="06">juin</option>
+							<option value="07">juillet</option>
+							<option value="08">août</option>
+							<option value="09">septembre</option>
+							<option value="10">octobre</option>
+							<option value="11">novembre</option>
+							<option value="12">décembre</option>
+						</select>
+					</h4>
+
 				</div>
 				<div class="card-body">
 					<div
 						class="toolbar"><!--        Here you can write extra buttons/actions for the toolbar              -->
 					</div>
 					<div class="material-datatables">
-						<div class="col-md-12 row">
+						<div class="col-12 row">
 							{% for invoce in invoces %}
-
-								<div class="col-lg-3 col-md-3 col-sm-3">
+								<div class="col-lg-3 col-md-6 col-sm-12 invoce" data-month="{{ invoce.dateAt | date("m") }}" data-year="{{ invoce.dateAt | date("Y") }}" data-state=".{% if invoce.statePaiement is same as(false) %}3{% elseif invoce.statePaiement <= 0  %}1{% else %}2{% endif %}">
 									<div class="card card-stats">
 										<div class="card-header card-header-{% if invoce.statePaiement is same as(false) %}danger{% elseif invoce.statePaiement <= 0  %}success{% else %}warning{% endif %} card-header-icon">
 											<div class="card-icon">
@@ -43,7 +99,7 @@
 										</div>
 										<div class="card-body">
 											<h4 class="card-title">{{ invoce.user.firstname}}
-												{{ invoce.user.firstname}}</h4>
+												{{ invoce.user.lastname}}</h4>
 											<p>
 												<a href="{{ path("GetInvoce", {id: invoce.id}) }}" class="btn btn">
 													{% if invoce.statePaiement is same as(false) %}
@@ -77,4 +133,59 @@
 	</div>
 {% endblock %}
 
-{% block script %}{% endblock %}
+{% block script %}
+	<script>
+		const rating = document.getElementById('rating');
+const year = document.getElementById('year');
+const month = document.getElementById('month');
+const elements = document.getElementsByClassName('invoce');
+
+rating.addEventListener('change', function () {
+let value = rating.value;
+[... elements].forEach((element) => {
+if (value === '') {
+element.classList.remove('hidden-state');
+} else {
+const rating = element.dataset.state;
+if (! rating || rating == value) {
+element.classList.remove('hidden-state');
+} else {
+element.classList.add('hidden-state');
+}
+}
+});
+});
+
+year.addEventListener('change', function () {
+let value = year.value;
+[... elements].forEach((element) => {
+if (value === '') {
+element.classList.remove('hidden-year');
+} else {
+const rating = element.dataset.year;
+if (! rating || rating == value) {
+element.classList.remove('hidden-year');
+} else {
+element.classList.add('hidden-year');
+}
+}
+});
+});
+
+month.addEventListener('change', function () {
+let value = month.value;
+[... elements].forEach((element) => {
+if (value === '') {
+element.classList.remove('hidden-month');
+} else {
+const rating = element.dataset.month;
+if (! rating || rating == value) {
+element.classList.remove('hidden-month');
+} else {
+element.classList.add('hidden-month');
+}
+}
+});
+});
+	</script>
+{% endblock %}
