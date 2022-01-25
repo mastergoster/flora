@@ -250,9 +250,8 @@ class InvocesEntity extends Entity
     public function setPaiement($paiement)
     {
         $this->paiement = $paiement;
-
-        return $this;
     }
+
 
 
 
