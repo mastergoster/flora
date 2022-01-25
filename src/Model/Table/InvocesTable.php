@@ -11,6 +11,8 @@ class InvocesTable extends Table
     {
         $all = parent::all();
         foreach ($all as $value) {
+            $value->setUser((new UsersTable($this->db))->find($value->getIdUsers()));
+            $value->setPaiement((new ComptaLinesTable($this->db))->findAll($value->getRef(), "desc"));
             $value->setInvocesLines((new InvocesLinesTable($this->db))->findAll($value->getId(), "id_invoces"));
         }
         return $all;

@@ -46,6 +46,11 @@ class AAInitSeeder extends AbstractSeed
                 'activate'    => true
             ],
             [
+                'name'    => "bureau",
+                'level'    => 50,
+                'activate'    => true
+            ],
+            [
                 'name'    => "administrateur",
                 'level'    => 60,
                 'activate'    => true
@@ -54,7 +59,7 @@ class AAInitSeeder extends AbstractSeed
         $rolesLog = [
             [
                 'id_users' => "1",
-                'id_roles' => "4"
+                'id_roles' => "5"
             ]
         ];
 

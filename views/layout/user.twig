@@ -77,6 +77,18 @@
 												</span>
 											</a>
 										</li>
+										{% if session.users.level >= 50 %}
+											<li class="nav-item ">
+												<a class="nav-link{{ linkactive('gestion_invoces', true, 2) }}" href="{{ path('gestion_invoces')}}">
+													<span class="sidebar-mini">
+														F
+													</span>
+													<span class="sidebar-normal">
+														Factures
+													</span>
+												</a>
+											</li>
+										{% endif %}
 									</ul>
 								</div>
 							</li>

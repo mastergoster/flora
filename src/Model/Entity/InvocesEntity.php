@@ -11,7 +11,11 @@ class InvocesEntity extends Entity
 
     private $id_users;
 
+    private $user;
+
     private $price;
+
+    private $paiement;
 
     private $activate;
 
@@ -70,6 +74,13 @@ class InvocesEntity extends Entity
      */
     public function getPrice()
     {
+        if ($this->price === null) {
+            $price = 0;
+            foreach ($this->invocesLines as $line) {
+                $price += $line->getPrice() * $line->getQte();
+            }
+            return "{ $price }";
+        }
         return $this->price;
     }
 
@@ -221,6 +232,68 @@ class InvocesEntity extends Entity
     public function setRefStripeToken($refStripeToken)
     {
         $this->ref_stripe_token = $refStripeToken;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of paiement
+     */
+    public function getPaiement()
+    {
+        return $this->paiement;
+    }
+
+    /**
+     * Set the value of paiement
+     *
+     * @return  self
+     */
+    public function setPaiement($paiement)
+    {
+        $this->paiement = $paiement;
+
+        return $this;
+    }
+
+    /**
+     * recupère l'état du payment
+     *
+     * @return  self
+     */
+    public function getStatePaiement()
+    {
+        if ($this->price === null) {
+            return false;
+        }
+        if ($this->getPaiement()) {
+            $pay = 0;
+
+            foreach ($this->getPaiement() as $line) {
+                /** @var ComptaLinesEntity $line */
+                $pay += $line->getCredit() - $line->getDebit();
+            }
+            return $this->price - $pay;
+        }
+        return $this->price;
+    }
+
+    /**
+     * Get the value of user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set the value of user
+     *
+     * @return  self
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
 
         return $this;
     }
