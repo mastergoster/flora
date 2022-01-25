@@ -74,7 +74,7 @@ class InvocesEntity extends Entity
      */
     public function getPrice()
     {
-        if ($this->price === null) {
+        if ($this->price === null && $this->invocesLines !== null) {
             $price = 0;
             foreach ($this->invocesLines as $line) {
                 $price += $line->getPrice() * $line->getQte();
@@ -244,17 +244,7 @@ class InvocesEntity extends Entity
         return $this->paiement;
     }
 
-    /**
-     * Set the value of paiement
-     *
-     * @return  self
-     */
-    public function setPaiement($paiement)
-    {
-        $this->paiement = $paiement;
 
-        return $this;
-    }
 
     /**
      * recupère l'état du payment
