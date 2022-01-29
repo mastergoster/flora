@@ -1,0 +1,160 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Dashboard
+{% endblock %}
+{% block titlePage %}Dashboard
+{% endblock %}
+{% block style %}{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-rose card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">assignment</i>
+					</div>
+					<h4 class="card-title">Facture pour
+						{{invoce.user.firstname}}
+						{{invoce.user.lastname}}
+						-
+						{{invoce.ref}}</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-shopping">
+							<thead>
+								<tr>
+									<th class="text-center">Référance</th>
+									<th class="text-center">Nom</th>
+									<th class="text-center">Description</th>
+									<th class="text-center">Prix Unitaire</th>
+									<th class="text-center">Quantité</th>
+									<th class="text-center">Remise</th>
+									<th class="text-center">total ligne</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+
+								{% for invocesLine in invoce.invocesLines %}
+									<tr>
+										<td>
+											{{invocesLine.ref}}
+										</td>
+										<td>
+											{{invocesLine.name}}
+										</td>
+										<td>
+											{{invocesLine.desc}}
+										</td>
+										<td class="td-number text-center">
+											{{invocesLine.price}}<small>€</small>
+										</td>
+										<td class="td-number text-center">
+											{{invocesLine.qte}}
+											<div class="btn-group btn-group-sm">
+												<form class="form-inline" method="post">
+													<div class="form-group">
+														<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
+														<input name="action" type="hidden" class="form-control" id="action" value="qte-">
+														<input name="data" type="hidden" class="form-control" id="data" value="{{ invocesLine.qte }}">
+														<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
+													</div>
+													<button type="submit" class="btn btn-round btn-info">
+														<i class="material-icons">remove</i>
+													</button>
+												</form>
+												<form class="form-inline" method="post">
+													<div class="form-group">
+														<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
+														<input name="action" type="hidden" class="form-control" id="action" value="qte+">
+														<input name="data" type="hidden" class="form-control" id="data" value="{{ invocesLine.qte }}">
+														<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
+													</div>
+													<button type="submit" class="btn btn-round btn-info">
+														<i class="material-icons">add</i>
+													</button>
+												</form>
+											</div>
+										</td>
+										<td class="td-number text-center">
+											{{invocesLine.discount}}<small>€</small>
+										</td>
+										<td class="td-number text-center">
+											{{ (invocesLine.price * invocesLine.qte) - invocesLine.discount}}<small>€</small>
+										</td>
+										<td class="td-actions">
+											<form class="form-inline" method="post">
+												<div class="form-group">
+													<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
+													<input name="action" type="hidden" class="form-control" id="action" value="delete">
+													<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
+												</div>
+												<button type="submit" class="btn btn-link" data-original-title="Remove item">
+													<i class="material-icons">close</i>
+												</button>
+											</form>
+										</td>
+									</tr>
+								{% endfor %}
+								<tr>
+									<td colspan="1"></td>
+									<td colspan="7" class="text-center">
+										<form class="form-inline text-center" method="post">
+											<div class="form-group">
+												<input name="id" type="hidden" class="form-control" id="id" value="0">
+												<input name="action" type="hidden" class="form-control" id="action" value="addline">
+												<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
+											</div>
+
+											<select name="data" class="col-5" title="Single Select">
+												{% for product in products %}
+													<option value="{{product.id}}" {% if not product.activate %} disabled="" {% endif %} selected="">{{product.ref}}
+														-
+														{{product.name}}
+														-
+														{{product.price}}€</option>
+
+												{% endfor %}
+											</select>
+
+											<button type="submit" class="btn btn-round btn-info" data-original-title="add item">
+												<i class="material-icons">add</i>
+											</button>
+										</form>
+									</td>
+								</tr>
+							</tbody>
+						</td>
+						<td colspan="1"></td>
+					</tr>
+					<tr>
+						<td colspan="5"></td>
+						<td class="td-total">
+							Total
+						</td>
+						<td colspan="1" class="td-price">
+							<small>€</small>2,346
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="6"></td>
+						<td colspan="2" class="text-right">
+							<form class="form-inline" method="post" action="{{ path("gestion_validate_Invoce", {id: invoce.id})}}">
+								<div class="form-group">
+									<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
+									<input name="action" type="hidden" class="form-control" id="action" value="delete">
+									<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
+								</div>
+								<button type="submit" class="btn btn-success btn-round">Valider la facture
+									<i class="material-icons">keyboard_arrow_right</i>
+								</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div></div></div>{% endblock %}{% block script %}{% endblock %}

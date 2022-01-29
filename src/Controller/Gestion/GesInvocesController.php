@@ -2,10 +2,11 @@
 
 namespace App\Controller\Gestion;
 
-use App\Model\Entity\ComptaLinesEntity;
 use \Core\Controller\Controller;
+use App\Services\InvocesServices;
 use Core\Controller\FormController;
 use App\Model\Entity\RecapConsoEntity;
+use App\Model\Entity\ComptaLinesEntity;
 use Core\Controller\Helpers\HController;
 use Core\Controller\Helpers\TableauController;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,9 @@ class GesInvocesController extends Controller
         $this->loadModel('rolesLog');
         $this->loadModel("messages");
         $this->loadModel("invoces");
+        $this->loadModel("invocesLines");
         $this->loadModel("comptaLines");
+        $this->loadModel("products");
     }
 
     public function invoces(): Response
@@ -48,14 +51,105 @@ class GesInvocesController extends Controller
         if (!$this->session()->has("users")) {
             return $this->redirect("usersLogin");
         }
+        $form = new FormController();
+        $form->field("id", ["require"]);
+        $form->field("action", ["require"]);
+        $form->field("data");
+        $form->field("invoceId", ["require"]);
+        $errors =  $form->hasErrors();
+        if (!isset($errors["post"])) {
+            $datas = $form->getDatas();
+            if ($datas["invoceId"] == $id) {
+                if (!$errors) {
+                    switch ($datas["action"]) {
+                        case 'qte-':
+                            if ($datas["data"] - 1 >= 1) {
+                                $this->invocesLines->update($datas["id"], 'id', ["qte" => $datas["data"] - 1]);
+                            }
+                            break;
+
+                        case 'qte+':
+                            $this->invocesLines->update($datas["id"], 'id', ["qte" => $datas["data"] + 1]);
+                            break;
+
+                        case 'delete':
+                            $this->invocesLines->delete($datas["id"]);
+                            break;
+                        case 'addline':
+                            if ($product = $this->products->findForInvoce($datas["data"])) {
+                                $product->setIdInvoces($datas["invoceId"]);
+                                $product->setIdProducts($product->getId());
+                                $product->setQte(1);
+                                $product->setDiscount(0);
+                                $product->setId(null);
+                                $product->activate = null;
+                                $this->invocesLines->create($product, true);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
 
         $invoce = $this->invoces->findActivate($id, "id");
         if (!$invoce) {
-            $this->messageFlash()->error("action non permise");
-            return $this->redirect("gestion_invoces");
+            $invoce = $this->invoces->findById($id);
+            if (!$invoce) {
+                $this->messageFlash()->error("action non permise");
+                return $this->redirect("gestion_invoces");
+            }
+
+            return $this->render(
+                "gestion/invoce",
+                [
+                    "invoce" => $invoce,
+                    'products' => $this->products->all()
+                ]
+            );
         }
         $user = $this->users->find($invoce->getIdUsers());
         return $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
+    }
+
+    public function validateInvoce($id): Response
+    {
+        $invoces = $this->invoces->find($id);
+        $invoces->setDateAt(date("Y-m-d H:i:s"));
+        if ($invoces) {
+            $service = new InvocesServices();
+            $service->activate($invoces);
+            $this->invoces->updateByClass($invoces);
+        }
+        $this->messageFlash()->success("la facture est activé");
+        return $this->redirect('gestion_invoces');
+    }
+
+    public function newInvoce($id): Response
+    {
+        $invocesServices = new InvocesServices;
+        if (is_numeric($id)) {
+            $data = ["date_at" => date("Y-m-d 09:00:00"), "id_user" => $id];
+            $invocesServices->getNewInvoce($data);
+        }
+        return $this->redirect('gestion_invoces');
+    }
+
+    public function deleteInvoce(): Response
+    {
+        $form = new FormController();
+        $form->field("id", ["require"]);
+        $errors =  $form->hasErrors();
+
+        if (!isset($errors["post"])) {
+            $datasDel = $form->getDatas();
+            if (!$errors) {
+                $inv = $this->invoces->find($datasDel["id"]);
+                if ($inv->getActivate() == 0) {
+                    $this->invoces->delete($datasDel["id"]);
+                }
+            }
+        }
+        return $this->redirect('gestion_invoces');
     }
 
 

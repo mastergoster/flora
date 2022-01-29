@@ -54,8 +54,11 @@ class RouteConfig
             ["get",    '/gestion/users', 'GesUsers#users', 'gestion_users'],
             ["get",    '/gestion/invoces', 'GesInvoces#invoces', 'gestion_invoces'],
             ["post",    '/gestion/invoces', 'GesInvoces#payeInvoce', 'gestion_paye_Invoce'],
+            ["post",    '/gestion/invoce/validate/[i:id]', 'GesInvoces#validateInvoce', 'gestion_validate_Invoce'],
+            ["get",    '/gestion/invoce/new/[i:id]', 'GesInvoces#newInvoce', 'gestion_new_Invoce'],
+            ["post",    '/gestion/invoce/delete', 'GesInvoces#deleteInvoce', 'gestion_delete_Invoce'],
 
-            ["get",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
+            ["match",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
             ["get",    '/Mentions-Legales', 'Pages#legal', 'legal']
         ];
     }

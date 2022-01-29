@@ -59,9 +59,9 @@
 											{% endif %}
 										</td>
 										<td class="text-right">
-											<button class="btn btn-link btn-black btn-just-icon edit" data-id="{{user.id}}">
+											<a href="{{ path("gestion_new_Invoce", {id: user.id})}}" class="btn btn-link btn-black btn-just-icon">
 												<i class="material-icons">receipt</i>
-											</button>
+											</a>
 											<button class="btn btn-link btn-{% if user.display == '0000' %}danger{% else %}success{% endif %} btn-just-icon display" data-id="{{user.id}}">
 												<i class="material-icons">dvr</i>
 											</button>

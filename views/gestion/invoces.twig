@@ -118,6 +118,16 @@
 														</button>
 													</form>
 												{% endif %}
+												{% if invoce.statePaiement is same as(false) %}
+													<form class="form-inline" method="post" action="{{ path("gestion_delete_Invoce")}}" onsubmit="return confirm('Êtes vous sur de vouloir supprimer cette facture? \n \n La demarche est définitive et ne peut être inversée.')">
+														<div class="form-group">
+															<input name="id" type="hidden" class="form-control" id="id" value="{{ invoce.id }}">
+														</div>
+														<button type="submit" class="btn btn-danger">
+															Delete
+														</button>
+													</form>
+												{% endif %}
 											</div>
 
 										</div>
