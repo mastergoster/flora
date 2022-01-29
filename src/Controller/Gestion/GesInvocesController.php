@@ -98,16 +98,21 @@ class GesInvocesController extends Controller
                 $this->messageFlash()->error("action non permise");
                 return $this->redirect("gestion_invoces");
             }
-
+            $total = 0;
+            foreach ($invoce->getInvocesLines() as $line) {
+                $total += ($line->getPrice() * $line->getQte()) - $line->getDiscount();
+            }
             return $this->render(
                 "gestion/invoce",
                 [
                     "invoce" => $invoce,
-                    'products' => $this->products->all()
+                    'products' => $this->products->all(),
+                    "total" => $total
                 ]
             );
         }
         $user = $this->users->find($invoce->getIdUsers());
+
         return $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
     }
 

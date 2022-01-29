@@ -134,14 +134,15 @@
 							Total
 						</td>
 						<td colspan="1" class="td-price">
-							<small>€</small>2,346
+
+							{{ total }}<small>€</small>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<td colspan="6"></td>
 						<td colspan="2" class="text-right">
-							<form class="form-inline" method="post" action="{{ path("gestion_validate_Invoce", {id: invoce.id})}}">
+							<form class="form-inline" method="post" action="{{ path("gestion_validate_Invoce", {id: invoce.id})}}" onsubmit="return confirm('Êtes vous sur de vouloir validé cette facture? \n \n La demarche est définitive et ne peut être inversée.')">
 								<div class="form-group">
 									<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
 									<input name="action" type="hidden" class="form-control" id="action" value="delete">
