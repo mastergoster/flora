@@ -21,6 +21,24 @@ abstract class Controller
 
     protected function render(string $view, array $variables = []): Response
     {
+        if (
+            $this->request()->headers->get("Content-Type") == "application/json" &&
+            explode('/', $this->request()->server->get("REQUEST_URI"))[1] == "api"
+        ) {
+
+            $response = new Response;
+
+            $response->setContent(
+                json_encode($variables)
+            );
+            $response->setStatusCode(200);
+            $response->headers->set('Content-Type', 'application/json');
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            $response->headers->set('Access-Control-Allow-Headers', 'true');
+            return $response;
+        }
+
+
         $variables["debugTime"] = $this->getApp()->getDebugTime();
         return  $this->getApp()->response->setContent($this->getTwig()->render(
             $view . '.twig',

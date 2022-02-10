@@ -91,7 +91,14 @@ class UsersEntity extends Entity
 
     private $id_images;
 
+    private $street;
+
+    private $city;
+
+    private $desc;
+
     private $display;
+
 
     /**
      * Get undocumented variable
@@ -434,6 +441,66 @@ class UsersEntity extends Entity
     public function setDisplay($display)
     {
         $this->display = $display;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of street
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * Set the value of street
+     *
+     * @return  self
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of city
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set the value of city
+     *
+     * @return  self
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of desc
+     */
+    public function getDesc()
+    {
+        return $this->desc;
+    }
+
+    /**
+     * Set the value of desc
+     *
+     * @return  self
+     */
+    public function setDesc($desc)
+    {
+        $this->desc = $desc;
 
         return $this;
     }

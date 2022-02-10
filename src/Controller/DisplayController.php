@@ -26,9 +26,21 @@ class DisplayController extends Controller
         foreach ($users as $user) {
             $user->presence = $this->hours->presence($user->getId());
             if ($user->presence = $this->hours->presence($user->getId())) {
-                $presence[] = $user;
+                $presence[] = [
+                    "id" => $user->getId(),
+                    "presence" => $user->presence,
+                    "email" => $user->getEmail(),
+                    "firstName" => $user->getFirstName(),
+                    "lastName" => $user->getLastName(),
+                ];
             } else {
-                $absent[] = $user;
+                $absent[] = [
+                    "id" => $user->getId(),
+                    "presence" => $user->presence,
+                    "email" => $user->getEmail(),
+                    "firstName" => $user->getFirstName(),
+                    "lastName" => $user->getLastName(),
+                ];
             }
         }
         return $this->render(

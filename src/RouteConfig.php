@@ -59,7 +59,11 @@ class RouteConfig
             ["post",    '/gestion/invoce/delete', 'GesInvoces#deleteInvoce', 'gestion_delete_Invoce'],
 
             ["match",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
-            ["get",    '/Mentions-Legales', 'Pages#legal', 'legal']
+            ["get",    '/Mentions-Legales', 'Pages#legal', 'legal'],
+
+
+            /** API */
+            ["get",    '/api/V1/pos', 'Display#tactile', 'APIpos'],
         ];
     }
 }
