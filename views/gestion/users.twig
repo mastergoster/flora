@@ -59,6 +59,9 @@
 											{% endif %}
 										</td>
 										<td class="text-right">
+											<a href="{{ path("gestion_user", {id: user.id})}}" class="btn btn-link btn-black btn-just-icon">
+												<i class="material-icons">edit</i>
+											</a>
 											<a href="{{ path("gestion_new_Invoce", {id: user.id})}}" class="btn btn-link btn-black btn-just-icon">
 												<i class="material-icons">receipt</i>
 											</a>
