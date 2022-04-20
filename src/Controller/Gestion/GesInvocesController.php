@@ -2,6 +2,7 @@
 
 namespace App\Controller\Gestion;
 
+use App\App;
 use \Core\Controller\Controller;
 use App\Services\InvocesServices;
 use Core\Controller\FormController;
@@ -112,7 +113,15 @@ class GesInvocesController extends Controller
             );
         }
         $user = $this->users->find($invoce->getIdUsers());
-
+        /**
+         * no cache 
+         */
+        if ($invoce->getActivate() == 1) {
+            $file = App::getInstance()->rootFolder() . "/files/user/invoce/" . $invoce->getRef() . ".pdf";
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
         return $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
     }
 
