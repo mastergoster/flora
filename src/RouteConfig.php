@@ -51,6 +51,7 @@ class RouteConfig
             ["post",    '/display/admin/new/line', 'Display#ajaxDisplayNewLine', 'post_ajaxDisplayNewLine'],
             ["post",    '/login', 'Users#login', 'post_usersLogin'],
             ["match",    '/ajax', 'Ajax#init', 'ajax'],
+            ["match",    '/gestion/users/[i:id]', 'GesUsers#user', 'gestion_user'],
             ["get",    '/gestion/users', 'GesUsers#users', 'gestion_users'],
             ["get",    '/gestion/invoces', 'GesInvoces#invoces', 'gestion_invoces'],
             ["post",    '/gestion/invoces', 'GesInvoces#payeInvoce', 'gestion_paye_Invoce'],

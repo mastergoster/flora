@@ -3,6 +3,7 @@
 namespace App\Controller\Gestion;
 
 use \Core\Controller\Controller;
+use Core\Controller\FormController;
 use App\Model\Entity\RecapConsoEntity;
 use Core\Controller\Helpers\HController;
 use Core\Controller\Helpers\TableauController;
@@ -54,6 +55,43 @@ class GesUsersController extends Controller
             "gestion/users",
             [
                 "users" => $users
+            ]
+        );
+    }
+
+    public function user(int $id): Response
+    {
+
+        $user = $this->users->find($id);
+        $formUpdate = new FormController();
+        $formUpdate->field("first_name");
+        $formUpdate->field("last_name");
+        $formUpdate->field("street");
+        $formUpdate->field("city");
+        $formUpdate->field("postal_code");
+        $formUpdate->field("desc");
+        if ($user->getVerify() == "1") {
+            $formUpdate->field("pin", ["ExactLength" => 4, "int"]);
+        }
+        $errors = [];
+        if ($this->request()->query->has("user")) {
+            $errors =  $formUpdate->hasErrors();
+            if (!isset($errors["post"])) {
+                $datas = $formUpdate->getDatas();
+                if (!$errors) {
+                    $this->users->update($user->getId(), "id", $datas);
+                }
+            }
+            $user = $this->users->find($id);
+        }
+
+        $invoces = $this->invoces->allActivateByUser($user->getId());
+
+        return $this->render(
+            "gestion/edit",
+            [
+                "user" => $user,
+                "invoces" => $invoces
             ]
         );
     }

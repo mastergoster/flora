@@ -74,18 +74,22 @@ class RouterController
                 $folder = "Gestion\\";
             }
 
-            if (class_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
+            if (
+                class_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
                 method_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller", $method)
             ) {
                 $controller = "App\\Controller\\" . $folder . ucfirst($controller) . "Controller";
-            } elseif (class_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
+            } elseif (
+                class_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
                 method_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller", $method)
             ) {
                 $controller = "Core\\Controller\\" . $folder . ucfirst($controller) . "Controller";
             } else {
-                $controller = "Core\\Controller\\ErrorsController";
-                $method = "er404";
-                $match['params'] = [];
+                if (!getenv("ENV_DEV")) {
+                    $controller = "Core\\Controller\\ErrorsController";
+                    $method = "er404";
+                    $match['params'] = [];
+                }
             }
         }
 

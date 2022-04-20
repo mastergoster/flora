@@ -1,0 +1,224 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Profil
+{% endblock %}
+{% block titlePage %}Profil
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Edition du Profil</h4>
+					<p class="card-category">Profil de
+						{{user.firstname}}
+						{{ user.lastname}}
+						- id :
+						{{user.id}}</p>
+				</div>
+				<div class="card-body">
+					<form method="post" action="?user">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group">
+									<label class="form-group bmd-label-floating ">Adresse Email</label>
+									<input type="email" name="email" value="{{ user.email }}" class="form-control" disabled>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group">
+									<label class="form-group bmd-label-floating ">Téléphone</label>
+									<input type="text" name="phone_number" value="{{ user.phoneNumber }}" class="form-control" disabled>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group">
+									<label class="form-group bmd-label-floating ">Code PIN</label>
+									<input type="number" min="0000" max="9999" name="pin" value="{{ user.pin }}" class="form-control" {% if user.verify == 0 %} disabled {% endif %}>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group{% if errors['first_name'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Prénom</label>
+									<input type="text" name="first_name" value="{{ user.firstName | capitalize}}" class="form-control">
+									{% if errors['first_name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group {% if errors['last_name'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Nom</label>
+									<input type="text" name="last_name" value="{{ user.lastName | capitalize}}" class="form-control">
+									{% if errors['last_name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group bmd-form-group {% if errors['street'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Adresse</label>
+									<input type="text" name="street" value="{{ user.street }}" class="form-control">
+									{% if errors['street'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group {% if errors['city'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Ville</label>
+									<input type="text" name="city" value="{{ user.city }}" class="form-control">
+									{% if errors['city'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group bmd-form-group {% if errors['postal_code'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Code Postal</label>
+									<input type="text" name="postal_code" value="{{ user.postalCode }}" class="form-control">
+									{% if errors['postal_code'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Biographie</label>
+									<div class="form-group bmd-form-group {% if errors['desc'] %} has-danger{% endif %}">
+										<label class="bmd-label-floating">
+											Une petite description de toi ;)</label>
+										<textarea class="form-control" name="desc" rows="5">{{ user.desc }}</textarea>
+										{% if errors['first_name'] %}
+											<span class="material-icons form-control-feedback">clear</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">Mettre à jour le Profil</button>
+						<div class="clearfix"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">liste des factures</h4>
+				</div>
+				<div class="card-body">
+					<ul>
+						{% for invoce in invoces %}
+							<li>
+								<a href="{{ path('GetInvoce', {'id': invoce.id} )}}">
+									{{invoce.ref}}
+									-
+									{{invoce.price}}€</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+	<script>
+		function getCookie(nomCookie) {
+deb = document.cookie.indexOf(nomCookie + "=")
+if (deb >= 0) {
+deb += nomCookie.length + 1
+fin = document.cookie.indexOf(";", deb)
+if (fin < 0) 
+fin = document.cookie.length
+
+
+
+
+
+return unescape(document.cookie.substring(deb, fin))
+} else 
+return ""
+
+
+
+
+
+}
+
+var ajaxup = { // (A) ADD TO UPLOAD QUEUE
+queue: [], // upload queue
+add: function () {
+for (let f of document.getElementById("upfile").files) {
+ajaxup.queue.push(f);
+}
+document.getElementById("upform").reset();
+if (! ajaxup.uploading) {
+ajaxup.go();
+}
+return false;
+},
+
+// (B) AJAX UPLOAD
+uploading: false, // upload in progress
+go: function () { // (B1) UPLOAD ALREADY IN PROGRESS
+ajaxup.uploading = true;
+
+// (B2) FILE TO UPLOAD
+var data = new FormData();
+data.append("upfile", ajaxup.queue[0]);
+// APPEND MORE VARIABLES IF YOU WANT
+data.append("id_user", {{ user.id }});
+data.append("function", "updatepicture");
+
+// (B3) AJAX REQUEST
+var xhr = new XMLHttpRequest();
+xhr.open("POST", "/ajax");
+
+xhr.onreadystatechange = function () {
+if (xhr.readyState == 4 && xhr.status == 200) {
+objresponse = JSON.parse(this.response)
+document.getElementById("upstat").src = objresponse.url;
+}
+if (xhr.readyState == 4 && xhr.status == 500) {
+$.notify({
+message: 'Erreur de chargement'
+}, {
+placement: {
+from: "top",
+align: "center"
+},
+type: 'danger'
+});
+
+}
+// (B4) SHOW UPLOAD RESULTS
+
+
+// (B5) NEXT FILE
+ajaxup.queue.shift();
+if (ajaxup.queue.length != 0) {
+ajaxup.go();
+} else {
+ajaxup.uploading = false;
+}
+};
+
+// (B6) GO!
+xhr.send(data);
+}
+};
+document.getElementById("upfile").onchange = function () {
+return ajaxup.add();
+};
+	</script>
+{% endblock %}
