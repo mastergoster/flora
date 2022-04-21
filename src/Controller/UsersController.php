@@ -535,6 +535,7 @@ class UsersController extends Controller
         $formUpdate->field("city", ["require"]);
         $formUpdate->field("postal_code", ["require"]);
         $formUpdate->field("desc", ["require"]);
+        $formUpdate->field("society");
         if ($user->getVerify() == "1") {
             $formUpdate->field("pin", ["ExactLength" => 4, "int"]);
         }
@@ -559,7 +560,8 @@ class UsersController extends Controller
             if (!isset($errors["post"])) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if ($user->getId() == $datasPassword["id"] &&
+                    if (
+                        $user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {

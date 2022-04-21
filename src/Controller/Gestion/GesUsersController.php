@@ -70,6 +70,7 @@ class GesUsersController extends Controller
         $formUpdate->field("city");
         $formUpdate->field("postal_code");
         $formUpdate->field("desc");
+        $formUpdate->field("society");
         if ($user->getVerify() == "1") {
             $formUpdate->field("pin", ["ExactLength" => 4, "int"]);
         }

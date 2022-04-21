@@ -99,6 +99,7 @@ class UsersEntity extends Entity
 
     private $display;
 
+    private $society;
 
     /**
      * Get undocumented variable
@@ -501,6 +502,26 @@ class UsersEntity extends Entity
     public function setDesc($desc)
     {
         $this->desc = $desc;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of society
+     */
+    public function getSociety()
+    {
+        return $this->society;
+    }
+
+    /**
+     * Set the value of society
+     *
+     * @return  self
+     */
+    public function setSociety($society)
+    {
+        $this->society = $society;
 
         return $this;
     }
