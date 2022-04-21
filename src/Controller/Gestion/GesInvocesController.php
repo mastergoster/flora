@@ -131,10 +131,12 @@ class GesInvocesController extends Controller
         $invoces->setDateAt(date("Y-m-d H:i:s"));
         if ($invoces) {
             $service = new InvocesServices();
-            $service->activate($invoces);
-            $this->invoces->updateByClass($invoces);
+            if ($service->activate($invoces)) {
+                $this->messageFlash()->success("la facture est activé");
+            } else {
+                $this->messageFlash()->error("la facture n'est pas activé");
+            }
         }
-        $this->messageFlash()->success("la facture est activé");
         return $this->redirect('gestion_invoces');
     }
 
