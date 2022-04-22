@@ -42,6 +42,11 @@ class InvocesTable extends Table
     public function allActivateByUser($id)
     {
         $all = $this->query("SELECT * FROM {$this->table} WHERE id_users=? AND activate=1", [$id]);
+        foreach ($all as $value) {
+            $value->setUser((new UsersTable($this->db))->find($value->getIdUsers()));
+            $value->setPaiement((new ComptaLinesTable($this->db))->findAll($value->getRef(), "desc"));
+            $value->setInvocesLines((new InvocesLinesTable($this->db))->findAll($value->getId(), "id_invoces"));
+        }
         return $all;
     }
 }
