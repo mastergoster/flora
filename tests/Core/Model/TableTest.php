@@ -140,7 +140,7 @@ class TableTest extends TestCase
             "created_at" => "2020-12-14 10:37:56"
         ]);
         $user = new ClassTest\UserTestEntity();
-        $user->id = 1;
+        $user->id = '1';
         $user->password = 'password';
         $user->email = 'test@test.fr';
         $user->first_name = 'nameTest';
@@ -154,6 +154,7 @@ class TableTest extends TestCase
         $user->street = null;
         $user->city = null;
         $user->desc = null;
+        $user->society = null;
         $user->id_images = null;
         $user->display = '0000';
         $result = $users->query("SELECT * FROM users");
@@ -178,6 +179,7 @@ class TableTest extends TestCase
         $user->street = null;
         $user->city = null;
         $user->desc = null;
+        $user->society = null;
         $user->id_images = null;
         $user->display = '0000';
 
@@ -220,6 +222,7 @@ class TableTest extends TestCase
         $user->city = null;
         $user->desc = null;
         $user->id_images = null;
+        $user->society = null;
         $user->display = '0000';
         $users = new UserTestTable($db);
         $users->updateByClass($user);
@@ -247,6 +250,7 @@ class TableTest extends TestCase
         $user->street = null;
         $user->city = null;
         $user->desc = null;
+        $user->society = null;
         $user->id_images = null;
         $user->display = '0000';
         $users = new UserTestTable($db);

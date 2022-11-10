@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
-use App\Model\Entity\InvocesEntity;
+use App\App;
 use Core\Controller\Controller;
+use App\Model\Entity\InvocesEntity;
+use Core\Controller\EmailController;
 
 class InvocesServices extends Controller
 {
@@ -11,6 +13,7 @@ class InvocesServices extends Controller
     {
         $this->loadModel("invoces");
         $this->loadModel("invocesLines");
+        $this->loadModel("users");
     }
 
     public function getNewInvoce(array $datas)
@@ -54,15 +57,29 @@ class InvocesServices extends Controller
 
     public function activate(InvocesEntity $invoce)
     {
-        $invoce->setActivate(true);
-        if (\substr($invoce->getRef(), 0, 5) == "PROV_") {
-            $invoce->setRef($this->numfact(true));
-        }
         $lines = $this->invocesLines->findAll($invoce->getID(), "id_invoces");
         foreach ($lines as $line) {
             $invoce->setPrice($invoce->getPrice() + (($line->getPrice() * $line->getQte()) - $line->getDiscount()));
         }
+        if ($invoce->getPrice() == 0) {
+            return false;
+        }
+        $invoce->setActivate(true);
+        if (\substr($invoce->getRef(), 0, 5) == "PROV_") {
+            $invoce->setRef($this->numfact(true));
+        }
+
+        $invoce->setPrice(0);
+
         //dd($this->numfact(true));
         $invoce->setUpdatedAt(date("Y-m-d H:i:s"));
+        $this->invoces->updateByClass($invoce);
+        $user = $this->users->find($invoce->getIdUsers());
+        $mail = new EmailController();
+        $mail->object(getenv('siteName') . ' - Vous avez une nouvelle facture sur votre espace')
+            ->to($user->getEmail())
+            ->message('newInvoce', compact('user'))
+            ->send();
+        return true;
     }
 }
