@@ -27,6 +27,8 @@ class GesUsersController extends Controller
         $this->loadModel("messages");
         $this->loadModel("invoces");
         $this->loadModel("comptaLines");
+        $this->loadModel("subscription");
+        $this->loadModel("products");
     }
 
     public function users(): Response
@@ -89,6 +91,9 @@ class GesUsersController extends Controller
         $invoces = $this->invoces->allActivateByUser($user->getId());
         $userRoles = $this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at");
         $roles = TableauController::assocId($this->roles->all());
+        $products = TableauController::assocId($this->products->all());
+        $subscriptions = $this->subscription->findAll($user->getId(), "id_users", "DESC", "created_at");
+
         return $this->render(
             "gestion/edit",
             [
@@ -96,6 +101,8 @@ class GesUsersController extends Controller
                 "invoces" => $invoces,
                 "userRoles" => $userRoles,
                 "roles" => $roles,
+                "subscriptions" => $subscriptions,
+                "products" => $products,
             ]
         );
     }

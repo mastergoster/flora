@@ -165,7 +165,26 @@
 					</ul>
 				</div>
 			</div>
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Abonnements</h4>
+				</div>
+				<div class="card-body">
+					<ul>
+						{% for subscription in subscriptions %}
+							<li>
+								{{ products[subscription.id_products].ref }}
+								du
+								{{ subscription.started_at | date("m/Y") }}
+								au
+								{{ subscription.finished_at | date("m/Y") }}
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
 		</div>
+
 	</div>
 {% endblock %}
 {% block script %}

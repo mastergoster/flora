@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use Core\Model\Entity;
 use Core\Controller\Helpers\HController;
+use Exception;
 
 class ProductsEntity extends Entity
 {
@@ -13,6 +14,9 @@ class ProductsEntity extends Entity
     private $desc;
     private $price;
     private $activate;
+    private $subscribeable;
+    private $duration;
+    private $unity;
     private $created_at;
     private $updated_at;
 
@@ -173,6 +177,62 @@ class ProductsEntity extends Entity
     {
         $this->id = $id;
 
+        return $this;
+    }
+
+    /**
+     * Get the value of subscribeable
+     */
+    public function getSubscribeable()
+    {
+        return $this->subscribeable;
+    }
+
+    /**
+     * Set the value of subscribeable
+     */
+    public function setSubscribeable($subscribeable): self
+    {
+        $this->subscribeable = $subscribeable;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of duration
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * Set the value of duration
+     */
+    public function setDuration($duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of unity
+     */
+    public function getUnity()
+    {
+        return $this->unity;
+    }
+
+    /**
+     * Set the value of unity
+     */
+    public function setUnity($unity): self
+    {
+        if (!in_array($unity, ["month", "day", "hour"])) {
+            throw new Exception("this format is invalid", 500);
+        }
+        $this->unity = $unity;
         return $this;
     }
 }

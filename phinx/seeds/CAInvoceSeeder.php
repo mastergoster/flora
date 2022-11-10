@@ -29,6 +29,16 @@ class CAInvoceSeeder extends AbstractSeed
                     "activate" => true,
                 ];
             }
+            $products[] = [
+                "ref" => $faker->domainWord(),
+                "name" => $faker->sentence(1),
+                "desc" => $faker->paragraph(),
+                "price" => $faker->randomNumber(2),
+                "activate" => true,
+                "subscribeable" => true,
+                "duration" => 1,
+                "unity" => "month"
+            ];
             for ($i = 0; $i <= 3; $i++) {
                 $invoce[] = [
                     'ref' =>  "PROV_" . $faker->dateTimeBetween('now', '+1 years')->format("Y-m-d H:i:s"),

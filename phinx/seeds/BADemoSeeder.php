@@ -20,7 +20,7 @@ class BADemoSeeder extends AbstractSeed
 
             $faker = Faker\Factory::create('fr_FR');
             $users = [];
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < 10; $i++) {
                 $users[] =
                     [
                         'password'    => password_hash("password", PASSWORD_BCRYPT),
@@ -35,7 +35,7 @@ class BADemoSeeder extends AbstractSeed
                     ];
             }
             $rolesLog = [];
-            for ($f = 2; $f < 22; $f++) {
+            for ($f = 2; $f < 10; $f++) {
                 $rolesLog[] =
                     [
                         'id_users' => $f,
