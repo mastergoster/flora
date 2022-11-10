@@ -69,7 +69,6 @@ class InvocesServices extends Controller
             $invoce->setRef($this->numfact(true));
         }
 
-        $invoce->setPrice(0);
 
         //dd($this->numfact(true));
         $invoce->setUpdatedAt(date("Y-m-d H:i:s"));
