@@ -151,7 +151,11 @@ class GesInvocesController extends Controller
         $invocesServices = new InvocesServices;
         if (is_numeric($id)) {
             $data = ["date_at" => date("Y-m-d 09:00:00"), "id_user" => $id];
-            $invocesServices->getNewInvoce($data);
+
+            return $this->redirect(
+                'get_invoce',
+                ["id" => $invocesServices->getNewInvoce($data)]
+            );
         }
         return $this->redirect('gestion_invoces');
     }
