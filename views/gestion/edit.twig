@@ -134,6 +134,32 @@
 									{{invoce.ref}}
 									-
 									{{invoce.price}}€</a>
+								-
+								{% if invoce.statePaiement is same as(false) %}
+									Impayé
+								{% elseif invoce.statePaiement <= 0  %}
+									Payé
+								{% else %}
+									Impayé
+								{% endif %}
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">status de la personne</h4>
+				</div>
+				<div class="card-body">
+					<ul>
+						{% for userRole in userRoles %}
+							<li>
+								{{ roles[userRole.idRoles].name }}
+								du
+								{{ userRole.createdAt | date("d/m/Y") }}
+								au
+								{{ userRole.updatedAt | date("d/m/Y") }}
 							</li>
 						{% endfor %}
 					</ul>

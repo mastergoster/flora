@@ -87,12 +87,15 @@ class GesUsersController extends Controller
         }
 
         $invoces = $this->invoces->allActivateByUser($user->getId());
-
+        $userRoles = $this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at");
+        $roles = TableauController::assocId($this->roles->all());
         return $this->render(
             "gestion/edit",
             [
                 "user" => $user,
-                "invoces" => $invoces
+                "invoces" => $invoces,
+                "userRoles" => $userRoles,
+                "roles" => $roles,
             ]
         );
     }

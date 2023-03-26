@@ -38,6 +38,12 @@ class GesInvocesController extends Controller
     {
 
         $invoces = $this->invoces->all();
+        $years = [];
+        $yearNow = date("Y");
+        for ($i = 2020; $i <= $yearNow; $i++) {
+            $years[] = $i;
+        }
+
         return $this->render(
             "gestion/invoces",
             [
