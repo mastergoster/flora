@@ -156,7 +156,7 @@ class GesInvocesController extends Controller
 
             return $this->redirect(
                 'GetInvoce',
-                ["id" => $invocesServices->getNewInvoce($data)]
+                ["id" => $invocesServices->getNewInvoce($data)->getId()]
             );
         }
         return $this->redirect('gestion_invoces');
