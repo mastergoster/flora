@@ -155,7 +155,7 @@ class GesInvocesController extends Controller
             $data = ["date_at" => date("Y-m-d 09:00:00"), "id_user" => $id];
 
             return $this->redirect(
-                'get_invoce',
+                'GetInvoce',
                 ["id" => $invocesServices->getNewInvoce($data)]
             );
         }
