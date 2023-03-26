@@ -47,7 +47,9 @@ class GesInvocesController extends Controller
         return $this->render(
             "gestion/invoces",
             [
-                "invoces" => $invoces
+                "invoces" => $invoces,
+                "years" => $years,
+                "yearNow" => $yearNow,
             ]
         );
     }
