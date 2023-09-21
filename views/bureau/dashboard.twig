@@ -1,0 +1,137 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Dashboard
+{% endblock %}
+{% block titlePage %}Dashboard
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-primary card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">people</i>
+					</div>
+					<h4 class="card-title">Utilisateurs</h4>
+				</div>
+				<div class="card-body">
+					<div
+						class="toolbar"><!--        Here you can write extra buttons/actions for the toolbar              -->
+					</div>
+					<div class="material-datatables">
+						<table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Prenom</th>
+									<th>status</th>
+									<th>forfait</th>
+									<th>facturation</th>
+									<th class="disabled-sorting text-right">Actions</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>Nom</th>
+									<th>Prenom</th>
+									<th>status</th>
+									<th>reste sur forfait</th>
+									<th>facturation</th>
+									<th class="text-right">Actions</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								{% for user in users %}
+									<tr>
+										<td>{{ user.lastname }}</td>
+										<td>{{ user.firstname }}</td>
+										<td>{{ user.role.name }}</td>
+										<td>
+											{{ user.recap.heurDispo|join('h')  }}
+										</td>
+										<td>
+											{{ user.totalInvoce|number_format(2, '.', '')  }}
+											€
+											{% if (user.totalInvoce - user.totalPaid) %}
+												<br>-
+												{{ (user.totalInvoce - user.totalPaid)|number_format(2, '.', '')  }}
+												€
+											{% endif %}
+										</td>
+										<td class="text-right">
+											<a href="{{ path("gestion_user", {id: user.id})}}" class="btn btn-link btn-black btn-just-icon">
+												<i class="material-icons">edit</i>
+											</a>
+											<a href="{{ path("gestion_new_Invoce", {id: user.id})}}" class="btn btn-link btn-black btn-just-icon">
+												<i class="material-icons">receipt</i>
+											</a>
+											<button class="btn btn-link btn-{% if user.display == '0000' %}danger{% else %}success{% endif %} btn-just-icon display" data-id="{{user.id}}">
+												<i class="material-icons">dvr</i>
+											</button>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- end content-->
+			</div>
+			<!--  end card  -->
+		</div>
+		<!-- end col-md-12 -->
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script>
+		$(document).ready(function () {
+var myTable = $('#datatables').DataTable({
+"pagingType": "full_numbers",
+"lengthMenu": [
+[
+5, 10, 15, -1
+],
+[
+5, 10, 15, "Tous"
+]
+],
+responsive: true,
+language: {
+search: "_INPUT_",
+searchPlaceholder: "Filtre"
+}
+});
+$('#datatables').on('click', '.display', function () {
+let formData = new FormData();
+formData.append("id_user", $(this).data('id'));
+formData.append("function", "d-tactile");
+fetch("/ajax", {
+method: "post",
+body: formData
+}).then(function (response) {
+if (response.ok) {
+response.json().then(function (json) {
+if (json.state === "0001") {
+$(this).removeClass("btn-danger")
+$(this).addClass("btn-success")
+} else {
+$(this).removeClass("btn-success")
+$(this).addClass("btn-danger")
+}
+
+}.bind(this));
+} else {
+console.log('Mauvaise réponse du réseau');
+}
+}.bind(this)).catch(function (error) {
+console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+});
+});
+
+$('#datatables').on('click', '.edit', function () {
+console.log($(this).data('id'));
+});
+});
+	</script>
+{% endblock %}
