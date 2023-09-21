@@ -1,0 +1,86 @@
+{% extends 'layout/user.twig' %}
+{% block title %}Produit
+{% endblock %}
+{% block titlePage %}Produit
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Edition du Produit</h4>
+				</div>
+				<div class="card-body">
+					<form method="post" action="">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group{% if errors['ref'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">REF</label>
+									<input type="text" name="ref" value="{{ item.ref | capitalize}}" class="form-control">
+									{% if errors['ref'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group {% if errors['name'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">NOM</label>
+									<input type="text" name="name" value="{{ item.name | capitalize}}" class="form-control">
+									{% if errors['name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="form-group bmd-form-group {% if errors['desc'] %} has-danger{% endif %}">
+										<label class="bmd-label-floating">
+											description</label>
+										<textarea class="form-control" name="desc" rows="5">{{ item.desc }}</textarea>
+										{% if errors['desc'] %}
+											<span class="material-icons form-control-feedback">clear</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group bmd-form-group {% if errors['price'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">Prix</label>
+									<input type="nuber" name="price" value="{{ item.price }}" class="form-control">
+									{% if errors['price'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="togglebutton">
+									<label>
+									<input type="checkbox" name="activate" {% if item.activate %}checked=""{% endif %}>
+									<span class="toggle"></span>
+									{% if item.activate %}Produit activé{% else %}Produit déactivé{% endif %}
+									</label>
+                     			</div>
+							</div>
+							
+						</div>
+						<button type="submit" class="btn btn-primary pull-right">Mettre à jour le Produit</button>
+						<div class="clearfix"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}

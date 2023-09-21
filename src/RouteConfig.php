@@ -58,6 +58,10 @@ class RouteConfig
             ["post",    '/gestion/invoce/validate/[i:id]', 'GesInvoces#validateInvoce', 'gestion_validate_Invoce'],
             ["get",    '/gestion/invoce/new/[i:id]', 'GesInvoces#newInvoce', 'gestion_new_Invoce'],
             ["post",    '/gestion/invoce/delete', 'GesInvoces#deleteInvoce', 'gestion_delete_Invoce'],
+            ["get",    '/gestion/prix', 'GesPrice#all', 'gestion_price'],
+            ["match",     '/gestion/prix/[i:id]', 'GesPrice#modif', 'gestion_price_modif'],
+
+            ["get", "/adhesion", 'Users#adhesion', "choiceAdhesion"],
 
             ["match",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
             ["get",    '/Mentions-Legales', 'Pages#legal', 'legal'],

@@ -2,6 +2,7 @@
 
 namespace Core\Controller;
 
+use App\Model\Entity\RolesLogEntity;
 use App\Model\Table\RolesLogTable;
 use App\Model\Table\RolesTable;
 use App\Model\Table\UsersTable;
@@ -10,6 +11,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SecurityController
 {
+    private $users;
+    private $roles;
+    private $rolesLog;
+    private $session;
+
     public function __construct(DatabaseController $db, SessionInterface $session)
     {
         $this->users = new UsersTable($db);
@@ -23,7 +29,7 @@ class SecurityController
         return $this->accessRole("administrateur");
     }
 
-    public function accessRole($level): bool
+    public function accessRole($level, $exact = false): bool
     {
 
         if (!$this->session->has('users')) {
@@ -44,16 +50,21 @@ class SecurityController
             "desc",
             "created_at"
         );
-
+        /** TODO : Change dynamic id */
+        $levelsUser = $levelsUser ?
+            $levelsUser :
+            [
+                (new RolesLogEntity())->setIdRoles(($this->roles->find("attente", 'name'))->getId())
+            ];
         $levelUser = $this->roles->find(
             $levelsUser[0]->getIdRoles()
         )->getLevel();
-
-        if ($level <= $levelUser) {
-            return true;
+        if ($exact) {
+            $return =  $level == $levelUser;
+        } else {
+            $return =  $level <= $levelUser;
         }
-
-        return false;
+        return $return;
     }
 
     public function logout(): void
@@ -113,6 +124,12 @@ class SecurityController
             "desc",
             "created_at"
         );
+        /** TODO : change Dynamic id */
+        $levelsUser = $levelsUser ?
+            $levelsUser :
+            [
+                (new RolesLogEntity())->setIdRoles(($this->roles->find("attente", 'name'))->getId())
+            ];
         $levelUser = $this->roles->find(
             $levelsUser[0]->getIdRoles()
         )->getLevel();
@@ -137,5 +154,10 @@ class SecurityController
             return false;
         }
         return true;
+    }
+
+    public  function isAttente()
+    {
+        return $this->accessRole("attente", true);
     }
 }

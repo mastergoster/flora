@@ -3,7 +3,8 @@
 {% endblock %}
 {% block titlePage %}Dashboard
 {% endblock %}
-{% block style %}{% endblock %}
+{% block style %}
+{% endblock %}
 {% block nav %}{% endblock %}
 {% block content %}
 	<div class="row">
@@ -45,36 +46,37 @@
 											{{invocesLine.name}}
 										</td>
 										<td>
-											{{invocesLine.desc}}
+											<form class="form-inline " method="post" style="position: relative;">
+													<div class="form-group grow-wrap">
+														<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
+														<input name="action" type="hidden" class="form-control" id="action" value="data-desc">
+														<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
+														<textarea name="data-desc" cols="30" rows="5">{{invocesLine.desc}}</textarea>
+													</div>
+													<button type="submit" class="btn btn-round btn-info" style="box-sizing: border-box;position: absolute;bottom: 50%;right: -15px;height: 30px;width: 30px;padding: 0;">
+														ok
+													</button>
+												</form>
+											
 										</td>
 										<td class="td-number text-center">
 											{{invocesLine.price}}<small>€</small>
 										</td>
 										<td class="td-number text-center">
-											{{invocesLine.qte}}
 											<div class="btn-group btn-group-sm">
 												<form class="form-inline" method="post">
 													<div class="form-group">
 														<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
-														<input name="action" type="hidden" class="form-control" id="action" value="qte-">
-														<input name="data" type="hidden" class="form-control" id="data" value="{{ invocesLine.qte }}">
+														<input name="action" type="hidden" class="form-control" id="action" value="qte">
+														<input name="data" type="number" min="1" class="form-control" id="data" value="{{ invocesLine.qte }}">
 														<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
-													</div>
-													<button type="submit" class="btn btn-round btn-info">
-														<i class="material-icons">remove</i>
+														<button type="submit" class="btn btn-round btn-info">
+														<i class="material-icons">done</i>
 													</button>
-												</form>
-												<form class="form-inline" method="post">
-													<div class="form-group">
-														<input name="id" type="hidden" class="form-control" id="id" value="{{ invocesLine.id }}">
-														<input name="action" type="hidden" class="form-control" id="action" value="qte+">
-														<input name="data" type="hidden" class="form-control" id="data" value="{{ invocesLine.qte }}">
-														<input name="invoceId" type="hidden" class="form-control" id="invoceId" value="{{ invoce.id }}">
 													</div>
-													<button type="submit" class="btn btn-round btn-info">
-														<i class="material-icons">add</i>
-													</button>
+													
 												</form>
+											
 											</div>
 										</td>
 										<td class="td-number text-center">
@@ -109,14 +111,16 @@
 
 											<select name="data" class="col-5" title="Single Select">
 												{% for product in products %}
-													<option value="{{product.id}}" {% if not product.activate %} disabled="" {% endif %} selected="">{{product.ref}}
-														-
-														{{product.name}}
-														-
-														{{product.price}}€</option>
-
+													{% if product.activate %}
+														<option value="{{product.id}}" {% if not product.activate %} disabled="" {% endif %} selected="">{{product.ref}}
+															-
+															{{product.name}}
+															-
+															{{product.price}}€</option>
+													{% endif %}
 												{% endfor %}
 											</select>
+											<input type="number" name="data-qte" value="1" min="1"/>
 
 											<button type="submit" class="btn btn-round btn-info" data-original-title="add item">
 												<i class="material-icons">add</i>

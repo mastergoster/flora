@@ -6,10 +6,11 @@ use App\Model\Table\UsersTable;
 use \Core\Controller\Controller;
 use Core\Controller\SmsController;
 use Core\Controller\FormController;
+use App\Model\Entity\RolesLogEntity;
 use Core\Controller\EmailController;
 use App\Model\Entity\RecapConsoEntity;
-use Core\Controller\Helpers\TableauController;
 use Symfony\Component\Console\Helper\Helper;
+use Core\Controller\Helpers\TableauController;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -119,7 +120,8 @@ class UsersController extends Controller
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
-                if (!$this->rolesLog->create(["id_roles" => 2, "id_users" => $userTable->lastInsertId()])) {
+                $roleAttente = $this->roles->find("attente", 'name');
+                if (!$this->rolesLog->create(["id_roles" => $roleAttente->getID(), "id_users" => $userTable->lastInsertId()])) {
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
@@ -319,6 +321,8 @@ class UsersController extends Controller
         if (!$this->security()->accessRole(20)) {
             if (!$this->security()->isActivate()) {
                 return $this->redirect('activatePage');
+            } elseif ($this->security()->isAttente()) {
+                return $this->redirect('choiceAdhesion');
             } else {
                 return $this->redirect('/403');
             }
@@ -328,6 +332,11 @@ class UsersController extends Controller
 
         $roles = TableauController::assocId($this->roles->all());
         $rolesLog = $this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at");
+        /** TODO change dynamic ID */
+        $norole = $this->roles->find("attente", 'name');
+        $rolesLog = $rolesLog ? $rolesLog : [
+            $norole->getId() => (new RolesLogEntity())->setIdRoles($norole->getId())
+        ];
         $roleUser = $roles[reset($rolesLog)->getIdRoles()];
         if ($user->getIdImages()) {
             $images = $this->images->find($user->getIdImages());
@@ -691,6 +700,18 @@ class UsersController extends Controller
                 "items" => $messages,
                 "display" => $display,
             ]
+        );
+    }
+
+    public function adhesion()
+    {
+        if (!$this->security()->isAttente()) {
+            return $this->redirect('userProfile');
+        }
+
+        return $this->render(
+            "user/adhesion",
+            []
         );
     }
 }
