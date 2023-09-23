@@ -120,7 +120,7 @@ class UsersController extends Controller
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
-                $roleAttente = $this->roles->find("attente", 'name');
+                $roleAttente = $this->roles->find("adherents", 'name');
                 if (!$this->rolesLog->create(["id_roles" => $roleAttente->getID(), "id_users" => $userTable->lastInsertId()])) {
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
