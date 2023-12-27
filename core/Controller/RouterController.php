@@ -62,7 +62,7 @@ class RouterController
 
         $folder = "";
 
-        if (!is_array($match) && !strpos($match['target'], "#")) {
+        if (!is_array($match) || !strpos($match['target'], "#")) {
             $controller = "Core\\Controller\\ErrorsController";
             $method = "er404";
             $match['params'] = [];

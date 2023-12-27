@@ -8,13 +8,16 @@ services:
     container_name: Mailcatcher
 
   dev:
-    image: chialab/php:7.4-apache
+    image: chialab/php-dev:7.4-apache
     volumes:
       - ./:/var/www/
+      - ./docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     ports:
       - "8080:80"
     container_name: Flora
     working_dir: /var/www
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 networks:
   default:

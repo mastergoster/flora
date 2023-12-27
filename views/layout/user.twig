@@ -77,18 +77,41 @@
 												</span>
 											</a>
 										</li>
-										{% if session.users.level >= 50 %}
-											<li class="nav-item ">
-												<a class="nav-link{{ linkactive('gestion_invoces', true, 2) }}" href="{{ path('gestion_invoces')}}">
-													<span class="sidebar-mini">
-														F
-													</span>
-													<span class="sidebar-normal">
-														Factures
-													</span>
-												</a>
-											</li>
-										{% endif %}
+									</ul>
+								</div>
+							</li>
+						{% endif %}
+						{% if session.users.level >= 50 %}
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="collapse" href="#bureau" aria-expanded="false">
+									<i class="material-icons">admin_panel_settings</i>
+									<p>
+										Bureau
+										<b class="caret"></b>
+									</p>
+								</a>
+								<div class="collapse" id="bureau">
+									<ul class="nav">
+										<li class="nav-item ">
+											<a class="nav-link{{ linkactive('gestion_price', true, 2) }}" href="{{ path('gestion_price')}}">
+												<span class="sidebar-mini">
+													P
+												</span>
+												<span class="sidebar-normal">
+													Prix
+												</span>
+											</a>
+										</li>
+										<li class="nav-item ">
+											<a class="nav-link{{ linkactive('gestion_invoces', true, 2) }}" href="{{ path('gestion_invoces')}}">
+												<span class="sidebar-mini">
+													F
+												</span>
+												<span class="sidebar-normal">
+													Factures
+												</span>
+											</a>
+										</li>
 									</ul>
 								</div>
 							</li>

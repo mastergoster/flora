@@ -21,7 +21,7 @@ class EmailController extends controller
 
         $mail = new PHPMailer();
         $mail->isSMTP();
-        if ($this->getConfig('ENV_DEV') || $this->getConfig('MAILER_Host') == "mailcatcher") {
+        if ($this->getConfig('ENV_DEV') || $this->getConfig('MAILER_Host') == "Mailcatcher") {
             //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->Host         = $this->getConfig('MAILER_Host');
             $mail->Port         = $this->getConfig('MAILER_Port');

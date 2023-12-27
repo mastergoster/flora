@@ -17,7 +17,7 @@ class GesInvocesController extends Controller
 
     public function __construct()
     {
-        if (!$this->security()->accessRole(50)) {
+        if (!$this->security()->accessRole(40)) {
             $this->redirect('userProfile')->send();
             exit();
         }
@@ -36,12 +36,24 @@ class GesInvocesController extends Controller
 
     public function invoces(): Response
     {
+        if (!$this->security()->accessRole(50)) {
+            $this->redirect('userProfile')->send();
+            exit();
+        }
 
         $invoces = $this->invoces->all();
+        $years = [];
+        $yearNow = date("Y");
+        for ($i = 2020; $i <= $yearNow; $i++) {
+            $years[] = $i;
+        }
+
         return $this->render(
             "gestion/invoces",
             [
-                "invoces" => $invoces
+                "invoces" => $invoces,
+                "years" => $years,
+                "yearNow" => $yearNow,
             ]
         );
     }
@@ -56,6 +68,8 @@ class GesInvocesController extends Controller
         $form->field("id", ["require"]);
         $form->field("action", ["require"]);
         $form->field("data");
+        $form->field("data-qte");
+        $form->field("data-desc");
         $form->field("invoceId", ["require"]);
         $errors =  $form->hasErrors();
         if (!isset($errors["post"])) {
@@ -63,28 +77,29 @@ class GesInvocesController extends Controller
             if ($datas["invoceId"] == $id) {
                 if (!$errors) {
                     switch ($datas["action"]) {
-                        case 'qte-':
-                            if ($datas["data"] - 1 >= 1) {
-                                $this->invocesLines->update($datas["id"], 'id', ["qte" => $datas["data"] - 1]);
-                            }
+                        case 'data-desc':
+                            $this->invocesLines->update($datas["id"], 'id', ["desc" => $datas["data-desc"]]);
                             break;
-
-                        case 'qte+':
-                            $this->invocesLines->update($datas["id"], 'id', ["qte" => $datas["data"] + 1]);
+                        case 'qte':
+                            $qte = $datas["data"]>=1?$datas["data"]:1;
+                            $this->invocesLines->update($datas["id"], 'id', ["qte" => $qte]);
                             break;
-
                         case 'delete':
                             $this->invocesLines->delete($datas["id"]);
                             break;
                         case 'addline':
-                            if ($product = $this->products->findForInvoce($datas["data"])) {
+                            $product = $this->products->findForInvoce($datas["data"]);
+                            $update = $this->invocesLines->find(["id_products" => $product->getId(), "id_invoces" => $datas["invoceId"]]);
+                            if ($product && !$update) {
                                 $product->setIdInvoces($datas["invoceId"]);
                                 $product->setIdProducts($product->getId());
-                                $product->setQte(1);
+                                $product->setQte($datas["data-qte"]);
                                 $product->setDiscount(0);
                                 $product->setId(null);
                                 $product->activate = null;
                                 $this->invocesLines->create($product, true);
+                            }elseif($update){
+                                $this->invocesLines->update($update->getId(), "id", ["qte" => $update->getQte() + $datas["data-qte"]]);
                             }
                             break;
                     }
@@ -131,10 +146,12 @@ class GesInvocesController extends Controller
         $invoces->setDateAt(date("Y-m-d H:i:s"));
         if ($invoces) {
             $service = new InvocesServices();
-            $service->activate($invoces);
-            $this->invoces->updateByClass($invoces);
+            if ($service->activate($invoces)) {
+                $this->messageFlash()->success("la facture est activé");
+            } else {
+                $this->messageFlash()->error("la facture n'est pas activé");
+            }
         }
-        $this->messageFlash()->success("la facture est activé");
         return $this->redirect('gestion_invoces');
     }
 
@@ -143,13 +160,21 @@ class GesInvocesController extends Controller
         $invocesServices = new InvocesServices;
         if (is_numeric($id)) {
             $data = ["date_at" => date("Y-m-d 09:00:00"), "id_user" => $id];
-            $invocesServices->getNewInvoce($data);
+
+            return $this->redirect(
+                'GetInvoce',
+                ["id" => $invocesServices->getNewInvoce($data)->getId()]
+            );
         }
         return $this->redirect('gestion_invoces');
     }
 
     public function deleteInvoce(): Response
     {
+        if (!$this->security()->accessRole(50)) {
+            $this->redirect('userProfile')->send();
+            exit();
+        }
         $form = new FormController();
         $form->field("id", ["require"]);
         $errors =  $form->hasErrors();
@@ -169,6 +194,10 @@ class GesInvocesController extends Controller
 
     public function payeInvoce()
     {
+        if (!$this->security()->accessRole(50)) {
+            $this->redirect('userProfile')->send();
+            exit();
+        }
         if (!$this->security()->accessRole(50)) {
             $this->redirect('userProfile')->send();
             exit();

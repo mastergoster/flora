@@ -47,9 +47,10 @@
 						<select id="year">
 							<option value="">
 								Année</option>
-							<option value="2020">2020</option>
-							<option value="2021">2021</option>
-							<option value="2022" selected>2022</option>
+							{# boucle pour afficher les anneés et selectionner celle en cours #}
+							{% for year in years %}
+								<option value="{{ year }}" {% if year == yearNow %} selected {% endif %}>{{ year }}</option>
+							{% endfor %}
 						</select>
 
 						<select id="month">
@@ -207,7 +208,7 @@ element.classList.add('hidden-month');
 });
 
 function gogogogog() {
-let value = "2022";
+let value = "{{ yearNow }}";
 [... elements].forEach((element) => {
 if (value === '') {
 element.classList.remove('hidden-year');

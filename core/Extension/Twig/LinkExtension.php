@@ -45,8 +45,9 @@ class LinkExtension extends AbstractExtension
     }
 
 
-    public function getLink(string $path = "home", array $params = []): string
+    public function getLink(string $path = "home", array $params = [], bool $full = false): string
     {
-        return $this->router->url($path, $params);
+        $url = $full ? "http://" . $_SERVER["HTTP_HOST"] : '';
+        return $url . $this->router->url($path, $params);
     }
 }
