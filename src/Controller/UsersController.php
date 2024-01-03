@@ -486,12 +486,23 @@ class UsersController extends Controller
         $form->field("name", ["require"]);
         $form->field("email", ["require", "mail", "unique" => $paramUnique]);
         $form->field("message", ["require"]);
+        $form->field("norobot", ["require", "robot"]);
+        $form->field("norobot2", ["notRequire"]);
+        $form->field("norobot3", ["require"]);
         $errors = $form->hasErrors();
         if (!isset($errors["post"])) {
             $datas = $form->getDatas();
-            $datas['id_roles'] = 4; // 4 = Administrateur
+            $datas['id_roles'] = 5; // 4 = Administrateur
             if (!$errors) {
+                unset($datas["norobot"]);
+                unset($datas["norobot2"]);
+                unset($datas["norobot3"]);
                 $this->messages->create($datas);
+                $mail = new EmailController();
+                $mail->object(getenv('siteName') . ' - Vous avez un nouveau message sur votre espace')
+                    ->to("contact@coworkinmoulins.fr")
+                    ->message('newMessage', compact('datas'))
+                    ->send();
                 $errors["error"] = false;
             } else {
                 $errors["error"] = true;

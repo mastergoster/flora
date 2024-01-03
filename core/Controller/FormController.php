@@ -117,7 +117,8 @@ class FormController
     private function errorVerify(string $field, bool $value): void
     {
         $fieldVerify = $field . "Verify";
-        if (isset($this->postDatas[$fieldVerify]) &&
+        if (
+            isset($this->postDatas[$fieldVerify]) &&
             $this->postDatas[$fieldVerify] == $this->postDatas[$field]
         ) {
             $this->addToDatas($field);
@@ -206,6 +207,24 @@ class FormController
     private function errorUnique(string $field, array $value): void
     {
         if (!in_array($this->postDatas[$field], $value)) {
+            $this->addToDatas($field);
+        } else {
+            $this->newError("$field", "La valeur indiquée dans \"{$field}\" n'est pas valide.");
+        }
+    }
+
+    private function errorRobot(string $field): void
+    {
+        if ($this->postDatas[$field] == md5($this->postDatas[$field . "3"])) {
+            $this->addToDatas($field);
+        } else {
+            $this->newError("$field", "La valeur indiquée dans \"{$field}\" n'est pas valide.");
+        }
+    }
+
+    private function errorNotRequire(string $field): void
+    {
+        if ($this->postDatas[$field] == "") {
             $this->addToDatas($field);
         } else {
             $this->newError("$field", "La valeur indiquée dans \"{$field}\" n'est pas valide.");

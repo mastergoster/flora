@@ -139,11 +139,6 @@
 									<li class="title-marge">
 										<ul>
 											<li class="title">non adhérent</li>
-											<li class="des">l'heure</li>
-											<li class="prix">5 €</li>
-										</ul>
-										<ul>
-											<li class="title">non adhérent</li>
 											<li class="des">la demie-journée</li>
 											<li class="prix">12 €</li>
 										</ul>
@@ -155,11 +150,6 @@
 									</li>
 									<li class="title">Quand on veux rester un peu plus...</li>
 									<li class="title-marge">
-										<ul>
-											<li class="title">adhérent</li>
-											<li class="des">l'heure</li>
-											<li class="prix">2,5 €</li>
-										</ul>
 										<ul>
 											<li class="title">adhérent</li>
 											<li class="des">la demie-journée</li>
@@ -194,7 +184,7 @@
 										<ul>
 											<li class="title">Adhésion Individuelle</li>
 											<li class="des"></li>
-											<li class="prix">20 € / an</li>
+											<li class="prix">30 € / an</li>
 										</ul>
 										<ul>
 											<li class="title">Adhésion Professionelle</li>
@@ -203,7 +193,7 @@
 										</ul>
 										<ul>
 											<li class="title">Forfait Mois</li>
-											<li class="des">option domiciliation 50 €</li>
+											<li class="des">option domiciliation 10 € / mois</li>
 											<li class="prix">100 € / mois</li>
 										</ul>
 									</li>
@@ -232,6 +222,16 @@
 								<div class="field">
 									<label for="message">Message</label>
 									<textarea name="message" id="message" rows="3"></textarea>
+								</div>
+								<div class="field">
+									<input type="checkbox" name="norobot" id="norobot" value="{{ norobot }}">
+
+									<label for="norobot">Je confirme que je suis un être humain, et pas un robot spammeur.</label>
+								</div>
+								<div class="field">
+									<input type="checkbox" name="norobot2" id="norobot2" value="{{ norobot2 }}">
+									<input type="hidden" name="norobot3" id="norobot3" value="{{ norobot3 }}">
+
 								</div>
 							</div>
 							<ul class="actions">
