@@ -116,13 +116,27 @@ class CronController extends Controller
         foreach ($users as $user) {
             dump("user : " . $user->getId());
             if (!in_array($user->getId(), $userOK)) {
-                if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at"))->getIdRoles(), $roleNok)) {
+                if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", true, "created_at"))->getIdRoles(), $roleNok)) {
                     $this->rolesLog->updateRole($user->getId(), 2);
                 }
             } else {
-                if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at"))->getIdRoles(), [3, 4, 5, 6])) {
+                if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", true, "created_at"))->getIdRoles(), [3, 4, 5, 6])) {
                     $this->rolesLog->updateRole($user->getId(), 3);
                 }
+            }
+        }
+    }
+
+    public function updateAffichage()
+    {
+        $roleok = [3, 4, 5, 6];
+        $users = $this->users->all();
+        foreach ($users as $user) {
+            dump("user : " . $user->getId());
+            if (in_array(end($this->rolesLog->findAll($user->getId(), "id_users", true, "created_at"))->getIdRoles(), $roleok)) {
+                $this->users->update($user->getId(), 'id', ["display" => "0001"]);
+            } else {
+                $this->users->update($user->getId(), 'id', ["display" => "0000"]);
             }
         }
     }

@@ -75,6 +75,7 @@ class RouteConfig
             ["get",    '/maj/pack', 'Cron#updatePackage', 'MajPackage'],
             ["get",    '/maj/hours', 'Cron#heurVerify', 'heurVerify'],
             ["get",    '/maj/adh', 'Cron#updateAdhesion', 'updateAdhesion'],
+            ["get",    '/maj/aff', 'Cron#updateAffichage', 'updateAffichage'],
 
         ];
     }
