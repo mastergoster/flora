@@ -17,8 +17,10 @@ class CronController extends Controller
         $this->loadModel("invocesLines");
         $this->loadModel("invoces");
         $this->loadModel("packagesLog");
+        $this->loadModel("rolesLog");
         $this->loadModel("packages");
         $this->loadModel("hours");
+        $this->loadModel("users");
     }
 
     public function updatePackage()
@@ -97,5 +99,27 @@ class CronController extends Controller
             $userHours[$id]["à jour"] = $globaleAllowedTemp > $globaleTemp;
         }
         dd($userHours);
+    }
+
+    public function updateAdhesion()
+    {
+        $packageOne = $this->invocesLines->findAll(31, "id_products");
+        $packageTwo = $this->invocesLines->findAll(32, "id_products");
+        $packageAll = array_merge($packageOne, $packageTwo);
+        $userOK = [];
+        $roleNok = [1, 6];
+        foreach ($packageAll as $package) {
+            $userOK[] = $this->invoces->find($package->getIdInvoces())->getIdUsers();
+        }
+        $users = $this->users->all();
+        \dump($userOK);
+        foreach ($users as $user) {
+            dump("user : " . $user->getId());
+            if (!in_array($user->getId(), $userOK)) {
+                if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at"))->getIdRoles(), $roleNok)) {
+                    $this->rolesLog->updateRole($user->getId(), 2);
+                }
+            }
+        }
     }
 }
