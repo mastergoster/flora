@@ -119,6 +119,10 @@ class CronController extends Controller
                 if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at"))->getIdRoles(), $roleNok)) {
                     $this->rolesLog->updateRole($user->getId(), 2);
                 }
+            } else {
+                if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", "DESC", "created_at"))->getIdRoles(), [3, 4, 5, 6])) {
+                    $this->rolesLog->updateRole($user->getId(), 3);
+                }
             }
         }
     }
