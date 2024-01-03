@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\Table\UsersTable;
 use \Core\Controller\Controller;
+use App\Services\InvocesServices;
 use Core\Controller\SmsController;
 use Core\Controller\FormController;
 use App\Model\Entity\RolesLogEntity;
@@ -27,6 +28,7 @@ class UsersController extends Controller
         $this->loadModel('invoces');
         $this->loadModel('invocesLines');
         $this->loadModel('images');
+        $this->loadModel('products');
     }
 
     public function login(): Response
@@ -120,7 +122,7 @@ class UsersController extends Controller
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
-                $roleAttente = $this->roles->find("adherents", 'name');
+                $roleAttente = $this->roles->find("attente", 'name');
                 if (!$this->rolesLog->create(["id_roles" => $roleAttente->getID(), "id_users" => $userTable->lastInsertId()])) {
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
@@ -703,11 +705,48 @@ class UsersController extends Controller
         );
     }
 
-    public function adhesion()
+    public function adhesion($id = null)
     {
         if (!$this->security()->isAttente()) {
             return $this->redirect('userProfile');
         }
+        $variable = [];
+
+        switch ($id) {
+            case '1':
+                $variable = ["role" => 2, "product" => 31];
+                break;
+            case '2':
+                $variable = ["role" => 2, "product" => 32];
+                break;
+            case '3':
+            case '4':
+            case '5':
+
+                break;
+            default:
+                break;
+        }
+        if (count($variable) == 2) {
+            $user = $this->session()->get("users");
+            $this->rolesLog->updateRole($user->getId(), $variable["role"]);
+            $invocesServices = new InvocesServices;
+            $invoce = $invocesServices->getNewInvoce(["id_user" => $user->getId(), "date_at" => date("Y-m-d H:i:s")]);
+            $product = $this->products->findForInvoce($variable["product"]);
+            $product->setIdInvoces($invoce->getId());
+            $product->setQte(1);
+            $product->setDiscount(0);
+            $product->setId(null);
+            $product->activate = null;
+            $this->invocesLines->create($product, true);
+            $invocesServices->activate($invoce);
+            $this->messageFlash()->success("Votre demande d'adhésion a bien été prise en compte.");
+            return $this->redirect('userInvoces');
+        }
+
+
+
+
 
         return $this->render(
             "user/adhesion",

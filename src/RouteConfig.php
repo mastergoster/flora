@@ -62,6 +62,7 @@ class RouteConfig
             ["match",     '/gestion/prix/[i:id]', 'GesPrice#modif', 'gestion_price_modif'],
 
             ["get", "/adhesion", 'Users#adhesion', "choiceAdhesion"],
+            ["get", "/adhesion/[i:id]", 'Users#adhesion', "choiceAdhesionGet"],
 
             ["match",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
             ["get",    '/Mentions-Legales', 'Pages#legal', 'legal'],
@@ -69,6 +70,11 @@ class RouteConfig
 
             /** API */
             ["get",    '/api/V1/pos', 'Display#tactile', 'APIpos'],
+
+            /** Maj */
+            ["get",    '/maj/pack', 'Cron#updatePackage', 'MajPackage'],
+            ["get",    '/maj/hours', 'Cron#heurVerify', 'heurVerify'],
+
         ];
     }
 }
