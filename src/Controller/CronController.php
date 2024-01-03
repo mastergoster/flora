@@ -96,7 +96,11 @@ class CronController extends Controller
             }
             $userHours[$id]["globaleAllowedTemp"] = $globaleAllowedTemp;
             $userHours[$id]["globaleTemp"] = $globaleTemp;
-            $userHours[$id]["à jour"] = $globaleAllowedTemp > $globaleTemp;
+            $userHours[$id]["à jour"] = $globaleAllowedTemp >= $globaleTemp ? "ok" : "nok";
+            if ($userHours[$id]["à jour"] == "nok") {
+                \dump($id . " : " . $userHours[$id]["à jour"] . " : " . (($globaleTemp - $globaleAllowedTemp) / 60 / 60) . " : " . (($globaleTemp) / 60 / 60) . " : " . ($globaleAllowedTemp / 60 / 60));
+                echo ("<a href='/admin/users/" . $id . "/modifheure'>lien</a>");
+            }
         }
         dd($userHours);
     }
@@ -140,5 +144,21 @@ class CronController extends Controller
             }
         }
         dump("ok");
+    }
+
+
+    public function updateFacture()
+    {
+        $user = [];
+        $packageAll = $this->invocesLines->findAll(4, "id_products", true, 'created_at'); //voir 24 dom
+        \dump($packageAll);
+        foreach ($packageAll as $package) {
+            $invoce = $this->invoces->find($package->getIdInvoces());
+            if ((new \DateTimeImmutable($invoce->getCreatedAt()))->getTimestamp() > (new \DateTimeImmutable())->modify('-40 day')->getTimestamp()) {
+                dump($this->users->find($invoce->getIdUsers())->getFirstname());
+                $user[] = $invoce;
+            }
+        }
+        dd($user);
     }
 }
