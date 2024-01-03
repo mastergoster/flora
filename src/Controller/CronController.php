@@ -107,7 +107,7 @@ class CronController extends Controller
         $packageTwo = $this->invocesLines->findAll(32, "id_products");
         $packageAll = array_merge($packageOne, $packageTwo);
         $userOK = [];
-        $roleNok = [1, 6];
+        $roleNok = [1, 2, 6];
         foreach ($packageAll as $package) {
             $userOK[] = $this->invoces->find($package->getIdInvoces())->getIdUsers();
         }
