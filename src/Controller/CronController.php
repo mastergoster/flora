@@ -114,7 +114,6 @@ class CronController extends Controller
         $users = $this->users->all();
         \dump($userOK);
         foreach ($users as $user) {
-            dump("user : " . $user->getId());
             if (!in_array($user->getId(), $userOK)) {
                 if (!in_array(end($this->rolesLog->findAll($user->getId(), "id_users", true, "created_at"))->getIdRoles(), $roleNok)) {
                     $this->rolesLog->updateRole($user->getId(), 2);
@@ -125,6 +124,7 @@ class CronController extends Controller
                 }
             }
         }
+        dump("ok");
     }
 
     public function updateAffichage()
@@ -132,12 +132,13 @@ class CronController extends Controller
         $roleok = [3, 4, 5, 6];
         $users = $this->users->all();
         foreach ($users as $user) {
-            dump("user : " . $user->getId());
+
             if (in_array(end($this->rolesLog->findAll($user->getId(), "id_users", true, "created_at"))->getIdRoles(), $roleok)) {
                 $this->users->update($user->getId(), 'id', ["display" => "0001"]);
             } else {
                 $this->users->update($user->getId(), 'id', ["display" => "0000"]);
             }
         }
+        dump("ok");
     }
 }
