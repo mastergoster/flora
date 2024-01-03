@@ -714,10 +714,10 @@ class UsersController extends Controller
 
         switch ($id) {
             case '1':
-                $variable = ["role" => 2, "product" => 31];
+                $variable = ["role" => 3, "product" => 31];
                 break;
             case '2':
-                $variable = ["role" => 2, "product" => 32];
+                $variable = ["role" => 3, "product" => 32];
                 break;
             case '3':
             case '4':
