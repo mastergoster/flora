@@ -115,7 +115,7 @@ class UsersController extends Controller
                 //créer token et pin
                 $datas["token"] =  substr(md5(uniqid()), 0, 10);
                 $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
-                $datas["display"] = "0001";
+                $datas["display"] = "0000";
 
                 //persiter user en bdd
                 if (!$userTable->create($datas)) {
@@ -745,10 +745,6 @@ class UsersController extends Controller
             $invoce = $invocesServices->getNewInvoce(["id_user" => $user->getId(), "date_at" => date("Y-m-d H:i:s")]);
             $product = $this->products->findForInvoce($variable["product"]);
             $product->setIdInvoces($invoce->getId());
-            $product->setQte(1);
-            $product->setDiscount(0);
-            $product->setId(null);
-            $product->activate = null;
             $this->invocesLines->create($product, true);
             $invocesServices->activate($invoce);
             $this->messageFlash()->success("Votre demande d'adhésion a bien été prise en compte.");
