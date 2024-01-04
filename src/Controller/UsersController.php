@@ -745,6 +745,11 @@ class UsersController extends Controller
             $invoce = $invocesServices->getNewInvoce(["id_user" => $user->getId(), "date_at" => date("Y-m-d H:i:s")]);
             $product = $this->products->findForInvoce($variable["product"]);
             $product->setIdInvoces($invoce->getId());
+            $product->setQte(1);
+            $product->setDiscount(0);
+            $product->setIdProducts($product->getId());
+            $product->setId(null);
+
             $this->invocesLines->create($product, true);
             $invocesServices->activate($invoce);
             $this->messageFlash()->success("Votre demande d'adhésion a bien été prise en compte.");
