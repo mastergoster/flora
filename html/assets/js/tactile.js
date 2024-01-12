@@ -156,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function submitajax(e) {
         e.preventDefault();
-
         let form = e.target;
 
         fetch(form.action, {

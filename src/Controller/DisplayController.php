@@ -16,6 +16,7 @@ class DisplayController extends Controller
         }
         $this->loadModel('users');
         $this->loadModel('hours');
+        $this->loadModel('images');
     }
 
     public function tactile(): Response
@@ -66,10 +67,22 @@ class DisplayController extends Controller
         }
 
         $user = $this->users->find($_POST['user_email'], 'email');
-
+        $user->presence = $this->hours->presence($user->getId());
         if (!$user->getVerify()) {
             $this->users->update($user->getId(), 'id', ["verify" => true]);
         }
-        return $this->jsonResponse($this->hours->create(["id_users" => $user->getId()]));
+        $this->hours->create(["id_users" => $user->getId()]);
+        $user->presence = $this->hours->presence($user->getId());
+        $photo = $this->images->find($user->getIdImages());
+        $picture = $photo ? $photo->getRef() . "/" . $photo->getName() : false;
+        return $this->jsonResponse([
+            "id" => $user->getId(),
+            "presence" => $user->presence,
+            "email" => $user->getEmail(),
+            "firstname" => $user->getFirstName(),
+            "lastname" => $user->getLastName(),
+            "picture" => $picture,
+            "society" => $user->getSociety(),
+        ]);
     }
 }
