@@ -13,4 +13,18 @@ abstract class Entity
             }
         }
     }
+
+    public function __toArray(): array
+    {
+        $array = [];
+        foreach ($this as $key => $value) {
+            $methode = 'get' . ucfirst($key);
+            if (method_exists($this, $methode)) {
+                $array[$key] = $this->$methode();
+            } else {
+                $array[$key] = $value;
+            }
+        }
+        return $array;
+    }
 }

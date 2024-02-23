@@ -72,6 +72,8 @@ class RouterController
                 $folder = "Admin\\";
             } elseif (substr($controller, 0, 3) == "Ges") {
                 $folder = "Gestion\\";
+            } elseif (substr($controller, 0, 3) == "Api") {
+                $folder = "Api\\";
             }
 
             if (

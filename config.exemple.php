@@ -14,5 +14,6 @@ return [
     "DB_Name" => "application",
     "BRANCH" => "master",
     "PATH_BASE" => __DIR__,
-    "STRIPE_KEY" => ""
+    "STRIPE_KEY" => "",
+    "IGLOOHOME_BASIC_CODE" => "xxxxxxxxxxxxxx"
 ];

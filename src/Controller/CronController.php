@@ -153,7 +153,7 @@ class CronController extends Controller
         $packageAll = $this->invocesLines->findAll(4, "id_products", true, 'created_at'); //voir 24 dom
         foreach ($packageAll as $package) {
             $invoce = $this->invoces->find($package->getIdInvoces());
-            if ((new \DateTimeImmutable($invoce->getCreatedAt()))->getTimestamp() > (new \DateTimeImmutable())->modify('-50 day')->getTimestamp()) {
+            if ((new \DateTimeImmutable($invoce->getCreatedAt()))->getTimestamp() > (new \DateTimeImmutable())->modify('-30 day')->getTimestamp()) {
                 dump($this->users->find($invoce->getIdUsers())->getFirstname());
                 $user[] = $invoce;
             }
