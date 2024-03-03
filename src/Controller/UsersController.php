@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\Table\UsersTable;
 use \Core\Controller\Controller;
+use App\Services\InvocesServices;
 use Core\Controller\SmsController;
 use Core\Controller\FormController;
 use App\Model\Entity\RolesLogEntity;
@@ -27,6 +28,7 @@ class UsersController extends Controller
         $this->loadModel('invoces');
         $this->loadModel('invocesLines');
         $this->loadModel('images');
+        $this->loadModel('products');
     }
 
     public function login(): Response
@@ -113,14 +115,14 @@ class UsersController extends Controller
                 //créer token et pin
                 $datas["token"] =  substr(md5(uniqid()), 0, 10);
                 $datas["pin"] = rand(0, 9) . rand(0, 9) . rand(0, 9) . rand(0, 9);
-                $datas["display"] = "0001";
+                $datas["display"] = "0000";
 
                 //persiter user en bdd
                 if (!$userTable->create($datas)) {
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
                 }
-                $roleAttente = $this->roles->find("adherents", 'name');
+                $roleAttente = $this->roles->find("attente", 'name');
                 if (!$this->rolesLog->create(["id_roles" => $roleAttente->getID(), "id_users" => $userTable->lastInsertId()])) {
                     //formater erreur comme il faut
                     throw new \Exception('erreur de sauvegarde');
@@ -484,12 +486,23 @@ class UsersController extends Controller
         $form->field("name", ["require"]);
         $form->field("email", ["require", "mail", "unique" => $paramUnique]);
         $form->field("message", ["require"]);
+        $form->field("norobot", ["require", "robot"]);
+        $form->field("norobot2", ["notRequire"]);
+        $form->field("norobot3", ["require"]);
         $errors = $form->hasErrors();
         if (!isset($errors["post"])) {
             $datas = $form->getDatas();
-            $datas['id_roles'] = 4; // 4 = Administrateur
+            $datas['id_roles'] = 5; // 4 = Administrateur
             if (!$errors) {
+                unset($datas["norobot"]);
+                unset($datas["norobot2"]);
+                unset($datas["norobot3"]);
                 $this->messages->create($datas);
+                $mail = new EmailController();
+                $mail->object(getenv('siteName') . ' - Vous avez un nouveau message sur votre espace')
+                    ->to("contact@coworkinmoulins.fr")
+                    ->message('newMessage', compact('datas'))
+                    ->send();
                 $errors["error"] = false;
             } else {
                 $errors["error"] = true;
@@ -703,11 +716,49 @@ class UsersController extends Controller
         );
     }
 
-    public function adhesion()
+    public function adhesion($id = null)
     {
         if (!$this->security()->isAttente()) {
             return $this->redirect('userProfile');
         }
+        $variable = [];
+
+        switch ($id) {
+            case '1':
+                $variable = ["role" => 3, "product" => 31];
+                break;
+            case '2':
+                $variable = ["role" => 3, "product" => 32];
+                break;
+            case '3':
+            case '4':
+            case '5':
+
+                break;
+            default:
+                break;
+        }
+        if (count($variable) == 2) {
+            $user = $this->session()->get("users");
+            $this->rolesLog->updateRole($user->getId(), $variable["role"]);
+            $invocesServices = new InvocesServices;
+            $invoce = $invocesServices->getNewInvoce(["id_user" => $user->getId(), "date_at" => date("Y-m-d H:i:s")]);
+            $product = $this->products->findForInvoce($variable["product"]);
+            $product->setIdInvoces($invoce->getId());
+            $product->setQte(1);
+            $product->setDiscount(0);
+            $product->setIdProducts($product->getId());
+            $product->setId(null);
+
+            $this->invocesLines->create($product, true);
+            $invocesServices->activate($invoce);
+            $this->messageFlash()->success("Votre demande d'adhésion a bien été prise en compte.");
+            return $this->redirect('userInvoces');
+        }
+
+
+
+
 
         return $this->render(
             "user/adhesion",

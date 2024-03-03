@@ -13,7 +13,13 @@ class PagesController extends Controller
 
     public function index(): Response
     {
-        return $this->render('pages/index', []);
+        $nobot = time() . '_' . rand(50000, 60000);
+        return $this->render('pages/index', [
+            "norobot3" => $nobot,
+            "norobot2" => time(),
+            "norobot" => md5($nobot),
+
+        ]);
     }
 
     public function legal(): Response

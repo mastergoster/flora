@@ -47,7 +47,11 @@ class AjaxController extends Controller
                 $userstd->firstname = $user->getFirstName();
                 $userstd->email = $user->getEmail();
                 $userstd->lastname = $user->getLastName();
+                $userstd->society = $user->getSociety();
                 $user->presence = $this->hours->presence($user->getId());
+
+                $photo = $this->images->find($user->getIdImages());
+                $userstd->picture =  $photo ? $photo->getRef() . "/" . $photo->getName() : false;
                 if ($user->presence = $this->hours->presence($user->getId())) {
                     $userstd->presence = true;
                 } else {

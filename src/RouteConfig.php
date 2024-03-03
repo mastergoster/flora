@@ -60,8 +60,13 @@ class RouteConfig
             ["post",    '/gestion/invoce/delete', 'GesInvoces#deleteInvoce', 'gestion_delete_Invoce'],
             ["get",    '/gestion/prix', 'GesPrice#all', 'gestion_price'],
             ["match",     '/gestion/prix/[i:id]', 'GesPrice#modif', 'gestion_price_modif'],
+            ["get",    '/gestion/ressources', 'GesRessources#all', 'gestion_ressources'],
+            ["match",     '/gestion/ressources/[i:id]', 'GesRessources#modif', 'gestion_ressources_modif'],
+
+
 
             ["get", "/adhesion", 'Users#adhesion', "choiceAdhesion"],
+            ["get", "/adhesion/[i:id]", 'Users#adhesion', "choiceAdhesionGet"],
 
             ["match",    '/gestion/invoce/[i:id]', 'GesInvoces#invoce', 'GetInvoce'],
             ["get",    '/Mentions-Legales', 'Pages#legal', 'legal'],
@@ -69,6 +74,16 @@ class RouteConfig
 
             /** API */
             ["get",    '/api/V1/pos', 'Display#tactile', 'APIpos'],
+            ["get",    '/api/V1/ressources', 'ApiRessources#all', 'APIressources'],
+
+            /** Maj */
+            ["get",    '/maj/pack', 'Cron#updatePackage', 'MajPackage'],
+            ["get",    '/maj/hours', 'Cron#heurVerify', 'heurVerify'],
+            ["get",    '/maj/adh', 'Cron#updateAdhesion', 'updateAdhesion'],
+            ["get",    '/maj/aff', 'Cron#updateAffichage', 'updateAffichage'],
+            ["get",    '/maj/fac', 'Cron#updateFacture', 'updateFacture'],
+
+
         ];
     }
 }

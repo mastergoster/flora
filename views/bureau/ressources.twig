@@ -1,0 +1,84 @@
+{% extends 'layout/user.twig' %}
+{% block title %}Ressources Dashboard
+{% endblock %}
+{% block titlePage %}Dashboard
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-primary card-header-icon">
+					<div class="card-icon">
+						<i class="material-icons">
+							meeting_room
+						</i>
+
+					</div>
+					<h4 class="card-title">Ressources</h4>
+
+				</div>
+				<a href="{{ path("gestion_ressources_modif", {id: 0})}}" class="btn btn-primary">
+
+					Nouvelle Ressource
+
+				</a>
+				<div class="card-body">
+					<div
+						class="toolbar"><!--        Here you can write extra buttons/actions for the toolbar              -->
+					</div>
+					<div class="material-datatables">
+						<div class="col-12 row">
+							{% for item in items %}
+								<div class="col-lg-3 col-md-6 col-sm-12">
+									<div class="card card-stats">
+										<div class="card-header  card-header-icon">
+											<div class="card-icon">
+												<img src="/medias/{{ item.image.name }}" alt="" style="
+													    height: 100px;
+													    width: 100px;
+													    object-fit: cover;
+													">
+
+											</div>
+										</div>
+										<div class="card-body">
+											<h3>
+												{{ item.name }}
+											</h3>
+											<p>slug :
+												{{item.slug}}</p>
+											<p>nombre de place :
+												{{item.nombrePlace}}</p>
+
+											<p>
+												{{ item.description }}
+											</p>
+
+										</div>
+										<div class="card-footer">
+											<div class="stats">
+												<a href="{{ path("gestion_ressources_modif", {id: item.id})}}" class="btn btn-primary">
+
+													Mofifier
+												</a>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+							{% endfor %}
+						</div>
+
+					</div>
+				</div>
+				<!-- end content-->
+			</div>
+			<!--  end card  -->
+		</div>
+		<!-- end col-md-12 -->
+	</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'layout/user.twig' %}
+{% block title %}Produit
+{% endblock %}
+{% block titlePage %}Produit
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title">Edition du Produit</h4>
+				</div>
+				<div class="card-body">
+					<form method="post" action="" enctype="multipart/form-data">
+
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group bmd-form-group {% if errors['name'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">NOM</label>
+									<input type="text" name="name" value="{{ item.name | capitalize}}" class="form-control">
+									{% if errors['name'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group bmd-form-group {% if errors['slug'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">NOM</label>
+									<input type="text" name="slug" value="{{ item.slug | capitalize}}" class="form-control">
+									{% if errors['slug'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group bmd-form-group{% if errors['nombrePlace'] %} has-danger{% endif %}">
+									<label class="bmd-label-floating">nombre de Place</label>
+									<input type="number" name="nombrePlace" value="{{ item.nombrePlace }}" class="form-control">
+									{% if errors['nombrePlace'] %}
+										<span class="material-icons form-control-feedback">clear</span>
+									{% endif %}
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="form-group bmd-form-group {% if errors['description'] %} has-danger{% endif %}">
+
+										<label class="bmd-label-floating">
+											description</label>
+										<textarea class="form-control" name="description" rows="5">{{ item.description }}</textarea>
+
+
+										{% if errors['description'] %}
+
+											<span class="material-icons form-control-feedback">clear</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="file" name="file">
+							</div>
+						</div>
+
+						<button type="submit" class="btn btn-primary pull-right">Mettre à jour le Produit</button>
+						<div class="clearfix"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+{% endblock %}
+{% block script %}{% endblock %}
