@@ -10,7 +10,7 @@ class IgloohomeController extends Controller
     private $curl;
 
     private $pieces = [
-        "Studio" => [
+        "studio" => [
             "id" => "IGK3076a4bc7",
             "bridge" => "EB1X01e5d59e"
         ],
