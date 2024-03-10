@@ -96,6 +96,7 @@ class ApiRessourcesController extends Controller
                     ],
                     403
                 );
+            }
              $this->books->delete($data['idBdd']);
             return $this->jsonResponse(
                 [
