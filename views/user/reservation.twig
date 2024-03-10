@@ -1,0 +1,181 @@
+{% extends 'layout/user.twig' %}
+{% block title %}User Dashboard
+{% endblock %}
+{% block titlePage %}Dashboard
+{% endblock %}
+{% block style %}
+<style>  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+
+  </style>
+	{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-calendar">
+				<div class="card-body p-3">
+					<div class="calendar" data-bs-toggle="calendar" id="calendar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="modal fade show" id="modal-form" tabindex="-1" style="display:none;background-color: rgba(0, 0, 0, 0.5);" role="dialog" aria-labelledby="modal-form" aria-hidden="false">
+		<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-body p-0">
+					<div class="card card-plain">
+						<div class="card-header pb-0 text-left">
+							<h5 class="">Nouvelle reservation</h5>
+						</div>
+						<div class="card-body">
+							<form role="form text-left">
+								<fieldset>
+								{% for resource in ressources %}
+									<div>
+										<input type="radio" id="{{resource.slug}}" name="drone" value="{{resource.slug}}" checked />
+										<label for="{{resource.slug}}">{{resource.name}}</label>
+									</div>
+								{% endfor %}
+								</fieldset>
+								<button class="btn btn-primary" value="save">save</button>
+								<button class="btn btn-danger" value="delete">delete</button>
+							</form>
+						</div>
+						<div class="card-footer text-center pt-0 px-lg-2 px-1">
+							<p class="mb-4 text-sm mx-auto">
+							Don't have an account?
+							<a href="javascript:;" class="text-info text-gradient font-weight-bold">Sign up</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block script1 %}
+<script src='/fullcalendar/dist/index.global.js'></script>
+<script src='/fullcalendar/packages/core/locales/fr.global.js'></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+	document.querySelector("#modal-form").addEventListener('click', function(e){
+		if(e.target.id === "modal-form"){
+			document.querySelector("#modal-form").style.display = "none";
+		}
+	});
+
+	document.querySelector("#modal-form").addEventListener('submit', function(e){
+		e.preventDefault();
+		saveEventOnApi(
+			saveInfo.startStr ? saveInfo.startStr : saveInfo.event.startStr, 
+			saveInfo.endStr ? saveInfo.endStr : saveInfo.event.endStr, 
+			document.querySelector('input[name="drone"]:checked').value, 
+			saveInfo.event === undefined ? undefined : saveInfo.event.extendedProps.idBdd, 
+			e.submitter.value === "delete" ? true : false
+			);
+		document.querySelector("#modal-form").style.display = "none";
+
+	});
+	
+	
+	var saveInfo = "";
+	function saveEventOnApi(start, end, salle, id = undefined, deleteEvent = false){
+		fetch('/api/V1/reservation', {
+			method: 'POST',
+			credentials: "same-origin",
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				start: start,
+				end: end,
+				salle: salle,
+				idBdd: id,
+				delete: deleteEvent
+			}),
+		})
+		.then(response =>{
+
+			if(response.status === 200){
+				return response.json();
+			}
+			return {error: true};
+		})
+		.then(data => {
+			if(data.message === "Deleted"){
+				saveInfo.event.remove();
+				return;
+			}
+			if(data.message === "Created"){
+				calendar.addEvent(data.event);
+			}
+			if(data.message === "Updated"){
+				saveInfo.event.remove();
+				calendar.addEvent(data.event);
+			}
+			
+			if(data.error){
+				saveInfo.revert();
+			}
+		})
+	}
+
+
+	function createEvent(info) {
+		if(info.event === undefined || info.event.extendedProps.editable){
+			saveInfo = info;
+			if(info.event === undefined){
+				document.querySelector('button[value="delete"]').disabled = true;
+			}else{
+				document.querySelector('button[value="delete"]').disabled = false;
+				document.querySelector('input[name="drone"][value="'+ info.event.extendedProps.salle +'"]').checked = true;
+			}
+			document.querySelector("#modal-form").style.display = "block";
+		}
+	}
+	function updateEvent(info) {
+		saveInfo =info;
+			saveEventOnApi(
+				info.event.startStr,
+				info.event.endStr,
+				info.event.extendedProps.salle,
+				info.event.extendedProps.idBdd);
+	}
+
+    /* initialize the calendar
+    -----------------------------------------------------------------*/
+
+    var calendarEl = document.getElementById("calendar");
+    var initialLocaleCode = 'fr';
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+	  timeZone: 'Europe/Paris',
+      locale: initialLocaleCode,
+      events: {{ events | raw}},
+      initialView: 'timeGridWeek',
+      nowIndicator: true,
+      navLinks: false,
+      buttonIcons: true,
+      editable: true,
+      selectable: true,
+      droppable: false, 
+		select: createEvent,
+		eventClick: createEvent,
+		eventResize: updateEvent,
+		eventDrop: updateEvent,
+      });
+
+    calendar.render();
+
+  });
+
+</script>
+{% endblock %}

@@ -2,7 +2,6 @@
 
 namespace Core\Controller;
 
-
 class IgloohomeController extends Controller
 {
     private $basicCode;
@@ -38,7 +37,7 @@ class IgloohomeController extends Controller
     private function getToken()
     {
         $this->curl = curl_init();
-        curl_setopt_array($this->curl, array(
+        curl_setopt_array($this->curl, [
             CURLOPT_URL => 'https://auth.igloohome.co/oauth2/token',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -48,12 +47,12 @@ class IgloohomeController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => 'grant_type=client_credentials',
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTPHEADER => [
                 'Content-Type: application/x-www-form-urlencoded',
                 'grant_type: client_credentials',
                 'Authorization: Basic {' . $this->basicCode . '}',
-            ),
-        ));
+            ],
+        ]);
 
         $response = curl_exec($this->curl);
         curl_close($this->curl);
@@ -71,7 +70,7 @@ class IgloohomeController extends Controller
         }
 
         $this->curl = curl_init();
-        curl_setopt_array($this->curl, array(
+        curl_setopt_array($this->curl, [
             CURLOPT_URL => 'https://api.igloodeveloper.co/igloohome/devices/'
                 . $this->pieces[$salle]['id'] . '/jobs/bridges/'
                 . $this->pieces[$salle]['bridge'],
@@ -85,12 +84,12 @@ class IgloohomeController extends Controller
             CURLOPT_POSTFIELDS => '{
   "jobType": 2
 }',
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTPHEADER => [
                 'Accept: application/json',
                 'Content-Type: application/json',
                 'Authorization: Bearer ' . $this->token
-            ),
-        ));
+            ],
+        ]);
 
         $response = curl_exec($this->curl);
         curl_close($this->curl);

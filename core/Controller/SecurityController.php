@@ -156,7 +156,7 @@ class SecurityController
         return true;
     }
 
-    public  function isAttente()
+    public function isAttente()
     {
         return $this->accessRole("attente", true);
     }

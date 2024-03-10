@@ -56,6 +56,14 @@
 								<p>Messagerie</p>
 							</a>
 						</li>
+						{% if session.users.level >= 20 %}
+						<li class="nav-item{{ linkactive('userResevation', false, 2) }}">
+							<a class="nav-link" href="{{ path('userResevation')}}">
+								<i class="material-icons">desk</i>
+								<p>Bureaux</p>
+							</a>
+						</li>
+						{% endif %}
 						{% if session.users.level >= 40 %}
 							<li class="nav-item">
 								<a class="nav-link" data-toggle="collapse" href="#componentsExamples" aria-expanded="false">
@@ -226,7 +234,7 @@
 			</body>
 		</html>
 	</div>
-
+	{% block script1 %}
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
@@ -458,5 +466,6 @@ align: "right"
 }
 });{% endfor %}{% endif %}
 	</script>
+	{% endblock %}
 	{% block script %}{% endblock %}
 </body></html>

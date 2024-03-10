@@ -98,7 +98,7 @@ class GesInvocesController extends Controller
                                 $product->setId(null);
                                 $product->activate = null;
                                 $this->invocesLines->create($product, true);
-                            }elseif($update){
+                            } elseif ($update) {
                                 $this->invocesLines->update($update->getId(), "id", ["qte" => $update->getQte() + $datas["data-qte"]]);
                             }
                             break;
@@ -129,7 +129,7 @@ class GesInvocesController extends Controller
         }
         $user = $this->users->find($invoce->getIdUsers());
         /**
-         * no cache 
+         * no cache
          */
         if ($invoce->getActivate() == 1) {
             $file = App::getInstance()->rootFolder() . "/files/user/invoce/" . $invoce->getRef() . ".pdf";

@@ -50,6 +50,7 @@ class GesRessourcesController extends Controller
         $form->field("slug", ["require"]);
         $form->field("description", ["require"]);
         $form->field("nombrePlace", ["require", "int"]);
+        $form->field("color", ["require"]);
         $errors =  $form->hasErrors();
         if (!isset($errors["post"])) {
             $datas = $form->getDatas();

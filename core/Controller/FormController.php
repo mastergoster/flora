@@ -117,8 +117,7 @@ class FormController
     private function errorVerify(string $field, bool $value): void
     {
         $fieldVerify = $field . "Verify";
-        if (
-            isset($this->postDatas[$fieldVerify]) &&
+        if (isset($this->postDatas[$fieldVerify]) &&
             $this->postDatas[$fieldVerify] == $this->postDatas[$field]
         ) {
             $this->addToDatas($field);

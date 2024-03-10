@@ -42,6 +42,7 @@ class RouteConfig
             ["get",     '/user/logout', 'users#logout', 'userLogout'],
             ["get",     '/user/profile', 'users#profile', 'userProfile'],
             ["get",     '/user/invoices', 'users#invoces', 'userInvoces'],
+            ["get",     '/user/resevation', 'users#resevation', 'userResevation'],
             ["match",   '/user/messages', 'users#userMessages', 'userMessages'],
             ["match",   '/user/edit', 'users#edit', 'userEdit'],
             ["get",     '/user/invoices/[i:id]', 'users#invoce', 'userInvoce'],
@@ -75,6 +76,7 @@ class RouteConfig
             /** API */
             ["get",    '/api/V1/pos', 'Display#tactile', 'APIpos'],
             ["get",    '/api/V1/ressources', 'ApiRessources#all', 'APIressources'],
+            ["post",    '/api/V1/reservation', 'ApiRessources#book', 'APIbook'],
 
             /** Maj */
             ["get",    '/maj/pack', 'Cron#updatePackage', 'MajPackage'],

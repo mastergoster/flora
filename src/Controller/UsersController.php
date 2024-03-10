@@ -29,6 +29,8 @@ class UsersController extends Controller
         $this->loadModel('invocesLines');
         $this->loadModel('images');
         $this->loadModel('products');
+        $this->loadModel('ressources');
+        $this->loadModel('books');
     }
 
     public function login(): Response
@@ -582,8 +584,7 @@ class UsersController extends Controller
             if (!isset($errors["post"])) {
                 $datasPassword = $formPassword->getDatas();
                 if (!$errorsPassword) {
-                    if (
-                        $user->getId() == $datasPassword["id"] &&
+                    if ($user->getId() == $datasPassword["id"] &&
                         $this->security()->login($user->getEmail(), $datasPassword["password"])
                     ) {
                         if ($this->security()->updatePassword($datasPassword["password_new"])) {
@@ -733,7 +734,6 @@ class UsersController extends Controller
             case '3':
             case '4':
             case '5':
-
                 break;
             default:
                 break;
@@ -763,6 +763,21 @@ class UsersController extends Controller
         return $this->render(
             "user/adhesion",
             []
+        );
+    }
+
+    public function resevation()
+    {
+        $events = [];
+        foreach ($this->books->all() as $value) {
+            $events[] = $value->__toArray();
+        }
+        $ressources = $this->ressources->all();
+        return $this->render(
+            "user/reservation",
+            ["events" => \json_encode($events),
+            "ressources" => $ressources
+            ]
         );
     }
 }

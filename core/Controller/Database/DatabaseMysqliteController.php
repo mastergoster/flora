@@ -41,6 +41,7 @@ class DatabaseMysqliteController extends DatabaseController
 
     public function query(string $statement, ?string $class_name = null, bool $one = false)
     {
+
         $req = $this->getPDO()->query($statement);
         if (strpos($statement, 'UPDATE') === 0 ||
             strpos($statement, 'INSERT') === 0 ||

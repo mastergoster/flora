@@ -48,7 +48,6 @@ class CronController extends Controller
         $create = 0;
         foreach ($userPackage as $id => $package) {
             foreach ($package as $idPackage => $value) {
-
                 while ($value["count"] > $value["apply"]) {
                     $this->packagesLog->create(
                         [
@@ -64,7 +63,7 @@ class CronController extends Controller
         dd($create);
     }
 
-    function heurVerify()
+    public function heurVerify()
     {
         $packages = TableauController::assocId($this->packages->all());
         $hours = $this->hours->all('DESC', "created_at");
@@ -136,7 +135,6 @@ class CronController extends Controller
         $roleok = [3, 4, 5, 6];
         $users = $this->users->all();
         foreach ($users as $user) {
-
             if (in_array(end($this->rolesLog->findAll($user->getId(), "id_users", true, "created_at"))->getIdRoles(), $roleok)) {
                 $this->users->update($user->getId(), 'id', ["display" => "0001"]);
             } else {

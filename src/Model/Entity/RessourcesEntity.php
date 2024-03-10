@@ -14,6 +14,7 @@ class RessourcesEntity extends Entity
     protected $nombre_place;
     protected $created_at;
     protected $updated_at;
+    protected $color;
 
     /**
      * Get the value of id
@@ -172,6 +173,24 @@ class RessourcesEntity extends Entity
     public function setNombrePlace($nombre_place)
     {
         $this->nombre_place = $nombre_place;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of color
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set the value of color
+     */
+    public function setColor($color): self
+    {
+        $this->color = $color;
 
         return $this;
     }

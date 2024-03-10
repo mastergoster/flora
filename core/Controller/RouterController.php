@@ -76,13 +76,11 @@ class RouterController
                 $folder = "Api\\";
             }
 
-            if (
-                class_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
+            if (class_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
                 method_exists("App\\Controller\\" . $folder . ucfirst($controller) . "Controller", $method)
             ) {
                 $controller = "App\\Controller\\" . $folder . ucfirst($controller) . "Controller";
-            } elseif (
-                class_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
+            } elseif (class_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller") &&
                 method_exists("Core\\Controller\\" . $folder . ucfirst($controller) . "Controller", $method)
             ) {
                 $controller = "Core\\Controller\\" . $folder . ucfirst($controller) . "Controller";

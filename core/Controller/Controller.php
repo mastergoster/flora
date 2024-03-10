@@ -21,11 +21,9 @@ abstract class Controller
 
     protected function render(string $view, array $variables = []): Response
     {
-        if (
-            $this->request()->headers->get("Content-Type") == "application/json" &&
+        if ($this->request()->headers->get("Content-Type") == "application/json" &&
             explode('/', $this->request()->server->get("REQUEST_URI"))[1] == "api"
         ) {
-
             $response = new Response;
 
             $response->setContent(

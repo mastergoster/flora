@@ -52,11 +52,10 @@ class GesPriceController extends Controller
             if (!$errors) {
                 if ($id===null) {
                     $product = $this->products->create($datas);
-                }else{
+                } else {
                     $product->hydrate($datas);
                     $this->products->updateByClass($product);
                 }
-                
             }
         }
 
