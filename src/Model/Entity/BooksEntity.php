@@ -153,12 +153,23 @@ class BooksEntity extends Entity
     }
     private function color(): string
     {
-        $color = $this->ressource_color;
+        $color = $this->ressource_color ? $this->ressource_color : "#000000";
+        list($r, $g, $b) = sscanf($color, "#%02x%02x%02x");
+        $color = "rgba($r, $g, $b, 1)";
         if (!$this->editable()) {
-            list($r, $g, $b) = sscanf($color, "#%02x%02x%02x");
-            return "rgba($r, $g, $b, 0.5)";
+           $color = "rgba($r, $g, $b, 0.5)";
         }
-        return $this->ressource_color;
+        $this->rgb_best_contrast($r, $g, $b);
+        $this->textcolor;
+        return $color;
+    }
+
+    public function rgb_best_contrast($r, $g, $b) {
+        return array(
+            'r' => ($r < 128) ? 255 : 0,
+            'g' => ($g < 128) ? 255 : 0,
+            'b' => ($b < 128) ? 255 : 0
+        );
     }
 
     private function titre(): string
@@ -182,8 +193,8 @@ class BooksEntity extends Entity
                 "idBdd"  => $this->id,
                 "editable"=> $this->editable(),
             ],
-            "textColor"=> "#000000",
             "backgroundColor"=> $this->color(),
+            "textColor"=> $this->textcolor,
             "editable"=> $this->editable()
         ];
 
