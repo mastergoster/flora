@@ -21,10 +21,10 @@ class AdminCoreController extends Controller
     public function update(): Response
     {
         // if (\getenv("ENV_DEV")) {
-            return $this->render(
-                "admin/update",
-                ["itemss" => ["erreur" => ["mode dev impossible de faire ceci"]]]
-            );
+        //     return $this->render(
+        //         "admin/update",
+        //         ["itemss" => ["erreur" => ["mode dev impossible de faire ceci"]]]
+        //     );
         // }
 
 
