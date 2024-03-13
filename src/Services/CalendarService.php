@@ -18,7 +18,7 @@ class CalendarService extends Controller
         foreach ($this->books as $book) {
             \dump($book);
             $user = $this->users->find($book->getIdUser());
-            $salle =$this->ressource_slug;
+            $salle =$book->ressource_slug;
             $society = $user->getSociety();
             if ($society != null) {
                 $salle .= " - ". $society;
