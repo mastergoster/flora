@@ -45,6 +45,9 @@ class CalendarService extends Controller
     }
 
     public function event($date_debut, $date_fin, $objet){
+
+        $date_debut = date_timestamp_get(date_create($date_debut));
+        $date_fin = date_timestamp_get(date_create($date_fin)); 
         $event = "BEGIN:VEVENT\n";
         $event .= "X-WR-TIMEZONE:Europe/Paris\n";
         $event .= "DTSTART:".date('Ymd',$date_debut)."T".date('His',$date_debut)."\n";
