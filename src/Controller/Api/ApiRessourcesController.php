@@ -100,7 +100,16 @@ class ApiRessourcesController extends Controller
                 200
             );
         }
-        if(count($this->books->verify($data['salle'], $data['start'], $data['end'], $data['idBdd'])) > 0){
+        if(
+            count(
+                $this->books->verify(
+                    $data['salle'], 
+                    $data['start'], 
+                    $data['end'], 
+                    isset($data['idBdd']) ? $data['idBdd']  :null 
+                    )
+                ) > 0
+        ){
             return $this->jsonResponse(
                 [
                     "message" => "Forbidden"
