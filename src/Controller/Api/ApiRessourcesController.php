@@ -7,6 +7,8 @@ use \Core\Controller\Controller;
 use App\Model\Table\ImagesTable;
 use App\Model\Entity\BooksEntity;
 use App\Model\Table\RessourcesTable;
+use App\Services\CalendarService;
+use Mpdf\Tag\NewPage;
 
 class ApiRessourcesController extends Controller
 {
@@ -39,19 +41,6 @@ class ApiRessourcesController extends Controller
 
     public function book()
     {
-        
-        // [
-        //     "title"=> 'Testxcwc',
-        //     "start"=> '2024-03-07T10:30:00',
-        //     "end"=> '2024-03-07T11:30:00',
-        //     "extendedProps"=> [
-        //       "salle"=> 'Testxcwc',
-        //       "editable"=> false,
-        //       "idBdd"  => 1,
-        //     ],
-        //     "backgroundColor"=> 'rgba(255, 0, 0, 0.5)',
-        //     "editable"=> false
-        // ],
         $user = $this->session()->get('users');
         $jsonData = file_get_contents("php://input");
         $data = json_decode($jsonData, true);
@@ -71,7 +60,11 @@ class ApiRessourcesController extends Controller
                 400
             );
         }
-        if((new \DateTime($data['start']))->modify("30 min")->format('Y-m-d H:i:s') < date('Y-m-d H:i:s')){
+        if(
+            (new \DateTime($data['start']))
+            ->modify("30 min")
+            ->format('Y-m-d H:i:s') < date('Y-m-d H:i:s')
+            ){
             return $this->jsonResponse(
                 [
                     "message" => "Bad request"
@@ -98,6 +91,7 @@ class ApiRessourcesController extends Controller
                 );
             }
              $this->books->delete($data['idBdd']);
+             new CalendarService();
             return $this->jsonResponse(
                 [
                     "message" => "Deleted",
@@ -134,6 +128,7 @@ class ApiRessourcesController extends Controller
 
             $books->setUpdatedAt(date('Y-m-d H:i:s'));
             $this->books->updateByClass($books);
+            new CalendarService();
             return $this->jsonResponse(
                 [
                     "message" => "Updated",
@@ -154,6 +149,7 @@ class ApiRessourcesController extends Controller
             $books->setIdRessource($ressource->getId());
             $this->books->create($books, true);
             $books->setId($this->books->lastInsertId());
+            new CalendarService();
             return $this->jsonResponse(
                 [
                     "message" => "Created",
