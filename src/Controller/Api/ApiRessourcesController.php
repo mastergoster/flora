@@ -108,6 +108,27 @@ class ApiRessourcesController extends Controller
                 403
             );
         }
+        if(!isset($data['idBdd'])){
+            $books = New BooksEntity();
+            $books->setStartAt($data['start']);
+            $books->setEndAt($data['end']);
+            $books->setIdUser($user->getId());
+            $ressource = $this->ressources->find($data['salle'], 'slug');
+            $books->ressource_slug = $ressource->getSlug();
+            $books->ressource_color = $ressource->getColor();
+            $books->ressource_name = $ressource->getName();
+            $books->setIdRessource($ressource->getId());
+            $this->books->create($books, true);
+            $books->setId($this->books->lastInsertId());
+            new CalendarService();
+            return $this->jsonResponse(
+                [
+                    "message" => "Created",
+                    "event" => $books->__toArray()
+                ],
+                200
+            );
+        }
         if($data['idBdd']){
             $books = $this->books->find($data['idBdd']);
             if($books->getIdUser() != $user->getId()){
@@ -132,27 +153,6 @@ class ApiRessourcesController extends Controller
             return $this->jsonResponse(
                 [
                     "message" => "Updated",
-                    "event" => $books->__toArray()
-                ],
-                200
-            );
-        }
-        if(!isset($data['idBdd'])){
-            $books = New BooksEntity();
-            $books->setStartAt($data['start']);
-            $books->setEndAt($data['end']);
-            $books->setIdUser($user->getId());
-            $ressource = $this->ressources->find($data['salle'], 'slug');
-            $books->ressource_slug = $ressource->getSlug();
-            $books->ressource_color = $ressource->getColor();
-            $books->ressource_name = $ressource->getName();
-            $books->setIdRessource($ressource->getId());
-            $this->books->create($books, true);
-            $books->setId($this->books->lastInsertId());
-            new CalendarService();
-            return $this->jsonResponse(
-                [
-                    "message" => "Created",
                     "event" => $books->__toArray()
                 ],
                 200
