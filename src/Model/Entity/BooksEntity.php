@@ -159,12 +159,12 @@ class BooksEntity extends Entity
         if (!$this->editable()) {
            $color = "rgba($r, $g, $b, 0.5)";
         }
-        $this->rgb_best_contrast($r, $g, $b);
-        $this->textcolor;
         return $color;
     }
 
-    public function rgb_best_contrast($r, $g, $b) {
+    public function rgb_best_contrast() {
+        $color = $this->ressource_color ? $this->ressource_color : "#000000";
+        list($r, $g, $b) = sscanf($color, "#%02x%02x%02x");
         return array(
             'r' => ($r < 128) ? 255 : 0,
             'g' => ($g < 128) ? 255 : 0,
@@ -194,7 +194,7 @@ class BooksEntity extends Entity
                 "editable"=> $this->editable(),
             ],
             "backgroundColor"=> $this->color(),
-            "textColor"=> $this->textcolor,
+            "textColor"=> $this->rgb_best_contrast(),
             "editable"=> $this->editable()
         ];
 

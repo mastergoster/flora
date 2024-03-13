@@ -30,7 +30,16 @@ class CalendarService extends Controller
         }
         $this->ics .= "END:VCALENDAR";
         $fichier = getenv("fichier_ics").'.ics';
-        $f = fopen(\getenv("PATH_BASE") ."/html/medias/".$fichier, 'w+');
+        $f = fopen(
+            \getenv("PATH_BASE") .
+             \DIRECTORY_SEPARATOR .
+              "html" .
+              \DIRECTORY_SEPARATOR .
+              "medias" .
+              \DIRECTORY_SEPARATOR .
+              $fichier,
+              'w+'
+            );
         fputs($f, $this->ics);
     }
 
