@@ -16,7 +16,6 @@ class CalendarService extends Controller
         $this->loadModel("users");
         $this->books = $this->books->all();
         foreach ($this->books as $book) {
-            \dump($book);
             $user = $this->users->find($book->getIdUser());
             $salle =$book->ressource_slug;
             $society = $user->getSociety();
