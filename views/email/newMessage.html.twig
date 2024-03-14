@@ -1,15 +1,9 @@
-<html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>CoWorkInMoulins nouvelle facture</title>
-	</head>
-	<body style="box-sizing: border-box; margin: 0;">
+<body style="box-sizing: border-box; margin: 0;">
   <table class="main-body" style="box-sizing: border-box; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 100%; height: 100%; background-color: rgb(234, 236, 237);" width="100%" height="100%" bgcolor="rgb(234, 236, 237)">
     <tbody id="ibcc" style="box-sizing: border-box;">
       <tr class="row" style="box-sizing: border-box; vertical-align: top;" valign="top">
         <td id="i5mm" class="main-body-cell" style="box-sizing: border-box;">
-          <table class="container" id="ir1f" style="box-sizing: border-box; font-family: Helvetica, serif; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; height: 0px; width: 90%; max-width: 550px;" width="90%" height="0">
+          <table class="container" id="ir1f" style="box-sizing: border-box; font-family: san-serif; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; height: 0px; width: 90%; max-width: 550px;" width="90%" height="0">
             <tbody style="box-sizing: border-box;">
               <tr style="box-sizing: border-box;">
                 <td class="container-cell" id="ir8g" style="box-sizing: border-box; vertical-align: top; font-size: medium; padding-bottom: 50px; padding: 0 0 0 0;" valign="top">
@@ -48,7 +42,7 @@
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <p class="card-text" id="ioo3ta" style="box-sizing: border-box;">Voici le contenu du message :&nbsp;
+                                  <p class="card-text" id="ioo3ta" style="box-sizing: border-box;">Voici le contenu du message :
                                   </p>
                                   <p class="card-text" id="igu29k" style="box-sizing: border-box;">
 								  {% if datas.message is iterable %}
@@ -56,7 +50,7 @@
 								  {{ message }}<br />
 								  {% endfor %}
 								  {% else %}
-								  {{ datas.message}}
+								  {{ datas.message  }}
 								  {% endif %}
                                   </p>
 								  {% if datas.name %}
@@ -93,7 +87,6 @@
     </tbody>
   </table>
 </body>
-</html>
 
 
 

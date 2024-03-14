@@ -21,6 +21,7 @@ class EmailController extends controller
 
         $mail = new PHPMailer();
         $mail->isSMTP();
+        $mail->CharSet = "UTF-8";
         if ($this->getConfig('ENV_DEV') || $this->getConfig('MAILER_Host') == "Mailcatcher") {
             //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->Host         = $this->getConfig('MAILER_Host');

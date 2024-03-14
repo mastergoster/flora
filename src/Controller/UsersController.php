@@ -666,7 +666,7 @@ class UsersController extends Controller
 
         $form = new FormController();
         $form->field("destinataire", ["require"]);
-        $form->field("message", ["require"]);
+        $form->field("message", ["require"],["safe" => true]);
 
         $errors = $form->hasErrors();
         if (!isset($errors["post"])) {
