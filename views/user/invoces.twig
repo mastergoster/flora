@@ -53,9 +53,18 @@
 										<a href="{{ path("userInvoce", {id: invoce.id}) }}" class="btn btn-primary">
 											<i class="material-icons">cloud_download</i>
 										</a>
-										<a href="{{ path("charge", {id: invoce.id}) }}" class="btn btn-success">
+										{% if invoce.statePaiement is same as(false) %}
+											<a href="{{ path("charge", {id: invoce.id}) }}" class="btn btn-success">
 											<i class="material-icons">euro_symbol</i>
-										</a>
+											</a>
+										{% elseif invoce.statePaiement <= 0  %}
+											 Payé	
+										{% else %}
+											<a href="{{ path("charge", {id: invoce.id}) }}" class="btn btn-success">
+											<i class="material-icons">euro_symbol</i>
+											</a>
+										{% endif %}
+										
 									</td>
 								</tr>
 							{% endfor %}
