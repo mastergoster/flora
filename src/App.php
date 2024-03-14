@@ -72,7 +72,7 @@ class App
             die();
         }
 
-        if (getenv("ENV_DEV")) {
+        if (getenv("ENV_DEV") || getenv("debug")){
             $whoops = new \Whoops\Run;
             $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
             $whoops->register();

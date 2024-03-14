@@ -16,5 +16,6 @@ return [
     "PATH_BASE" => __DIR__,
     "STRIPE_KEY" => "",
     "IGLOOHOME_BASIC_CODE" => "xxxxxxxxxxxxxx",
-    "fichier_ics" => ""
+    "fichier_ics" => "",
+    "debug" => true
 ];
