@@ -29,6 +29,7 @@ class InvocesEntity extends Entity
 
     private $ref_stripe_token;
 
+
     /**
      * Get the value of ref
      */
@@ -295,5 +296,10 @@ class InvocesEntity extends Entity
         $this->user = $user;
 
         return $this;
+    }
+
+    public function securityToken()
+    {
+        return md5($this->id . $this->id_users . $this->price . $this->date_at);
     }
 }

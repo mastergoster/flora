@@ -188,13 +188,10 @@
 					Assoc. COWORKINMOULINS<br/>
 					<span style="font-size: 7pt; font-family: sans;">1 pl. Mar. de Lattre de Tassigny<br/>
 						03000 - Moulins<br/><br/></span>
-					IBAN : FR76 1680 6008 2066 1070 8181029<br/>
-					<span style="font-size: 7pt; font-family: sans; text-align: center;">BIC  : AGRIFRPP868<br/>
-						banque : 16806 - guichet : 00820
-						<br/>
-						compte : 6610708180 - clé : 29
-					</span>
-
+					ATTENTION LES PAIEMENTS :<br/>
+					- PAR VIREMENT<br/>
+					- EN ESPÈCES<br/>
+					 NE SONT PLUS ACCEPTÉS.
 				</td>
 			</tr>
 		</table><br/>
@@ -209,7 +206,20 @@
 			</table>
 			<br/>
 		{% endif %}
-
+		<table width="100%" style="font-family: serif;" cellpadding="10">
+				<tr>
+					<td width="100%" style="border: 0.1mm solid #888888;text-align: center;">
+					{% if invoce.statePaiement is same as(false) %}
+						<a href="{{ path('charge', {'id': invoce.id}, true)}}?token={{ invoce.securityToken }}">{{ path('charge', {'id': invoce.id}, true)}}?token={{ invoce.securityToken }}</a>
+					{% elseif invoce.statePaiement <= 0  %}
+						Payé
+					{% else %}
+						<a href="{{ path('charge', {'id': invoce.id}, true)}}?token={{ invoce.securityToken }}">{{ path('charge', {'id': invoce.id}, true)}}?token={{ invoce.securityToken }}</a>
+					{% endif %}
+					</td>
+				</tr>
+			</table>
+			<br/>
 		<table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
 			<thead>
 				<tr>

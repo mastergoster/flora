@@ -11,6 +11,8 @@
 		<p>Vous avez une nouvelle facture sur votre espace membre Coworking de MOULINS.<br>
 			Rendez-vous &agrave; cette adresse adresse pour effectuer le r&egrave;glement :
 			<a href="{{ path('userInvoces', {}, true) }}">{{ path('userInvoces', {}, true) }}</a>
+			ou payer directement en ligne via ce lien : 
+			<a href="{{ path('charge', {'id': invoce.id }, true) }}?token={{ invoce.securityToken }}">Lien de payement Stripe</a>
 		</p>
 		<p>L'espace de Coworking By CoWorkInMoulins</p>
 	</body>

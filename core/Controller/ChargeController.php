@@ -14,6 +14,7 @@ class ChargeController extends Controller
     private $token = "";
     private $url = "";
     private $numero;
+    private $temporaire = false;
 
     public function __construct()
     {
@@ -27,10 +28,26 @@ class ChargeController extends Controller
 
     public function create(int $id): Response
     {
-        if (!$this->session()->has("users")) {
-            return $this->redirect("usersLogin");
+        $invoce = $this->invoces->findActivate($id, "id");
+
+        if (!$invoce) {
+            $this->messageFlash()->error("action non permise");
+            return $this->redirect("userInvoces");
         }
-        $user = $this->session()->get("users");
+
+        if (!$this->session()->has("users")) {
+            // if(!isset($_GET["token"]) || $_GET["token"] != $invoce->securityToken()){
+            //     dd($invoce->securityToken());
+            //     dd("pas cool");
+            //     $this->messageFlash()->error("action non permise");
+            //     return $this->redirect("userInvoces");
+            // }
+            $this->temporaire = true ;
+            $user = $this->Users->find($invoce->getIdUsers(), "id");
+        }else{
+            $user = $this->session()->get("users");
+        }
+        
         $invoce = $this->invoces->findActivate($id, "id");
         $totalPaid = 0;
         foreach ($this->comptaLines->findAll($invoce->getRef(), 'desc') as $line) {

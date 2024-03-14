@@ -22,6 +22,7 @@ class InvocesTable extends Table
     {
         $all = $this->query("SELECT * FROM {$this->table} WHERE id=? AND activate=1", [$id], true);
         if ($all) {
+            $all->setPaiement((new ComptaLinesTable($this->db))->findAll($all->getRef(), "desc"));
             $all->setInvocesLines((new InvocesLinesTable($this->db))->findAll($all->getId(), "id_invoces"));
         }
 
@@ -33,6 +34,7 @@ class InvocesTable extends Table
         $all = $this->query("SELECT * FROM {$this->table} WHERE id=?", [$id], true);
         if ($all) {
             $all->setUser((new UsersTable($this->db))->find($all->getIdUsers()));
+            $all->setPaiement((new ComptaLinesTable($this->db))->findAll($all->getRef(), "desc"));
             $all->setInvocesLines((new InvocesLinesTable($this->db))->findAll($all->getId(), "id_invoces"));
         }
 
