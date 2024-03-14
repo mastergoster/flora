@@ -15,6 +15,18 @@ class UsersTable extends Table
         }
         return $this->query("SELECT * FROM $this->table WHERE display = ?" . $order, [$display]);
     }
+
+    public function findAllByRole($id_role)
+    {
+        return $this->query(
+            "SELECT $this->table.*
+            FROM $this->table 
+            Left join roles_log on $this->table.id = roles_log.id_users 
+            WHERE roles_log.id_roles = ? AND roles_log.updated_at is null", 
+            [$id_role]
+            );
+
+    }
     // public function getUser($mail, $password)
     // {
     //     $user = $this->query("SELECT $this->table.*,

@@ -688,7 +688,24 @@ class UsersController extends Controller
 
             if (!$errors) {
                 $this->messages->create($datas);
-                $this->messageFlash()->success("Votre message a bien été envoyé.");
+                if(isset($datas['id_users'])){
+                    $usersReception = $this->users->findAll($datas['id_users']);
+                }
+                if(isset($datas['id_roles'])){
+                    $usersReception = $this->users->findAllByRole($datas['id_roles']);
+                }
+                $datas["message"]  = explode("\n", $datas["message"]);
+                foreach ($usersReception as $value) {
+                    $mail = new EmailController();
+                    $mail->object(getenv('siteName') . ' - Vous avez un nouveau message sur votre espace')
+                        ->to($value->getEmail())
+                        ->message('newMessage', compact('datas'))
+                        ->send();
+                }
+                $nombre = count($usersReception);
+                $this->messageFlash()->success("Votre message a bien été envoyé à $nombre personnes.");
+
+                
                 unset($datas);
                 return $this->redirect("userMessages");
             } else {
