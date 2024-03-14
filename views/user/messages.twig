@@ -136,7 +136,11 @@
 																	{{ message.createdAt | date("d/m/Y à H:i:s") }}</small>
 
 																<br>
-																<p class="ml-2">{{message.message}}</p>
+																<p class="ml-2">
+																	{% for msg in message.MessageArray %}
+																		{{msg}}<br>
+																	{% endfor %}
+																</p>
 
 															</td>
 															{% if message.idExp is null %}

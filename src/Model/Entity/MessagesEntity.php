@@ -170,6 +170,11 @@ class MessagesEntity extends Entity
         return $this->message;
     }
 
+    public function getMessageArray()
+    {
+        return explode("\n", $this->message);
+    }
+
     /**
      * Set the value of message
      *
