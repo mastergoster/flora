@@ -689,7 +689,7 @@ class UsersController extends Controller
             if (!$errors) {
                 $this->messages->create($datas);
                 if(isset($datas['id_users'])){
-                    $usersReception = $this->users->findAll($datas['id_users']);
+                    $usersReception = $this->users->findAll($datas['id_users'], "id");
                 }
                 if(isset($datas['id_roles'])){
                     $usersReception = $this->users->findAllByRole($datas['id_roles']);
