@@ -128,7 +128,12 @@
 				document.querySelector('button[value="delete"]').disabled = false;
 				document.querySelector('input[name="drone"][value="'+ info.event.extendedProps.salle +'"]').checked = true;
 			}
-			document.querySelector("#modal-form").style.display = "block";
+			if(info.startStr > new Date().toISOString()
+				|| info.event.startStr > new Date().toISOString()
+			){
+				document.querySelector("#modal-form").style.display = "block";
+			}
+			
 		}
 	}
 	function updateEvent(info) {
