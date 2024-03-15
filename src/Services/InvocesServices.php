@@ -73,7 +73,7 @@ class InvocesServices extends Controller
         //dd($this->numfact(true));
         $invoce->setUpdatedAt(date("Y-m-d H:i:s"));
         $this->invoces->updateByClass($invoce);
-        $invoces = $this->invoces->findActivate($invoce->getId());
+        $invoce = $this->invoces->findActivate($invoce->getId());
         $user = $this->users->find($invoce->getIdUsers());
         $mail = new EmailController();
         $mail->object(getenv('siteName') . ' - Vous avez une nouvelle facture sur votre espace')

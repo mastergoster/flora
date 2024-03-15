@@ -105,6 +105,7 @@ abstract class Controller
                 $this->security()->userHydrateSession();
             }
             $this->twig->addGlobal('session', $this->session()->all());
+            $this->twig->addGlobal('PATH_BASE', $this->getApp()->getConfig("PATH_BASE"));
             $this->twig->addGlobal('constant', get_defined_constants());
             $this->twig->addExtension(new FlashExtension(App::getInstance()->request->getSession()));
             $this->twig->addExtension(new LinkExtension(App::getInstance()->getRouter()));

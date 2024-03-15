@@ -3,6 +3,7 @@
 namespace Core\Controller;
 
 use App\App;
+use Faker\Core\File;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
@@ -36,12 +37,10 @@ class ChargeController extends Controller
         }
 
         if (!$this->session()->has("users")) {
-            // if(!isset($_GET["token"]) || $_GET["token"] != $invoce->securityToken()){
-            //     dd($invoce->securityToken());
-            //     dd("pas cool");
-            //     $this->messageFlash()->error("action non permise");
-            //     return $this->redirect("userInvoces");
-            // }
+            if(!isset($_GET["token"]) || $_GET["token"] != $invoce->securityToken()){
+                $this->messageFlash()->error("action non permise");
+                return $this->redirect("userInvoces");
+            }
             $this->temporaire = true ;
             $user = $this->Users->find($invoce->getIdUsers(), "id");
         }else{
@@ -104,6 +103,20 @@ class ChargeController extends Controller
         $datas["debit"] = 0;
         $datas["date_at"] = date("Y-m-d H:i:s");
         $this->comptaLines->create($datas);
+        (new FilesController(
+            getenv("PATH_BASE") . 
+            \DIRECTORY_SEPARATOR . 
+            "files" . 
+            \DIRECTORY_SEPARATOR . 
+            "user" .
+            \DIRECTORY_SEPARATOR .
+            "invoce"))->delete($invoce->getRef());
+
+
+            $invoce = $this->invoces->findActivate($id);
+            $user = $this->Users->find($invoce->getIdUsers());
+            $this->renderPdf("user/invoce", ["invoce" => $invoce, "user" => $user, "title" => $invoce->getRef()]);
+
         $this->messageFlash()->success("Votre paiement a été effectué avec succès");
         return $this->redirect("userInvoces");
     }

@@ -95,4 +95,12 @@ class FilesController
         }
         return $arrafile;
     }
+
+    public function delete(string $file): bool
+    {
+        if (file_exists($this->path . \DIRECTORY_SEPARATOR . $file)) {
+            return unlink($this->path . \DIRECTORY_SEPARATOR . $file);
+        }
+        return false;
+    }
 }
