@@ -129,7 +129,7 @@
 				document.querySelector('input[name="drone"][value="'+ info.event.extendedProps.salle +'"]').checked = true;
 			}
 			if(info.startStr > new Date().toISOString()
-				|| info.event.startStr > new Date().toISOString()
+				|| info.event?.startStr > new Date().toISOString()
 			){
 				document.querySelector("#modal-form").style.display = "block";
 			}
